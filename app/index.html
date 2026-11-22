@@ -270,6 +270,13 @@ function vFicha(app,id){
   else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."));ul.append(li)});o.append(ul)}
   o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
   g.append(o,a);app.append(g);
+  if(p.cronologia||(p.insumos&&Object.keys(p.insumos).length)){const x=el("section","panel");x.append(el("h2",null,"Insumos y plazos según el estudio"));
+    const TN={transporte:"Transporte y viajes",agua:"Agua",combustible:"Combustible",energia:"Energía"};
+    if(p.cronologia){const c=p.cronologia.length>650?p.cronologia.slice(0,650).replace(/\s\S*$/,"")+"…":p.cronologia;x.append(el("p",null,"Plazos y fases"),el("p","desc",c));x.children[x.children.length-2].style.cssText="font-weight:600;margin:0"}
+    Object.keys(TN).forEach(k=>{const v=(p.insumos||{})[k];if(!v||!v.length)return;const h=el("p",null,TN[k]);h.style.cssText="font-weight:600;margin:0";x.append(h);const ul=el("ul","opps");v.forEach(o=>{const li=el("li");li.append(el("span",null,o.t+" (pág. "+o.p+")"));ul.append(li)});x.append(ul)});
+    x.append(el("p","note","Son extractos textuales del estudio presentado al SEIA, elegidos automáticamente por palabras clave. Pueden faltar datos o venir frases incompletas: revisa el documento antes de usar una cifra."));
+    if(p.pdf_resumen&&p.pdf_resumen!=="-"){const a=el("a",null,"Abrir el capítulo del estudio (PDF)");a.href="https://seia.sea.gob.cl"+p.pdf_resumen;a.target="_blank";a.rel="noopener";x.append(a)}
+    app.append(x)}
   {const ns=N.filter(x=>x.proyecto_id===p.id);if(ns.length){const s2=el("section","panel");s2.append(el("h2",null,"Plazos y noticias del proyecto"));ns.forEach(x=>{const pp=el("p","meta");pp.append(document.createTextNode(fdate(x.fecha)+": "+x.nota+" "));const a=el("a",null,"Fuente: "+x.fuente);a.href=x.fuente_url;a.target="_blank";a.rel="noopener";pp.append(a);s2.append(pp)});app.append(s2)}}
   {const c=el("section","panel");c.append(el("h2",null,"Quién construye y cómo llegar a ellos"));
     const conf=PE.filter(x=>x.proyecto_id===p.id);
