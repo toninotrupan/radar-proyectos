@@ -69,6 +69,14 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
 .soon{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:14px}
 .soon b{color:var(--fg)}
 .back{font-size:14px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;border:0;padding:0;margin:0}
+.checks legend{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:0;margin-bottom:6px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px}
+.checks input{width:auto}
+.btn{align-self:flex-start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer}
+.emp{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.emp li{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
+.emp b{display:block}.emp span{color:var(--muted);font-size:13px;display:block}
 @media (max-width:560px){.card{grid-template-columns:minmax(0,1fr)}.inv{text-align:left}.dl{grid-template-columns:minmax(0,1fr)}.dl dt{margin-top:6px}}
 </style>
 </head>
@@ -80,6 +88,7 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
     <a href="#oportunidades" data-nav="oportunidades">Oportunidades por rubro</a>
     <a href="#mercado" data-nav="mercado">Mercado</a>
     <a href="#novedades" data-nav="novedades">Novedades</a>
+    <a href="#empresa" data-nav="empresa">Mi empresa</a>
   </nav>
 </div></div>
 <main id="app"><p class="lead">Cargando proyectos…</p></main>
@@ -106,7 +115,17 @@ const RUBROS=[
  {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
  {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
 ];
-let P=[],C=[];
+let P=[],C=[],E=[],PE=[];
+const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
+const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
+function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros))return o}catch(e){}return null}
+function estim(p,r,pf){const paquete=(+p.inversion_mmusd||0)*r.pct/100;const tope=pf&&+pf.ventas>0?+pf.ventas*TOPE:null;return{paquete,tope,val:tope!=null?Math.min(paquete,tope):paquete,limita:tope!=null&&tope<paquete}}
+const SECEMP={i:"mineria",c:"energia",b:"transmision",a:"agua",o:"agua",j:"agua",e:"infraestructura",f:"infraestructura",g:"infraestructura",h:"infraestructura",k:"industria","ñ":"industria",l:"industria"};
+const TIPOEMP={epc:"Ingeniería y construcción (EPC)",constructora:"Constructora y montaje",ingenieria:"Ingeniería",registro:"Registro de proveedores"};
+function empLi(e,extra){const li=el("li");li.append(el("b",null,e.nombre),el("span",null,(TIPOEMP[e.tipo]||e.tipo)+(e.descripcion?". "+e.descripcion:"")));if(extra)li.append(el("span",null,extra));if(e.canal)li.append(el("span",null,"Cómo contactar: "+e.canal));
+  const links=el("span");if(e.url_proveedores){const a=el("a",null,e.tipo==="registro"?"Ir a la inscripción":"Canal de proveedores");a.href=e.url_proveedores;a.target="_blank";a.rel="noopener";links.append(a)}
+  if(e.sitio){if(e.url_proveedores)links.append(document.createTextNode(" · "));const a=el("a",null,"Sitio web");a.href=e.sitio;a.target="_blank";a.rel="noopener";links.append(a)}
+  if(e.verificado_at)links.append(document.createTextNode(" · verificado el "+fdate(e.verificado_at)));li.append(links);return li}
 const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
 const money=v=>(+v||0).toLocaleString("es-CL",{maximumFractionDigits:v<10?1:0});
@@ -216,24 +235,67 @@ function vFicha(app,id){
   const a=el("section","panel");a.append(el("h2",null,"Quién está detrás"));const dl=el("dl","dl");
   [["Titular (dueño)",p.titular],["Consultora ambiental",p.consultora||"Sin información en la ficha"],["Región",regionCorta(p.region)],["Comunas",p.comuna],["Tipología",(p.tipologia||"")+" "+(p.tipologia_desc||"")],["Razón de ingreso",p.razon_ingreso]].forEach(([x,y])=>{dl.append(el("dt",null,x),el("dd",null,y||""))});
   a.append(dl);const ls=el("a",null,"Ver expediente completo en el SEIA");ls.href="https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id;ls.target="_blank";ls.rel="noopener";a.append(ls);
-  a.append(Object.assign(el("div","soon"),{innerHTML:"<b>Constructor (EPC) y subcontratistas:</b> en desarrollo. Se sumará con adjudicaciones publicadas en prensa minera y comunicados."}));
-  const o=el("section","panel hl");o.append(el("h2",null,"Oportunidades por rubro"));const ops=opps(p);
+
+  const pf=perfil();const ops=opps(p);
+  const me=el("section","panel hl");me.append(el("h2",null,pf&&pf.nombre?"Para "+pf.nombre:"Para tu empresa"));
+  if(!pf||!pf.rubros.length){me.append(el("p","note","Indica el rubro y el tamaño de tu empresa para ver aquí qué oportunidades tendría en este proyecto y cuánto podría generar."));const a2=el("a","btn","Configurar mi empresa");a2.href="#empresa";a2.style.textDecoration="none";me.append(a2)}
+  else{const ul=el("ul","opps");let tot=0;pf.rubros.forEach(id=>{const r=RUBROS.find(x=>x.id===id);if(!r)return;const li=el("li");const ok=vigente(p)&&ops.some(x=>x.id===id);
+      if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, supuesto sin validar)."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
+      else li.append(el("b",null,r.n+": no calza"),el("span",null,vigente(p)?"No detectamos espacio para este rubro en este proyecto.":"El proyecto está cerrado ("+p.estado+")."));ul.append(li)});
+    me.append(ul);if(tot>0)me.append(kpi("US$ "+money(tot)+" M",pf.ventas?"lo que podría generar para tu empresa (por año, con tope por tamaño)":"valor estimado de tus rubros en este proyecto"));
+    const ed=el("a",null,"Cambiar rubro o tamaño");ed.href="#empresa";me.append(ed)}
+  app.append(me);
+  const o=el("section","panel");o.append(el("h2",null,"Todas las oportunidades por rubro"));
   if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
   else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
-  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+r.pct+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
+  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
   o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
   g.append(o,a);app.append(g);
+  {const c=el("section","panel");c.append(el("h2",null,"Quién construye y cómo llegar a ellos"));
+    const conf=PE.filter(x=>x.proyecto_id===p.id);
+    if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);const a3=el("a",null,"Ver fuente");a3.href=x.fuente_url;a3.target="_blank";a3.rel="noopener";li.append(a3);ul.append(li)});c.append(ul)}
+    else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
+    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec)));const cons=E.filter(e=>e.tipo!=="registro"&&e.sectores.includes(sec));
+    const h1=el("p",null,"1. Al dueño del proyecto: "+(p.titular||""));h1.style.cssText="font-weight:600;margin:0";c.append(h1,el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
+    if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+    const h2b=el("p",null,"2. A las empresas que suelen construir este tipo de proyecto");h2b.style.cssText="font-weight:600;margin:0";c.append(h2b);
+    if(cons.length){c.append(el("p","note","No significa que tengan este contrato: son empresas que construyen proyectos de este sector en Chile. Envía la presentación de tu empresa por su canal de proveedores."));const ul=el("ul","emp");cons.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+    else c.append(el("p","note","Aún no tenemos empresas verificadas para este sector."));
+    c.append(el("p","note","Solo mostramos canales corporativos públicos (portales de proveedores, formularios y correos genéricos). No guardamos datos de personas."));app.append(c)}
   const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
   if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}app.append(d);
   if(p.obras&&p.obras.length){const s=el("section","panel");s.append(el("h2",null,"Partes, obras y acciones que incluye"));const ul=el("ul");ul.style.margin="0";ul.style.paddingLeft="18px";p.obras.forEach(x=>ul.append(el("li",null,x)));s.append(ul);app.append(s)}
   const cs=C.filter(c=>c.proyecto_id===p.id&&!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));
   if(cs.length){const s=el("section","panel");s.append(el("h2",null,"Historial de cambios"));cs.forEach(c=>s.append(el("p","meta",new Date(c.detectado_at).toLocaleDateString("es-CL")+": "+(c.tipo==="nuevo"?"ingresó al SEIA":c.antes+" → "+c.despues))));app.append(s)}
 }
+function vEmpresa(app){
+  app.append(header("Mi empresa","Indica el rubro y el tamaño de la empresa que estás evaluando. Con eso, cada proyecto te muestra qué oportunidades tendría y cuánto podría generar. Estos datos se guardan solo en este navegador."));
+  const pf=perfil()||{nombre:"",rubros:[],tam:"",ventas:"",zona:"norte"};
+  const fm=el("form","panel");fm.innerHTML='<div class="filters"><label for="en">Nombre de la empresa (opcional)<input id="en" autocomplete="organization"></label><label for="et">Tamaño<select id="et"></select></label><label for="ev">Ventas anuales en US$ millones<input id="ev" type="number" min="0" step="0.1" inputmode="decimal"></label><label for="ez">Zona de trabajo<select id="ez"><option value="norte">Solo norte</option><option value="">Todo Chile</option></select></label></div>';
+  const fs=el("fieldset","checks");fs.append(el("legend",null,"Rubros de la empresa (puedes marcar varios)"));RUBROS.forEach(r=>{const l=el("label");const c=el("input");c.type="checkbox";c.value=r.id;c.checked=pf.rubros.includes(r.id);l.append(c,document.createTextNode(r.n));fs.append(l)});
+  const bt=el("button","btn","Guardar y ver oportunidades");bt.type="submit";const msg=el("p","note");msg.setAttribute("role","status");fm.append(fs,bt,msg);app.append(fm);
+  TAM.forEach(t=>$("#et").append(new Option(t[1],t[0])));$("#en").value=pf.nombre||"";$("#et").value=pf.tam||"";$("#ev").value=pf.ventas||"";$("#ez").value=pf.zona==null?"norte":pf.zona;
+  $("#et").addEventListener("input",()=>{const t=TAM.find(x=>x[0]===$("#et").value);if(t&&t[2])$("#ev").value=t[2]});
+  const out=el("div");out.style.cssText="display:flex;flex-direction:column;gap:20px";app.append(out);
+  const draw=()=>{out.textContent="";const pf=perfil();if(!pf||!pf.rubros.length)return;
+    const rs=RUBROS.filter(r=>pf.rubros.includes(r.id));const rows=[];
+    P.filter(p=>vigente(p)&&(!pf.zona||esNorte(p))).forEach(p=>{const ops=opps(p);const m=rs.filter(r=>ops.some(o=>o.id===r.id));if(m.length){const xs=m.map(r=>estim(p,r,pf));rows.push({p,m,val:xs.reduce((a,x)=>a+x.val,0),paq:xs.reduce((a,x)=>a+x.paquete,0)})}});
+    rows.sort((a,b)=>b.paq-a.paq);
+    const k=el("section","kpis");k.append(kpi(rows.length,"proyectos vigentes donde calza"),kpi("US$ "+money(rows.reduce((a,x)=>a+x.paq,0))+" M","tamaño total de esos paquetes"),kpi(rows.filter(x=>plazo(x.p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
+    if(pf.ventas)k.append(kpi("US$ "+money(+pf.ventas*TOPE)+" M","contrato anual razonable para su tamaño"));out.append(k);
+    out.append(el("p","note","Cómo leer las cifras: el paquete es la inversión del proyecto multiplicada por un porcentaje de partida para cada rubro (supuesto sin validar con datos de mercado). El tope por tamaño supone que un solo contrato no debería superar la mitad de las ventas anuales de la empresa. Sirve para priorizar a quién llamar primero, no como cotización."));
+    if(!rows.length){out.append(el("div","soon","No encontramos proyectos vigentes para esos rubros en esta zona. Prueba con Todo Chile o agrega otro rubro."));return}
+    const list=el("section","list"),slot=el("div");slot.style.cssText="display:flex;justify-content:center";out.append(list,slot);
+    slot.append(pager(list,rows,x=>{const w=el("p","why");w.append(el("b",null,"Calza en: "),document.createTextNode(x.m.map(r=>r.n).join(", ")+". Paquete estimado: US$ "+money(x.paq)+" millones."+(pf.ventas?" A su tamaño podría generar hasta US$ "+money(x.val)+" millones al año.":"")));return card(x.p,w)}))};
+  fm.addEventListener("submit",ev=>{ev.preventDefault();const rub=[...fs.querySelectorAll("input:checked")].map(c=>c.value);if(!rub.length){msg.textContent="Marca al menos un rubro para poder buscar oportunidades.";return}
+    try{localStorage.setItem("radar_empresa",JSON.stringify({nombre:$("#en").value.trim(),rubros:rub,tam:$("#et").value,ventas:+$("#ev").value||0,zona:$("#ez").value}));msg.textContent="Guardado. Abajo están los proyectos donde calza; cada ficha ahora muestra el detalle para esta empresa."}catch(e){msg.textContent="No se pudo guardar en este navegador."}draw()});
+  draw();
+}
 function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
   const nav=h.startsWith("p-")?"inicio":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else vInicio(app)}
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);window.addEventListener("hashchange",route);route()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*")])}catch(e){E=[];PE=[]}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
 </script>
 </body>
