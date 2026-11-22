@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Radar de Proyectos | Plataforma</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f2ee;--panel:#ffffff;--fg:#141d21;--muted:#566267;--line:#d8d3ca;--soft:#ebe7e0;--ink:#0a2229;--ink-fg:#eef4f4;--ink-muted:#9db6ba;--accent:#b4531c;--accent-soft:#f5e3d6;--ok:#1f7a4d;--ok-soft:#dcefe4;--warn:#8a6a00;--warn-soft:#f4ecd0;--bad:#a23a2a;--bad-soft:#f6dfda;--eval:#245c8f;--eval-soft:#dde8f3}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1719;--panel:#172124;--fg:#e8eeee;--muted:#9aabad;--line:#2a393d;--soft:#1f2c30;--ink:#081c21;--accent:#e8925a;--accent-soft:#3b2a1f;--ok:#62c795;--ok-soft:#18342a;--warn:#e0c15a;--warn-soft:#383016;--bad:#ee8f80;--bad-soft:#3d221e;--eval:#84b4e6;--eval-soft:#1b2c3d;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.top{background:var(--ink);color:var(--ink-fg)}
+.top .in{max-width:1120px;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between}
+.brand{font:800 19px/1 Archivo,system-ui,sans-serif;letter-spacing:.01em;color:var(--ink-fg);text-decoration:none}
+.brand small{font:400 11px "IBM Plex Mono",monospace;color:var(--ink-muted);margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:var(--ink-muted);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500;font-size:14px}
+nav a[aria-current="page"]{background:var(--accent);color:#fff}
+nav a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{max-width:1120px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:20px}
+h1{font:700 28px/1.15 Archivo,system-ui,sans-serif;margin:0;text-wrap:balance}
+h2{font:700 18px/1.25 Archivo,system-ui,sans-serif;margin:0}
+.lead{color:var(--muted);margin:6px 0 0;max-width:68ch}
+.stamp{font:400 12px "IBM Plex Mono",monospace;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font:700 24px/1.2 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel.hl{border-color:var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.filters label{display:flex;flex-direction:column;gap:4px;font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex:1 1 165px;min-width:0}
+select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.count{color:var(--muted);font-size:13px;margin:0}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--accent)}
+.card h3{font:600 16px/1.3 Inter,system-ui,sans-serif;margin:0;text-wrap:balance}
+.meta{color:var(--muted);font-size:13px;margin:0}
+.inv{text-align:right;font:700 20px/1.1 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.inv small{display:block;font:400 11px Inter,system-ui,sans-serif;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;grid-column:1/-1}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--soft)}
+.tag.rubro{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.ok{background:var(--ok-soft);color:var(--ok);font-weight:600}
+.tag.eval{background:var(--eval-soft);color:var(--eval);font-weight:600}
+.tag.adm{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.tag.bad{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.why{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+.why b{color:var(--fg)}
+.more{align-self:center;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;margin:0;font-size:14px}
+.dl dt{color:var(--muted)}
+.dl dd{margin:0}
+.desc{white-space:pre-line;max-width:75ch;margin:0}
+.opps{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.opps li{border-left:3px solid var(--accent);padding:2px 0 2px 12px}
+.opps b{display:block}
+.opps span{font-size:13px;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(90px,200px) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+.bar i{display:block;height:10px;background:var(--accent);border-radius:2px;min-width:2px}
+.bar .v{font:500 12px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{color:var(--muted);font-size:13px;max-width:75ch;margin:0}
+.soon{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:14px}
+.soon b{color:var(--fg)}
+.back{font-size:14px}
+@media (max-width:560px){.card{grid-template-columns:minmax(0,1fr)}.inv{text-align:left}.dl{grid-template-columns:minmax(0,1fr)}.dl dt{margin-top:6px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <a class="brand" href="#inicio">Radar de Proyectos<small>plataforma</small></a>
+  <nav aria-label="Secciones">
+    <a href="#inicio" data-nav="inicio">Proyectos</a>
+    <a href="#oportunidades" data-nav="oportunidades">Oportunidades por rubro</a>
+    <a href="#mercado" data-nav="mercado">Mercado</a>
+    <a href="#novedades" data-nav="novedades">Novedades</a>
+  </nav>
+</div></div>
+<main id="app"><p class="lead">Cargando proyectos…</p></main>
+<script>
+const SUPA="https://uyhdxjnqhkkazrokdjjc.supabase.co/rest/v1/";
+const KEY="sb_publishable_C7FEhSMaFO6yX9dXqgjKIA_cxGBjYwk";
+const BASE_INICIAL="2026-11-22T03:00:00Z"; // los "nuevos" anteriores a esta fecha son la carga inicial
+const NORTE=["Arica","Tarapacá","Antofagasta","Atacama","Coquimbo"];
+const SECTOR={a:"Agua",b:"Transmisión eléctrica",c:"Energía",e:"Transporte e infraestructura vial",f:"Puertos",g:"Infraestructura urbana",h:"Inmobiliario",i:"Minería",j:"Ductos",k:"Industria",l:"Agroindustria",m:"Forestal",n:"Acuicultura","ñ":"Química y combustibles",o:"Saneamiento y agua",p:"Áreas protegidas"};
+// Rubros de proveedores y reglas para detectar oportunidad. tip: letras de tipología; kw: palabras en la descripción.
+const RUBROS=[
+ {id:"carga",n:"Transporte de carga",pct:1.5,tip:["i","c","b","ñ","f","j","k"],kw:/transporte de|camion|insumos|concentrado|c[aá]todos|[aá]cido/i,min:20,why:"traslado de equipos, insumos y materiales"},
+ {id:"sobredim",n:"Carga sobredimensionada",pct:0.5,tip:["c","b"],kw:/aerogenerador|e[oó]lic|transformador|molino|subestaci[oó]n/i,min:50,why:"equipos de gran tamaño (aerogeneradores, transformadores, molinos)"},
+ {id:"personal",n:"Transporte de personal",pct:0.5,tip:["i"],kw:/campamento|faena|trabajadores|mano de obra/i,min:50,why:"traslado diario de trabajadores a faena"},
+ {id:"campamento",n:"Campamento y alimentación",pct:1.5,tip:["i"],kw:/campamento|alojamiento|casino/i,min:100,why:"alojamiento y alimentación durante la construcción"},
+ {id:"tierra",n:"Movimiento de tierra y maquinaria",pct:6,tip:["i","e","a"],kw:/rajo|botadero|relaves|excavaci|movimiento de tierra|plataforma|caminos?|dep[oó]sito/i,min:10,why:"excavaciones, plataformas, caminos y depósitos"},
+ {id:"aridos",n:"Áridos",pct:1,tip:["e"],kw:/[aá]ridos|empr[eé]stito|cantera/i,obra:/i\.5/,min:10,why:"extracción y suministro de áridos"},
+ {id:"civil",n:"Obras civiles y montaje",pct:15,tip:["i","c","b","h","g","e","f","o","k","ñ","a","j","l","n"],kw:/construcci[oó]n|montaje|planta|obras/i,min:10,why:"construcción y montaje de las obras"},
+ {id:"electrico",n:"Montaje eléctrico",pct:5,tip:["b","c"],kw:/l[ií]nea de transmisi[oó]n|subestaci[oó]n|fotovoltaic|bess|almacenamiento de energ[ií]a|tendido el[eé]ctrico/i,obra:/b\.[12]/,min:10,why:"líneas, subestaciones y conexión eléctrica"},
+ {id:"agua",n:"Agua, desalación y piping",pct:4,tip:["a","o","j"],kw:/desalad|acueducto|impulsi[oó]n|emisario|ducto|tuber[ií]a|sistema h[ií]drico/i,obra:/o\.6|a\.1|j\./,min:10,why:"plantas de agua, acueductos e impulsión"},
+ {id:"combustible",n:"Combustible y lubricantes",pct:2,tip:["i"],kw:/combustible|petr[oó]leo|di[eé]sel/i,min:100,why:"abastecimiento de combustible para equipos y faena"},
+ {id:"peligrosas",n:"Sustancias peligrosas y explosivos",pct:1,tip:["ñ"],kw:/explosiv|[aá]cido sulf[uú]rico|sustancias peligrosas|reactivos/i,obra:/ñ\./,min:10,why:"transporte y manejo de sustancias peligrosas"},
+ {id:"residuos",n:"Gestión de residuos",pct:0.5,tip:["i","o","ñ","k"],kw:/residuos|ril|riles|lodos/i,obra:/o\.|i\.3/,min:30,why:"retiro, transporte y disposición de residuos"},
+ {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
+ {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
+];
+let P=[],C=[];
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const money=v=>(+v||0).toLocaleString("es-CL",{maximumFractionDigits:v<10?1:0});
+const norm=s=>(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const fdate=d=>d?d.split("-").reverse().join("/"):"";
+const regionCorta=r=>(r||"").replace(/^Región (de la |del |de los |de )?/,"").replace("Metropolitana de Santiago","Metropolitana").replace("Libertador General Bernardo O'Higgins","O'Higgins").replace(" y de la Antártica Chilena","").replace(" del General Carlos Ibáñez del Campo","");
+const esNorte=p=>NORTE.some(n=>(p.region||"").includes(n));
+const sector=p=>SECTOR[(p.tipologia||"").trim().toLowerCase()[0]]||"Otro";
+function plazo(p){const e=norm(p.estado);if(e.includes("aprobado"))return{t:"Corto plazo",c:"ok"};if(e.includes("admision")&&!e.includes("no admitido"))return{t:"Mediano plazo",c:"adm"};if(e.includes("calificacion"))return{t:"Mediano plazo",c:"eval"};return{t:"Cerrado",c:"bad"}}
+const vigente=p=>plazo(p).t!=="Cerrado";
+function opps(p){const letra=(p.tipologia||"").trim().toLowerCase()[0];const texto=(p.nombre||"")+" "+(p.descripcion||"")+" "+(p.tipologia_desc||"");const obras=(p.obras||[]).join(" ");const inv=+p.inversion_mmusd||0;
+  return RUBROS.filter(r=>{if(inv<r.min)return false;const porTip=r.tip.includes(letra);const porKw=r.kw.test(texto);const porObra=r.obra?r.obra.test(obras):false;return (porTip&&(porKw||porObra))||(porKw&&porObra)||(porObra&&inv>=r.min*3)||(porTip&&["civil","carga","ambiental"].includes(r.id))});}
+function card(p,extra){const a=el("a","card");a.href="#p-"+p.id;const l=el("div");l.append(el("h3",null,p.nombre),el("p","meta",(p.titular||"")+" · "+(p.comuna||"")));
+  const inv=el("div","inv","US$ "+money(p.inversion_mmusd));inv.append(el("small",null,"millones"));
+  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));
+  a.append(l,inv,t);if(extra)a.append(extra);return a}
+function fillSel(sel,vals,first){sel.textContent="";sel.append(new Option(first,""));vals.forEach(v=>sel.append(new Option(v,v)))}
+function pager(list,rows,render){let n=0;const more=el("button","more","Ver más");more.type="button";const step=()=>{rows.slice(n,n+40).forEach(r=>list.append(render(r)));n+=40;more.hidden=n>=rows.length};more.onclick=step;step();return more}
+function header(t,lead){const h=el("header");h.append(el("h1",null,t));if(lead)h.append(el("p","lead",lead));return h}
+function kpi(v,l){const k=el("div","kpi");k.append(el("b",null,v),el("span",null,l));return k}
+const lastUpd=()=>{const m=P.reduce((a,p)=>p.actualizado_at>a?p.actualizado_at:a,"");return m?new Date(m).toLocaleString("es-CL",{dateStyle:"long",timeStyle:"short"}):""};
+
+function vInicio(app){
+  app.append(header("Proyectos en el SEIA","Todos los proyectos presentados al Sistema de Evaluación de Impacto Ambiental en los últimos 12 meses. Entra a cada uno para ver su ficha."));
+  app.append(el("p","stamp","Última lectura del SEIA: "+lastUpd()));
+  const k=el("section","kpis");const vig=P.filter(vigente);
+  k.append(kpi(P.length,"proyectos presentados"),kpi(P.filter(p=>plazo(p).t==="Mediano plazo").length,"en evaluación"),kpi(P.filter(p=>plazo(p).t==="Corto plazo").length,"aprobados"),kpi(P.filter(esNorte).length,"en el norte"),kpi("US$ "+money(vig.reduce((s,p)=>s+(+p.inversion_mmusd||0),0)/1000)+" mil M","inversión vigente"));
+  app.append(k);
+  const f=el("section","filters");f.innerHTML='<label for="fz">Zona<select id="fz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="fr">Región<select id="fr"></select></label><label for="fs">Sector<select id="fs"></select></label><label for="fe">Estado<select id="fe"></select></label><label for="fq">Buscar<input id="fq" type="search" placeholder="Proyecto o titular"></label>';
+  app.append(f);
+  const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
+  fillSel($("#fr"),[...new Set(P.map(p=>p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
+  fillSel($("#fs"),[...new Set(P.map(sector))].sort((a,b)=>a.localeCompare(b,"es")),"Todos");
+  fillSel($("#fe"),[...new Set(P.map(p=>p.estado))].filter(Boolean),"Todos");
+  const draw=()=>{const z=$("#fz").value,r=$("#fr").value,s=$("#fs").value,e=$("#fe").value,q=norm($("#fq").value.trim());
+    const rows=P.filter(p=>(!z||esNorte(p))&&(!r||p.region===r)&&(!s||sector(p)===s)&&(!e||p.estado===e)&&(!q||norm(p.nombre+" "+p.titular).includes(q)));
+    list.textContent="";slot.textContent="";
+    cnt.textContent=rows.length?rows.length+" proyectos, US$ "+money(rows.reduce((a,p)=>a+(+p.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";
+    if(rows.length)slot.append(pager(list,rows,p=>card(p)))};
+  ["fz","fr","fs","fe","fq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+}
+function vOpps(app){
+  app.append(header("Oportunidades por rubro","Elige el rubro de tu empresa y la zona. Te mostramos los proyectos vigentes donde ese rubro tiene espacio y por qué."));
+  const pn=el("section","panel hl");
+  const f=el("div","filters");f.innerHTML='<label for="or">Rubro de tu empresa<select id="or"></select></label><label for="oz">Zona<select id="oz"><option value="norte">Solo norte</option><option value="">Todo Chile</option></select></label><label for="op">% de la inversión para tu rubro (supuesto)<input id="op" type="number" min="0" max="100" step="0.1"></label>';
+  pn.append(f);const res=el("div","kpis");pn.append(res);
+  pn.append(el("p","note","Cómo leer la valorización: es el monto de inversión de los proyectos donde calza tu rubro, multiplicado por el porcentaje que tú indiques. El porcentaje inicial es un supuesto de partida sin validar con datos de mercado: ajústalo con tu experiencia. Es un orden de magnitud para priorizar, no una cotización."));
+  app.append(pn);
+  const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
+  const sel=$("#or");RUBROS.forEach(r=>sel.append(new Option(r.n,r.id)));
+  let saved="";try{saved=localStorage.getItem("radar_rubro")||""}catch(e){}
+  if(saved&&RUBROS.some(r=>r.id===saved))sel.value=saved;
+  const setPct=()=>{$("#op").value=RUBROS.find(r=>r.id===sel.value).pct};setPct();
+  const draw=()=>{const r=RUBROS.find(x=>x.id===sel.value),z=$("#oz").value,pct=Math.max(0,+$("#op").value||0);try{localStorage.setItem("radar_rubro",r.id)}catch(e){}
+    const rows=P.filter(p=>vigente(p)&&(!z||esNorte(p))&&opps(p).some(o=>o.id===r.id)).sort((a,b)=>b.inversion_mmusd-a.inversion_mmusd);
+    const tot=rows.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);
+    res.textContent="";res.append(kpi(rows.length,"proyectos donde calzas"),kpi("US$ "+money(tot)+" M","inversión de esos proyectos"),kpi("US$ "+money(tot*pct/100)+" M","mercado potencial para tu rubro ("+pct+"%)"),kpi(rows.filter(p=>plazo(p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
+    list.textContent="";slot.textContent="";
+    cnt.textContent=rows.length?"Ordenados por inversión, de mayor a menor":"No encontramos proyectos vigentes para ese rubro en esta zona. Prueba con Todo Chile.";
+    if(rows.length)slot.append(pager(list,rows,p=>{const w=el("p","why");w.append(el("b",null,"Por qué calza: "),document.createTextNode(r.why+". Valor estimado para tu rubro: US$ "+money((+p.inversion_mmusd||0)*pct/100)+" millones."));return card(p,w)}))};
+  sel.addEventListener("input",()=>{setPct();draw()});$("#oz").addEventListener("input",draw);$("#op").addEventListener("input",draw);draw();
+}
+function bars(title,entries,fmt){const s=el("section","panel");s.append(el("h2",null,title));const b=el("div","bars");const max=Math.max(...entries.map(e=>e[1]),1);entries.forEach(([k,v])=>{const r=el("div","bar");const i=el("i");i.style.width=(100*v/max)+"%";const w=el("div");w.append(i);r.append(el("span",null,k),w,el("span","v",fmt(v)));b.append(r)});s.append(b);return s}
+function group(rows,key,val){const m={};rows.forEach(p=>{const k=key(p);m[k]=(m[k]||0)+val(p)});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
+function vMercado(app){
+  app.append(header("Mercado","Dónde está la inversión que viene. Solo proyectos vigentes: en admisión, en evaluación o aprobados."));
+  const f=el("section","filters");f.innerHTML='<label for="mz">Zona<select id="mz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label>';app.append(f);
+  const out=el("div","grid2");app.append(out);
+  const draw=()=>{const rows=P.filter(p=>vigente(p)&&(!$("#mz").value||esNorte(p)));const inv=p=>+p.inversion_mmusd||0;out.textContent="";
+    out.append(bars("Inversión por región (US$ millones)",group(rows,p=>regionCorta(p.region),inv).slice(0,12),money),
+      bars("Inversión por sector (US$ millones)",group(rows,sector,inv).slice(0,12),money),
+      bars("Inversión por plazo (US$ millones)",group(rows,p=>plazo(p).t+(plazo(p).t==="Corto plazo"?" (aprobado)":" (en evaluación)"),inv),money),
+      bars("Proyectos por rubro de proveedor (cantidad)",RUBROS.map(r=>[r.n,rows.filter(p=>opps(p).some(o=>o.id===r.id)).length]).sort((a,b)=>b[1]-a[1]),v=>v),
+      bars("Mayores titulares (US$ millones)",group(rows,p=>p.titular||"",inv).slice(0,10),money),
+      bars("Consultoras ambientales con más proyectos (cantidad)",group(rows.filter(p=>p.consultora),p=>p.consultora,()=>1).slice(0,10),v=>v))};
+  $("#mz").addEventListener("input",draw);draw();
+  app.append(el("p","note","Montos declarados por cada titular en el SEIA. Corto plazo: proyecto aprobado. Mediano plazo: en admisión o en evaluación. El largo plazo (proyectos en estudio que aún no entran al SEIA) se sumará con datos de Cochilco."));
+}
+function vNovedades(app){
+  app.append(header("Novedades","Proyectos nuevos y cambios de estado detectados en cada revisión diaria del SEIA."));
+  const rows=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));const list=el("section","list");
+  if(!rows.length){app.append(el("div","soon","Todavía no hay novedades. La base se cargó el 21 de noviembre de 2026; desde la próxima revisión diaria aparecerán aquí los proyectos nuevos y los cambios de estado."));return}
+  const byId=Object.fromEntries(P.map(p=>[p.id,p]));
+  rows.forEach(c=>{const p=byId[c.proyecto_id];if(!p)return;const w=el("p","why");const d=new Date(c.detectado_at).toLocaleDateString("es-CL");w.append(el("b",null,d+": "),document.createTextNode(c.tipo==="nuevo"?"proyecto nuevo en el SEIA.":c.tipo==="estado"?"cambió de estado: "+c.antes+" → "+c.despues+".":"cambió de actividad: "+c.antes+" → "+c.despues+"."));list.append(card(p,w))});
+  app.append(list);
+}
+function vFicha(app,id){
+  const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"),Object.assign(el("a","back","Volver a la lista"),{href:"#inicio"}));return}
+  const b=el("a","back","← Volver a la lista");b.href="#inicio";app.append(b);
+  const pl=plazo(p);const h=header(p.nombre);const t=el("div","tags");t.style.marginTop="10px";t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag "+pl.c,pl.t),el("span","tag",p.tipo==="EIA"?"Estudio de Impacto Ambiental":"Declaración de Impacto Ambiental"));h.append(t);app.append(h);
+  const k=el("section","kpis");k.append(kpi("US$ "+money(p.inversion_mmusd)+" M","inversión declarada"),kpi(fdate(p.fecha_presentacion),"fecha de presentación"),kpi(p.dias_legales||"0","días legales transcurridos"),kpi(p.actividad||"","tramitación"));app.append(k);
+  const g=el("div","grid2");
+  const a=el("section","panel");a.append(el("h2",null,"Quién está detrás"));const dl=el("dl","dl");
+  [["Titular (dueño)",p.titular],["Consultora ambiental",p.consultora||"Sin información en la ficha"],["Región",regionCorta(p.region)],["Comunas",p.comuna],["Tipología",(p.tipologia||"")+" "+(p.tipologia_desc||"")],["Razón de ingreso",p.razon_ingreso]].forEach(([x,y])=>{dl.append(el("dt",null,x),el("dd",null,y||""))});
+  a.append(dl);const ls=el("a",null,"Ver expediente completo en el SEIA");ls.href="https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id;ls.target="_blank";ls.rel="noopener";a.append(ls);
+  a.append(Object.assign(el("div","soon"),{innerHTML:"<b>Constructor (EPC) y subcontratistas:</b> en desarrollo. Se sumará con adjudicaciones publicadas en prensa minera y comunicados."}));
+  const o=el("section","panel hl");o.append(el("h2",null,"Oportunidades por rubro"));const ops=opps(p);
+  if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
+  else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
+  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,r.why[0].toUpperCase()+r.why.slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+r.pct+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
+  o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Las cifras del estudio (trabajadores en el peak, viajes de camión, agua, combustible) todavía no están extraídas."));
+  g.append(o,a);app.append(g);
+  const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
+  if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}app.append(d);
+  if(p.obras&&p.obras.length){const s=el("section","panel");s.append(el("h2",null,"Partes, obras y acciones que incluye"));const ul=el("ul");ul.style.margin="0";ul.style.paddingLeft="18px";p.obras.forEach(x=>ul.append(el("li",null,x)));s.append(ul);app.append(s)}
+  const cs=C.filter(c=>c.proyecto_id===p.id&&!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));
+  if(cs.length){const s=el("section","panel");s.append(el("h2",null,"Historial de cambios"));cs.forEach(c=>s.append(el("p","meta",new Date(c.detectado_at).toLocaleDateString("es-CL")+": "+(c.tipo==="nuevo"?"ingresó al SEIA":c.antes+" → "+c.despues))));app.append(s)}
+}
+function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
+  const nav=h.startsWith("p-")?"inicio":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else vInicio(app)}
+async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);window.addEventListener("hashchange",route);route()}
+ catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
+</script>
+</body>
+</html>
