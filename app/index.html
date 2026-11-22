@@ -74,6 +74,12 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
 .checks label{display:flex;gap:8px;align-items:center;font-size:14px}
 .checks input{width:auto}
 .btn{align-self:flex-start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer}
+.cost{width:100%;border-collapse:collapse;font-size:14px}
+.cost th{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:4px 6px}
+.cost td{padding:4px 6px;vertical-align:middle}.cost td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cost input{padding:6px 8px}.tw{overflow-x:auto}
+.btn2{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer;align-self:flex-start}
+@media print{.top,.back,.btn,.btn2,.filters{display:none}body{background:#fff}}
 .emp{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
 .emp li{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
 .emp b{display:block}.emp span{color:var(--muted);font-size:13px;display:block}
@@ -255,6 +261,7 @@ function vFicha(app,id){
       if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
       else li.append(el("b",null,r.n+": no calza"),el("span",null,vigente(p)?"No detectamos espacio para este rubro en este proyecto.":"El proyecto está cerrado ("+p.estado+")."));ul.append(li)});
     me.append(ul);if(tot>0)me.append(kpi("US$ "+money(tot)+" M",pf.ventas?"lo que podría generar para tu empresa (por año, con tope por tamaño)":"valor estimado de tus rubros en este proyecto"));
+    if(vigente(p)&&pf.rubros.some(id=>ops.some(x=>x.id===id))){const cb=el("a","btn","Costear este proyecto");cb.href="#c-"+p.id;cb.style.textDecoration="none";me.append(cb)}
     const ed=el("a",null,"Cambiar rubro o tamaño");ed.href="#empresa";me.append(ed)}
   app.append(me);
   const o=el("section","panel");o.append(el("h2",null,"Todas las oportunidades por rubro"));
@@ -305,9 +312,40 @@ function vEmpresa(app){
     try{localStorage.setItem("radar_empresa",JSON.stringify({nombre:$("#en").value.trim(),rubros:rub,tam:$("#et").value,ventas:+$("#ev").value||0,regiones:[...fr.querySelectorAll("input:checked")].map(c=>c.value)}));msg.textContent="Guardado. Abajo están los proyectos donde calza; cada ficha muestra el detalle para esta empresa y Novedades destaca lo que le sirve."}catch(e){msg.textContent="No se pudo guardar en este navegador."}draw()});
   draw();
 }
+const PLANT={transporte:["Conductores","Camiones o equipos (arriendo o cuota)","Combustible","Mantención y neumáticos","Peajes y permisos","Seguros"],personal:["Conductores","Buses o minibuses (arriendo o cuota)","Combustible","Mantención","Seguros"],campamento:["Personal de cocina y aseo","Alimentación (raciones)","Módulos y equipamiento (arriendo)","Servicios básicos","Insumos de aseo y lavandería"],general:["Mano de obra","Equipos y maquinaria","Materiales e insumos","Combustible","Subcontratos","Seguros y garantías"]};
+const plantilla=id=>PLANT[["carga","sobredim","peligrosas","combustible","residuos","aridos"].includes(id)?"transporte":id==="personal"?"personal":id==="campamento"?"campamento":"general"];
+function vCosteo(app,id){
+  const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"));return}
+  const b=el("a","back","← Volver a la ficha");b.href="#p-"+p.id;app.append(b);
+  app.append(header("Costeo: "+p.nombre,"Calcula cuánto te costaría prestar el servicio y a qué precio ofertar. Tú pones tus costos reales; la página hace las sumas y compara con el tamaño estimado del negocio. Se guarda solo en este navegador."));
+  const pf=perfil();const ops=opps(p);const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id));if(!rs.length){app.append(el("div","soon","Este proyecto no tiene oportunidades detectadas para costear."));return}
+  const K="radar_costeo_"+p.id;let all={};try{all=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
+  const top=el("section","panel");top.innerHTML='<div class="filters"><label for="cr">Rubro a costear<select id="cr"></select></label><label for="cd">Valor del dólar en pesos<input id="cd" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej: el dólar observado de hoy"></label><label for="cg">Gastos generales (%)<input id="cg" type="number" min="0" max="100" step="0.5"></label><label for="cu">Utilidad (%)<input id="cu" type="number" min="0" max="100" step="0.5"></label></div>';app.append(top);
+  const sel=$("#cr");rs.forEach(r=>sel.append(new Option(r.n,r.id)));const mine=pf&&rs.find(r=>pf.rubros.includes(r.id));if(mine)sel.value=mine.id;
+  const pn=el("section","panel");pn.append(el("h2",null,"Tus costos directos"));const tw=el("div","tw");const tb=el("table","cost");tw.append(tb);pn.append(tw);
+  const add=el("button","btn2","Agregar otro costo");add.type="button";pn.append(add);app.append(pn);
+  const res=el("section","panel hl");app.append(res);
+  const pr=el("button","btn2","Imprimir o guardar como PDF");pr.type="button";pr.onclick=()=>window.print();app.append(pr);
+  const clp=v=>"$ "+Math.round(v).toLocaleString("es-CL");let st;
+  const load=()=>{const r=sel.value;st=all[r]||{dolar:all._dolar||"",gg:"",ut:"",filas:plantilla(r).map(c=>({c,q:"",u:"",m:""}))};$("#cd").value=st.dolar||all._dolar||"";$("#cg").value=st.gg;$("#cu").value=st.ut;draw()};
+  const save=()=>{st.dolar=$("#cd").value;st.gg=$("#cg").value;st.ut=$("#cu").value;all[sel.value]=st;all._dolar=st.dolar;try{localStorage.setItem(K,JSON.stringify(all))}catch(e){}};
+  const calc=()=>{save();const dir=st.filas.reduce((a,f)=>a+(+f.q||0)*(+f.u||0)*(+f.m||0),0);const gg=dir*(+st.gg||0)/100;const ut=(dir+gg)*(+st.ut||0)/100;const precio=dir+gg+ut;const r=RUBROS.find(x=>x.id===sel.value);const x=estim(p,r,pf);const usd=+st.dolar>0?precio/+st.dolar/1e6:null;
+    tb.querySelectorAll("tr[data-i]").forEach(tr=>{const f=st.filas[+tr.dataset.i];tr.querySelector(".n").textContent=clp((+f.q||0)*(+f.u||0)*(+f.m||0))});
+    res.textContent="";res.append(el("h2",null,"Resultado"));const k=el("div","kpis");k.append(kpi(clp(dir),"costo directo"),kpi(clp(gg),"gastos generales"),kpi(clp(ut),"utilidad"),kpi(clp(precio),"precio de oferta (sin IVA)"));res.append(k);
+    if(!dir){res.append(el("p","note","Completa cantidad, costo mensual por unidad y meses en cada fila. El subtotal de cada fila es cantidad por costo mensual por meses."));return}
+    if(usd==null){res.append(el("p","note","Escribe el valor del dólar para comparar tu precio con el tamaño estimado del negocio en este proyecto."));return}
+    const pct=x.paquete>0?usd/x.paquete*100:0;res.append(el("p",null,"Tu oferta equivale a US$ "+money(usd)+" millones. El paquete estimado de "+r.n.toLowerCase()+" en este proyecto es de US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+"), es decir, tu oferta cubriría cerca del "+(pct<1?pct.toFixed(1).replace(".",","):Math.round(pct))+"% de ese paquete."));
+    if(x.tope!=null)res.append(el("p","note",usd>x.tope?"Ojo: supera el contrato anual razonable para el tamaño de la empresa (US$ "+money(x.tope)+" millones). Revisa si tienes espalda financiera, garantías y capital de trabajo para sostenerlo.":"Está dentro del contrato anual razonable para el tamaño de la empresa (US$ "+money(x.tope)+" millones)."));
+    if(peak(p))res.append(el("p","note","Dato del estudio para dimensionar: "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+"."));
+    res.append(el("p","note","Es una herramienta de apoyo: los costos son los que tú ingresas y el paquete es una estimación para priorizar, no una cotización ni una garantía de adjudicación."))};
+  const draw=()=>{tb.textContent="";const h=el("tr");["Concepto","Cantidad","Costo mensual por unidad ($)","Meses","Subtotal",""].forEach(t=>h.append(el("th",null,t)));tb.append(h);
+    st.filas.forEach((f,i)=>{const tr=el("tr");tr.dataset.i=i;[["c","text",f.c,"Concepto"],["q","number",f.q,"Cantidad"],["u","number",f.u,"Costo mensual por unidad"],["m","number",f.m,"Meses"]].forEach(([k2,t,v,lab])=>{const td=el("td");const inp=el("input");inp.type=t;inp.value=v;inp.setAttribute("aria-label",lab+" fila "+(i+1));if(t==="number"){inp.min="0";inp.inputMode="decimal";inp.style.minWidth="90px"}else inp.style.minWidth="180px";inp.addEventListener("input",()=>{f[k2]=inp.value;calc()});td.append(inp);tr.append(td)});
+      tr.append(el("td","n",""));const td=el("td");const x=el("button","btn2","Quitar");x.type="button";x.setAttribute("aria-label","Quitar fila "+(i+1));x.onclick=()=>{st.filas.splice(i,1);draw()};td.append(x);tr.append(td);tb.append(tr)});calc()};
+  add.onclick=()=>{st.filas.push({c:"",q:"",u:"",m:""});draw()};sel.addEventListener("input",load);["cd","cg","cu"].forEach(i=>$("#"+i).addEventListener("input",calc));load();
+}
 function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
-  const nav=h.startsWith("p-")?"inicio":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else vInicio(app)}
+  const nav=h.startsWith("p-")||h.startsWith("c-")?"inicio":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
 (async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
