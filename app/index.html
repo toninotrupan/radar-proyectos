@@ -100,22 +100,22 @@ const NORTE=["Arica","Tarapacá","Antofagasta","Atacama","Coquimbo"];
 const SECTOR={a:"Agua",b:"Transmisión eléctrica",c:"Energía",e:"Transporte e infraestructura vial",f:"Puertos",g:"Infraestructura urbana",h:"Inmobiliario",i:"Minería",j:"Ductos",k:"Industria",l:"Agroindustria",m:"Forestal",n:"Acuicultura","ñ":"Química y combustibles",o:"Saneamiento y agua",p:"Áreas protegidas"};
 // Rubros de proveedores y reglas para detectar oportunidad. tip: letras de tipología; kw: palabras en la descripción.
 const RUBROS=[
- {id:"carga",n:"Transporte de carga",pct:1.5,tip:["i","c","b","ñ","f","j","k"],kw:/transporte de|camion|insumos|concentrado|c[aá]todos|[aá]cido/i,min:20,why:"traslado de equipos, insumos y materiales"},
+ {id:"carga",n:"Transporte de carga",pct:1.5,ref:"fletes e internación US$ 34,3 M de US$ 2.314,7 M (1,5%)",tip:["i","c","b","ñ","f","j","k"],kw:/transporte de|camion|insumos|concentrado|c[aá]todos|[aá]cido/i,min:20,why:"traslado de equipos, insumos y materiales"},
  {id:"sobredim",n:"Carga sobredimensionada",pct:0.5,tip:["c","b"],kw:/aerogenerador|e[oó]lic|transformador|molino|subestaci[oó]n/i,min:50,why:"equipos de gran tamaño (aerogeneradores, transformadores, molinos)"},
  {id:"personal",n:"Transporte de personal",pct:0.5,tip:["i"],kw:/campamento|faena|trabajadores|mano de obra/i,min:50,why:"traslado diario de trabajadores a faena"},
- {id:"campamento",n:"Campamento y alimentación",pct:1.5,tip:["i"],kw:/campamento|alojamiento|casino/i,min:100,why:"alojamiento y alimentación durante la construcción"},
- {id:"tierra",n:"Movimiento de tierra y maquinaria",pct:6,tip:["i","e","a"],kw:/rajo|botadero|relaves|excavaci|movimiento de tierra|plataforma|caminos?|dep[oó]sito/i,min:10,why:"excavaciones, plataformas, caminos y depósitos"},
+ {id:"campamento",n:"Campamento y alimentación",pct:3.8,ref:"campamento de construcción US$ 56,9 M más alimentación US$ 30,4 M, de un total de US$ 2.314,7 M (3,8%)",tip:["i"],kw:/campamento|alojamiento|casino/i,min:100,why:"alojamiento y alimentación durante la construcción"},
+ {id:"tierra",n:"Movimiento de tierra y maquinaria",pct:6.7,ref:"desarrollo de mina US$ 70,1 M, movimiento de tierra masivo US$ 43,3 M, base y muro del tranque US$ 26,7 M y caminos US$ 15,9 M (6,7%)",tip:["i","e","a"],kw:/rajo|botadero|relaves|excavaci|movimiento de tierra|plataforma|caminos?|dep[oó]sito/i,min:10,why:"excavaciones, plataformas, caminos y depósitos"},
  {id:"aridos",n:"Áridos",pct:1,tip:["e"],kw:/[aá]ridos|empr[eé]stito|cantera/i,obra:/i\.5/,min:10,why:"extracción y suministro de áridos"},
  {id:"civil",n:"Obras civiles y montaje",pct:15,tip:["i","c","b","h","g","e","f","o","k","ñ","a","j","l","n"],kw:/construcci[oó]n|montaje|planta|obras/i,min:10,why:"construcción y montaje de las obras"},
  {id:"electrico",n:"Montaje eléctrico",pct:5,tip:["b","c"],kw:/l[ií]nea de transmisi[oó]n|subestaci[oó]n|fotovoltaic|bess|almacenamiento de energ[ií]a|tendido el[eé]ctrico/i,obra:/b\.[12]/,min:10,why:"líneas, subestaciones y conexión eléctrica"},
- {id:"agua",n:"Agua, desalación y piping",pct:4,tip:["a","o","j"],kw:/desalad|acueducto|impulsi[oó]n|emisario|ducto|tuber[ií]a|sistema h[ií]drico/i,obra:/o\.6|a\.1|j\./,min:10,why:"plantas de agua, acueductos e impulsión"},
+ {id:"agua",n:"Agua, desalación y piping",pct:2.8,ref:"planta de osmosis y distribución US$ 46,3 M, agua en puerto US$ 8,3 M y recuperación y transporte de agua US$ 9,2 M (2,8%); no incluye el ducto de concentrado (US$ 108 M, 4,7%)",tip:["a","o","j"],kw:/desalad|acueducto|impulsi[oó]n|emisario|ducto|tuber[ií]a|sistema h[ií]drico/i,obra:/o\.6|a\.1|j\./,min:10,why:"plantas de agua, acueductos e impulsión"},
  {id:"combustible",n:"Combustible y lubricantes",pct:2,tip:["i"],kw:/combustible|petr[oó]leo|di[eé]sel/i,min:100,why:"abastecimiento de combustible para equipos y faena"},
  {id:"peligrosas",n:"Sustancias peligrosas y explosivos",pct:1,tip:["ñ"],kw:/explosiv|[aá]cido sulf[uú]rico|sustancias peligrosas|reactivos/i,obra:/ñ\./,min:10,why:"transporte y manejo de sustancias peligrosas"},
  {id:"residuos",n:"Gestión de residuos",pct:0.5,tip:["i","o","ñ","k"],kw:/residuos|ril|riles|lodos/i,obra:/o\.|i\.3/,min:30,why:"retiro, transporte y disposición de residuos"},
  {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
  {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
 ];
-let P=[],C=[],E=[],PE=[];
+let P=[],C=[],E=[],PE=[],N=[];
 const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
 const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
 function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros)){if(!Array.isArray(o.regiones))o.regiones=o.zona==="norte"?[...new Set(P.map(p=>p.region).filter(r=>NORTE.some(n=>(r||"").includes(n))))]:[];return o}}catch(e){}return null}
@@ -140,6 +140,8 @@ function plazo(p){const e=norm(p.estado);if(e.includes("aprobado"))return{t:"Cor
 const vigente=p=>plazo(p).t!=="Cerrado";
 function opps(p){const letra=(p.tipologia||"").trim().toLowerCase()[0];const texto=(p.nombre||"")+" "+(p.descripcion||"")+" "+(p.tipologia_desc||"");const obras=(p.obras||[]).join(" ");const inv=+p.inversion_mmusd||0;
   return RUBROS.filter(r=>{if(inv<r.min)return false;const porTip=r.tip.includes(letra);const porKw=r.kw.test(texto);const porObra=r.obra?r.obra.test(obras):false;return (porTip&&(porKw||porObra))||(porKw&&porObra)||(porObra&&inv>=r.min*3)||(porTip&&["civil","carga","ambiental"].includes(r.id))||(["personal","campamento"].includes(r.id)&&peak(p)>=(r.id==="personal"?150:300))});}
+const FUENTE="estudio de factibilidad del proyecto Santo Domingo (Atacama, 2024)";
+const refCorta=r=>r.ref?"calibrado con el "+FUENTE:"supuesto sin validar";
 const peak=p=>+p.mo_construccion_max||+p.mo_construccion_prom||0;
 const nf=v=>Number(v).toLocaleString("es-CL");
 function porque(r,p){if(["personal","campamento"].includes(r.id)&&peak(p))return r.why+" (el estudio declara "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+")";return r.why}
@@ -175,11 +177,16 @@ function vInicio(app){
 function vOpps(app){
   app.append(header("Oportunidades por rubro","Elige el rubro de tu empresa y la zona. Te mostramos los proyectos vigentes donde ese rubro tiene espacio y por qué."));
   const pn=el("section","panel hl");
-  const f=el("div","filters");f.innerHTML='<label for="or">Rubro de tu empresa<select id="or"></select></label><label for="oz">Zona<select id="oz"><option value="norte">Solo norte</option><option value="">Todo Chile</option></select></label><label for="op">% de la inversión para tu rubro (supuesto)<input id="op" type="number" min="0" max="100" step="0.1"></label>';
+  const f=el("div","filters");f.innerHTML='<label for="or">Rubro de tu empresa<select id="or"></select></label><label for="oz">Zona<select id="oz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="op">% de la inversión para tu rubro (supuesto)<input id="op" type="number" min="0" max="100" step="0.1"></label>';
   pn.append(f);const res=el("div","kpis");pn.append(res);
-  pn.append(el("p","note","Cómo leer la valorización: es el monto de inversión de los proyectos donde calza tu rubro, multiplicado por el porcentaje que tú indiques. El porcentaje inicial es un supuesto de partida sin validar con datos de mercado: ajústalo con tu experiencia. Es un orden de magnitud para priorizar, no una cotización."));
+  pn.append(el("p","note","Cómo leer la valorización: es el monto de inversión de los proyectos donde calza tu rubro, multiplicado por el porcentaje que tú indiques. El porcentaje inicial viene de un proyecto real cuando hay dato y es un supuesto cuando no lo hay (el detalle está al final de esta página): ajústalo con tu experiencia. Es un orden de magnitud para priorizar, no una cotización."));
   app.append(pn);
   const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
+  {const d=el("details","panel");const sm=el("summary",null,"De dónde salen los porcentajes de cada rubro");sm.style.cssText="font-weight:600;cursor:pointer";d.append(sm);
+   d.append(el("p","note","Comparamos con el desglose de inversión de un proyecto minero real del norte: el "+FUENTE+", una mina de cobre con planta, tranque, puerto y ductos, con inversión total de US$ 2.314,7 millones. Es un presupuesto de ingeniería detallado, no el costo final de una obra terminada, y es un solo proyecto minero: en proyectos solares o de transmisión las proporciones cambian. Los rubros sin dato siguen como supuesto."));
+   const ul=el("ul","opps");RUBROS.forEach(r=>{const li=el("li");li.append(el("b",null,r.n+": "+String(r.pct).replace(".",",")+"%"),el("span",null,r.ref?"Dato del estudio: "+r.ref+".":"Supuesto de partida, sin dato comparable todavía."));ul.append(li)});d.append(ul);
+   d.append(el("p","note","Otros datos del mismo estudio: ingeniería y adquisiciones US$ 47,8 M (2,1%), administración de la construcción US$ 108,3 M (4,7%), instalaciones temporales de obra US$ 35,6 M (1,5%), suministro y distribución eléctrica US$ 81,4 M (3,5%)."));
+   const a=el("a",null,"Ver la fuente (Capstone Copper)");a.href="https://capstonecopper.com/news/capstone-announces-updated-santo-domingo-feasibility-study-building-a-world-class-district-in-chile/";a.target="_blank";a.rel="noopener";d.append(a);app.append(d)}
   const sel=$("#or");RUBROS.forEach(r=>sel.append(new Option(r.n,r.id)));
   let saved="";try{saved=localStorage.getItem("radar_rubro")||""}catch(e){}
   if(saved&&RUBROS.some(r=>r.id===saved))sel.value=saved;
@@ -245,7 +252,7 @@ function vFicha(app,id){
   const me=el("section","panel hl");me.append(el("h2",null,pf&&pf.nombre?"Para "+pf.nombre:"Para tu empresa"));
   if(!pf||!pf.rubros.length){me.append(el("p","note","Indica el rubro y el tamaño de tu empresa para ver aquí qué oportunidades tendría en este proyecto y cuánto podría generar."));const a2=el("a","btn","Configurar mi empresa");a2.href="#empresa";a2.style.textDecoration="none";me.append(a2)}
   else{const ul=el("ul","opps");let tot=0;pf.rubros.forEach(id=>{const r=RUBROS.find(x=>x.id===id);if(!r)return;const li=el("li");const ok=vigente(p)&&ops.some(x=>x.id===id);
-      if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, supuesto sin validar)."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
+      if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
       else li.append(el("b",null,r.n+": no calza"),el("span",null,vigente(p)?"No detectamos espacio para este rubro en este proyecto.":"El proyecto está cerrado ("+p.estado+")."));ul.append(li)});
     me.append(ul);if(tot>0)me.append(kpi("US$ "+money(tot)+" M",pf.ventas?"lo que podría generar para tu empresa (por año, con tope por tamaño)":"valor estimado de tus rubros en este proyecto"));
     const ed=el("a",null,"Cambiar rubro o tamaño");ed.href="#empresa";me.append(ed)}
@@ -253,9 +260,10 @@ function vFicha(app,id){
   const o=el("section","panel");o.append(el("h2",null,"Todas las oportunidades por rubro"));
   if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
   else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
-  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
+  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."));ul.append(li)});o.append(ul)}
   o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
   g.append(o,a);app.append(g);
+  {const ns=N.filter(x=>x.proyecto_id===p.id);if(ns.length){const s2=el("section","panel");s2.append(el("h2",null,"Plazos y noticias del proyecto"));ns.forEach(x=>{const pp=el("p","meta");pp.append(document.createTextNode(fdate(x.fecha)+": "+x.nota+" "));const a=el("a",null,"Fuente: "+x.fuente);a.href=x.fuente_url;a.target="_blank";a.rel="noopener";pp.append(a);s2.append(pp)});app.append(s2)}}
   {const c=el("section","panel");c.append(el("h2",null,"Quién construye y cómo llegar a ellos"));
     const conf=PE.filter(x=>x.proyecto_id===p.id);
     if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);const a3=el("a",null,"Ver fuente");a3.href=x.fuente_url;a3.target="_blank";a3.rel="noopener";li.append(a3);ul.append(li)});c.append(ul)}
@@ -289,7 +297,7 @@ function vEmpresa(app){
     rows.sort((a,b)=>b.paq-a.paq);
     const k=el("section","kpis");k.append(kpi(rows.length,"proyectos vigentes donde calza"),kpi("US$ "+money(rows.reduce((a,x)=>a+x.paq,0))+" M","tamaño total de esos paquetes"),kpi(rows.filter(x=>plazo(x.p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
     if(pf.ventas)k.append(kpi("US$ "+money(+pf.ventas*TOPE)+" M","contrato anual razonable para su tamaño"));out.append(k);
-    out.append(el("p","note","Cómo leer las cifras: el paquete es la inversión del proyecto multiplicada por un porcentaje de partida para cada rubro (supuesto sin validar con datos de mercado). El tope por tamaño supone que un solo contrato no debería superar la mitad de las ventas anuales de la empresa. Sirve para priorizar a quién llamar primero, no como cotización."));
+    out.append(el("p","note","Cómo leer las cifras: el paquete es la inversión del proyecto multiplicada por un porcentaje por rubro. Cuatro rubros están calibrados con un proyecto minero real y el resto son supuestos (detalle en Oportunidades por rubro). El tope por tamaño supone que un solo contrato no debería superar la mitad de las ventas anuales de la empresa. Sirve para priorizar a quién llamar primero, no como cotización."));
     if(!rows.length){out.append(el("div","soon","No encontramos proyectos vigentes para esos rubros en esas regiones. Prueba quitando regiones (todo Chile) o agrega otro rubro."));return}
     const list=el("section","list"),slot=el("div");slot.style.cssText="display:flex;justify-content:center";out.append(list,slot);
     slot.append(pager(list,rows,x=>{const w=el("p","why");w.append(el("b",null,"Calza en: "),document.createTextNode(x.m.map(r=>r.n).join(", ")+". Paquete estimado: US$ "+money(x.paq)+" millones."+(pf.ventas?" A su tamaño podría generar hasta US$ "+money(x.val)+" millones al año.":"")));return card(x.p,w)}))};
@@ -301,7 +309,7 @@ function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app")
   const nav=h.startsWith("p-")?"inicio":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*")])}catch(e){E=[];PE=[]}window.addEventListener("hashchange",route);route()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
 </script>
 </body>
