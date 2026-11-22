@@ -118,7 +118,9 @@ const RUBROS=[
 let P=[],C=[],E=[],PE=[];
 const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
 const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
-function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros))return o}catch(e){}return null}
+function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros)){if(!Array.isArray(o.regiones))o.regiones=o.zona==="norte"?[...new Set(P.map(p=>p.region).filter(r=>NORTE.some(n=>(r||"").includes(n))))]:[];return o}}catch(e){}return null}
+const enZona=(p,pf)=>!pf||!pf.regiones||!pf.regiones.length||pf.regiones.includes(p.region);
+const calzaPerfil=(p,pf)=>pf&&enZona(p,pf)&&opps(p).some(o=>pf.rubros.includes(o.id));
 function estim(p,r,pf){const paquete=(+p.inversion_mmusd||0)*r.pct/100;const tope=pf&&+pf.ventas>0?+pf.ventas*TOPE:null;return{paquete,tope,val:tope!=null?Math.min(paquete,tope):paquete,limita:tope!=null&&tope<paquete}}
 const SECEMP={i:"mineria",c:"energia",b:"transmision",a:"agua",o:"agua",j:"agua",e:"infraestructura",f:"infraestructura",g:"infraestructura",h:"infraestructura",k:"industria","ñ":"industria",l:"industria"};
 const TIPOEMP={epc:"Ingeniería y construcción (EPC)",constructora:"Constructora y montaje",ingenieria:"Ingeniería",registro:"Registro de proveedores"};
@@ -213,9 +215,12 @@ function vNovedades(app){
   app.append(header("Novedades","Proyectos nuevos y cambios de estado detectados en cada revisión diaria del SEIA."));
   const rows=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));const list=el("section","list");
   if(!rows.length){app.append(el("div","soon","Todavía no hay novedades. La base se cargó el 21 de noviembre de 2026; desde la próxima revisión diaria aparecerán aquí los proyectos nuevos y los cambios de estado."));return}
-  const byId=Object.fromEntries(P.map(p=>[p.id,p]));
-  rows.forEach(c=>{const p=byId[c.proyecto_id];if(!p)return;const w=el("p","why");const d=new Date(c.detectado_at).toLocaleDateString("es-CL");w.append(el("b",null,d+": "),document.createTextNode(c.tipo==="nuevo"?"proyecto nuevo en el SEIA.":c.tipo==="estado"?"cambió de estado: "+c.antes+" → "+c.despues+".":"cambió de actividad: "+c.antes+" → "+c.despues+"."));list.append(card(p,w))});
-  app.append(list);
+  const byId=Object.fromEntries(P.map(p=>[p.id,p]));const pf=perfil();let solo=false;
+  if(pf&&pf.rubros.length){const f=el("section","filters");f.innerHTML='<label for="nm">Mostrar<select id="nm"><option value="mias">Solo lo que calza con mi empresa</option><option value="">Todas las novedades</option></select></label>';app.append(f);solo=true;$("#nm").addEventListener("input",()=>{solo=$("#nm").value==="mias";pinta()})}
+  const pinta=()=>{list.textContent="";let n=0;
+  rows.forEach(c=>{if(solo&&byId[c.proyecto_id]&&!calzaPerfil(byId[c.proyecto_id],pf))return;n++;const p=byId[c.proyecto_id];if(!p)return;const w=el("p","why");const d=new Date(c.detectado_at).toLocaleDateString("es-CL");w.append(el("b",null,d+": "),document.createTextNode(c.tipo==="nuevo"?"proyecto nuevo en el SEIA.":c.tipo==="estado"?"cambió de estado: "+c.antes+" → "+c.despues+".":"cambió de actividad: "+c.antes+" → "+c.despues+"."));list.append(card(p,w))});
+  if(!n)list.append(el("div","soon","No hay novedades que calcen con los rubros y regiones de tu empresa. Cambia a \"Todas las novedades\" para ver el resto."))};
+  pinta();app.append(list);
 }
 function vFicha(app,id){
   const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"),Object.assign(el("a","back","Volver a la lista"),{href:"#inicio"}));return}
@@ -270,25 +275,26 @@ function vFicha(app,id){
 }
 function vEmpresa(app){
   app.append(header("Mi empresa","Indica el rubro y el tamaño de la empresa que estás evaluando. Con eso, cada proyecto te muestra qué oportunidades tendría y cuánto podría generar. Estos datos se guardan solo en este navegador."));
-  const pf=perfil()||{nombre:"",rubros:[],tam:"",ventas:"",zona:"norte"};
-  const fm=el("form","panel");fm.innerHTML='<div class="filters"><label for="en">Nombre de la empresa (opcional)<input id="en" autocomplete="organization"></label><label for="et">Tamaño<select id="et"></select></label><label for="ev">Ventas anuales en US$ millones<input id="ev" type="number" min="0" step="0.1" inputmode="decimal"></label><label for="ez">Zona de trabajo<select id="ez"><option value="norte">Solo norte</option><option value="">Todo Chile</option></select></label></div>';
+  const pf=perfil()||{nombre:"",rubros:[],tam:"",ventas:"",regiones:[]};
+  const fm=el("form","panel");fm.innerHTML='<div class="filters"><label for="en">Nombre de la empresa (opcional)<input id="en" autocomplete="organization"></label><label for="et">Tamaño<select id="et"></select></label><label for="ev">Ventas anuales en US$ millones<input id="ev" type="number" min="0" step="0.1" inputmode="decimal"></label></div>';
   const fs=el("fieldset","checks");fs.append(el("legend",null,"Rubros de la empresa (puedes marcar varios)"));RUBROS.forEach(r=>{const l=el("label");const c=el("input");c.type="checkbox";c.value=r.id;c.checked=pf.rubros.includes(r.id);l.append(c,document.createTextNode(r.n));fs.append(l)});
-  const bt=el("button","btn","Guardar y ver oportunidades");bt.type="submit";const msg=el("p","note");msg.setAttribute("role","status");fm.append(fs,bt,msg);app.append(fm);
-  TAM.forEach(t=>$("#et").append(new Option(t[1],t[0])));$("#en").value=pf.nombre||"";$("#et").value=pf.tam||"";$("#ev").value=pf.ventas||"";$("#ez").value=pf.zona==null?"norte":pf.zona;
+  const fr=el("fieldset","checks");fr.append(el("legend",null,"Regiones donde trabaja (sin marcar ninguna: todo Chile)"));[...new Set(P.map(p=>p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")).forEach(r=>{const l=el("label");const c=el("input");c.type="checkbox";c.value=r;c.checked=(pf.regiones||[]).includes(r);l.append(c,document.createTextNode(regionCorta(r)));fr.append(l)});
+  const bt=el("button","btn","Guardar y ver oportunidades");bt.type="submit";const msg=el("p","note");msg.setAttribute("role","status");fm.append(fs,fr,bt,msg);app.append(fm);
+  TAM.forEach(t=>$("#et").append(new Option(t[1],t[0])));$("#en").value=pf.nombre||"";$("#et").value=pf.tam||"";$("#ev").value=pf.ventas||"";
   $("#et").addEventListener("input",()=>{const t=TAM.find(x=>x[0]===$("#et").value);if(t&&t[2])$("#ev").value=t[2]});
   const out=el("div");out.style.cssText="display:flex;flex-direction:column;gap:20px";app.append(out);
   const draw=()=>{out.textContent="";const pf=perfil();if(!pf||!pf.rubros.length)return;
     const rs=RUBROS.filter(r=>pf.rubros.includes(r.id));const rows=[];
-    P.filter(p=>vigente(p)&&(!pf.zona||esNorte(p))).forEach(p=>{const ops=opps(p);const m=rs.filter(r=>ops.some(o=>o.id===r.id));if(m.length){const xs=m.map(r=>estim(p,r,pf));rows.push({p,m,val:xs.reduce((a,x)=>a+x.val,0),paq:xs.reduce((a,x)=>a+x.paquete,0)})}});
+    P.filter(p=>vigente(p)&&enZona(p,pf)).forEach(p=>{const ops=opps(p);const m=rs.filter(r=>ops.some(o=>o.id===r.id));if(m.length){const xs=m.map(r=>estim(p,r,pf));rows.push({p,m,val:xs.reduce((a,x)=>a+x.val,0),paq:xs.reduce((a,x)=>a+x.paquete,0)})}});
     rows.sort((a,b)=>b.paq-a.paq);
     const k=el("section","kpis");k.append(kpi(rows.length,"proyectos vigentes donde calza"),kpi("US$ "+money(rows.reduce((a,x)=>a+x.paq,0))+" M","tamaño total de esos paquetes"),kpi(rows.filter(x=>plazo(x.p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
     if(pf.ventas)k.append(kpi("US$ "+money(+pf.ventas*TOPE)+" M","contrato anual razonable para su tamaño"));out.append(k);
     out.append(el("p","note","Cómo leer las cifras: el paquete es la inversión del proyecto multiplicada por un porcentaje de partida para cada rubro (supuesto sin validar con datos de mercado). El tope por tamaño supone que un solo contrato no debería superar la mitad de las ventas anuales de la empresa. Sirve para priorizar a quién llamar primero, no como cotización."));
-    if(!rows.length){out.append(el("div","soon","No encontramos proyectos vigentes para esos rubros en esta zona. Prueba con Todo Chile o agrega otro rubro."));return}
+    if(!rows.length){out.append(el("div","soon","No encontramos proyectos vigentes para esos rubros en esas regiones. Prueba quitando regiones (todo Chile) o agrega otro rubro."));return}
     const list=el("section","list"),slot=el("div");slot.style.cssText="display:flex;justify-content:center";out.append(list,slot);
     slot.append(pager(list,rows,x=>{const w=el("p","why");w.append(el("b",null,"Calza en: "),document.createTextNode(x.m.map(r=>r.n).join(", ")+". Paquete estimado: US$ "+money(x.paq)+" millones."+(pf.ventas?" A su tamaño podría generar hasta US$ "+money(x.val)+" millones al año.":"")));return card(x.p,w)}))};
   fm.addEventListener("submit",ev=>{ev.preventDefault();const rub=[...fs.querySelectorAll("input:checked")].map(c=>c.value);if(!rub.length){msg.textContent="Marca al menos un rubro para poder buscar oportunidades.";return}
-    try{localStorage.setItem("radar_empresa",JSON.stringify({nombre:$("#en").value.trim(),rubros:rub,tam:$("#et").value,ventas:+$("#ev").value||0,zona:$("#ez").value}));msg.textContent="Guardado. Abajo están los proyectos donde calza; cada ficha ahora muestra el detalle para esta empresa."}catch(e){msg.textContent="No se pudo guardar en este navegador."}draw()});
+    try{localStorage.setItem("radar_empresa",JSON.stringify({nombre:$("#en").value.trim(),rubros:rub,tam:$("#et").value,ventas:+$("#ev").value||0,regiones:[...fr.querySelectorAll("input:checked")].map(c=>c.value)}));msg.textContent="Guardado. Abajo están los proyectos donde calza; cada ficha muestra el detalle para esta empresa y Novedades destaca lo que le sirve."}catch(e){msg.textContent="No se pudo guardar en este navegador."}draw()});
   draw();
 }
 function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
