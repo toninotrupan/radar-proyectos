@@ -198,6 +198,15 @@ function vFicha(app,id){
   const b=el("a","back","← Volver a la lista");b.href="#inicio";app.append(b);
   const pl=plazo(p);const h=header(p.nombre);const t=el("div","tags");t.style.marginTop="10px";t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag "+pl.c,pl.t),el("span","tag",p.tipo==="EIA"?"Estudio de Impacto Ambiental":"Declaración de Impacto Ambiental"));h.append(t);app.append(h);
   const k=el("section","kpis");k.append(kpi("US$ "+money(p.inversion_mmusd)+" M","inversión declarada"),kpi(fdate(p.fecha_presentacion),"fecha de presentación"),kpi(p.dias_legales||"0","días legales transcurridos"),kpi(p.actividad||"","tramitación"));app.append(k);
+  if(p.estudio_leido_at&&(p.mo_construccion_max||p.mo_operacion_max||p.vida_util||p.superficie)){const e=el("section","panel");e.append(el("h2",null,"Cifras declaradas en el estudio"));const n=v=>v==null?"s/i":Number(v).toLocaleString("es-CL");
+    const kk=el("div","kpis");
+    if(p.mo_construccion_max!=null||p.mo_construccion_prom!=null)kk.append(kpi(n(p.mo_construccion_max),"trabajadores en el peak de construcción (promedio "+n(p.mo_construccion_prom)+")"));
+    if(p.mo_operacion_max!=null||p.mo_operacion_prom!=null)kk.append(kpi(n(p.mo_operacion_max),"trabajadores máximos en operación (promedio "+n(p.mo_operacion_prom)+")"));
+    if(p.mo_cierre_max!=null||p.mo_cierre_prom!=null)kk.append(kpi(n(p.mo_cierre_max),"trabajadores máximos en cierre (promedio "+n(p.mo_cierre_prom)+")"));
+    e.append(kk);const dl2=el("dl","dl");dl2.style.marginTop="12px";
+    if(p.vida_util)dl2.append(el("dt",null,"Vida útil"),el("dd",null,p.vida_util));
+    if(p.superficie)dl2.append(el("dt",null,"Superficie"),el("dd",null,p.superficie));
+    e.append(dl2,el("p","note","Datos tal como los declaró el titular en el EIA o DIA presentado al SEIA."));app.append(e)}
   const g=el("div","grid2");
   const a=el("section","panel");a.append(el("h2",null,"Quién está detrás"));const dl=el("dl","dl");
   [["Titular (dueño)",p.titular],["Consultora ambiental",p.consultora||"Sin información en la ficha"],["Región",regionCorta(p.region)],["Comunas",p.comuna],["Tipología",(p.tipologia||"")+" "+(p.tipologia_desc||"")],["Razón de ingreso",p.razon_ingreso]].forEach(([x,y])=>{dl.append(el("dt",null,x),el("dd",null,y||""))});
@@ -207,7 +216,7 @@ function vFicha(app,id){
   if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
   else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
   else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,r.why[0].toUpperCase()+r.why.slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+r.pct+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
-  o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Las cifras del estudio (trabajadores en el peak, viajes de camión, agua, combustible) todavía no están extraídas."));
+  o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
   g.append(o,a);app.append(g);
   const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
   if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}app.append(d);
