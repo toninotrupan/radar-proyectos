@@ -122,7 +122,7 @@ const RUBROS=[
  {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
  {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
 ];
-let P=[],C=[],E=[],PE=[],N=[];
+let P=[],C=[],E=[],PE=[],N=[],G=[];
 const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
 const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
 function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros)){if(!Array.isArray(o.regiones))o.regiones=o.zona==="norte"?[...new Set(P.map(p=>p.region).filter(r=>NORTE.some(n=>(r||"").includes(n))))]:[];return o}}catch(e){}return null}
@@ -130,10 +130,11 @@ const enZona=(p,pf)=>!pf||!pf.regiones||!pf.regiones.length||pf.regiones.include
 const calzaPerfil=(p,pf)=>pf&&enZona(p,pf)&&opps(p).some(o=>pf.rubros.includes(o.id));
 function estim(p,r,pf){const paquete=(+p.inversion_mmusd||0)*r.pct/100;const tope=pf&&+pf.ventas>0?+pf.ventas*TOPE:null;return{paquete,tope,val:tope!=null?Math.min(paquete,tope):paquete,limita:tope!=null&&tope<paquete}}
 const SECEMP={i:"mineria",c:"energia",b:"transmision",a:"agua",o:"agua",j:"agua",e:"infraestructura",f:"infraestructura",g:"infraestructura",h:"infraestructura",k:"industria","ñ":"industria",l:"industria"};
-const TIPOEMP={epc:"Ingeniería y construcción (EPC)",constructora:"Constructora y montaje",ingenieria:"Ingeniería",registro:"Registro de proveedores"};
+const TIPOEMP={epc:"Ingeniería y construcción (EPC)",constructora:"Constructora y montaje",ingenieria:"Ingeniería",registro:"Registro de proveedores",proveedor:"Proveedor de servicios"};
 function empLi(e,extra){const li=el("li");li.append(el("b",null,e.nombre),el("span",null,(TIPOEMP[e.tipo]||e.tipo)+(e.descripcion?". "+e.descripcion:"")));if(extra)li.append(el("span",null,extra));if(e.canal)li.append(el("span",null,"Cómo contactar: "+e.canal));
   const links=el("span");if(e.url_proveedores){const a=el("a",null,e.tipo==="registro"?"Ir a la inscripción":"Canal de proveedores");a.href=e.url_proveedores;a.target="_blank";a.rel="noopener";links.append(a)}
   if(e.sitio){if(e.url_proveedores)links.append(document.createTextNode(" · "));const a=el("a",null,"Sitio web");a.href=e.sitio;a.target="_blank";a.rel="noopener";links.append(a)}
+  if(e.fuente_url){if(e.url_proveedores||e.sitio)links.append(document.createTextNode(" · "));const a=el("a",null,"Fuente");a.href=e.fuente_url;a.target="_blank";a.rel="noopener";links.append(a)}
   if(e.verificado_at)links.append(document.createTextNode(" · verificado el "+fdate(e.verificado_at)));li.append(links);return li}
 const $=s=>document.querySelector(s);
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
@@ -283,14 +284,18 @@ function vFicha(app,id){
     const conf=PE.filter(x=>x.proyecto_id===p.id);
     if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);const a3=el("a",null,"Ver fuente");a3.href=x.fuente_url;a3.target="_blank";a3.rel="noopener";li.append(a3);ul.append(li)});c.append(ul)}
     else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
-    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.sectores.includes(sec));
+    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.tipo!=="proveedor"&&e.sectores.includes(sec));
     const h1=el("p",null,"1. Al dueño del proyecto: "+(p.titular||""));h1.style.cssText="font-weight:600;margin:0";c.append(h1,el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
     if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
     const h2b=el("p",null,"2. A las empresas que suelen construir este tipo de proyecto");h2b.style.cssText="font-weight:600;margin:0";c.append(h2b);
     if(cons.length){c.append(el("p","note","No significa que tengan este contrato: son empresas que construyen proyectos de este sector en Chile. Envía la presentación de tu empresa por su canal de proveedores."));const ul=el("ul","emp");cons.forEach(e=>ul.append(empLi(e)));c.append(ul)}
     else c.append(el("p","note","Aún no tenemos empresas verificadas para este sector."));
     c.append(el("p","note","Solo mostramos canales corporativos públicos (portales de proveedores, formularios y correos genéricos). No guardamos datos de personas."));app.append(c);
-    if(p.titular){const dd=ddPanel(p.titular);const otros=P.filter(x=>x.titular&&tkey(x.titular)===tkey(p.titular)).length;const a=el("a","btn",otros>1?"Ver los "+otros+" proyectos de esta empresa":"Ver la página de esta empresa");a.href="#t-"+encodeURIComponent(tkey(p.titular));dd.append(a);app.append(dd)}}
+    if(p.titular){const dd=ddPanel(p.titular);const otros=P.filter(x=>x.titular&&ekey(x.titular)===ekey(p.titular)).length;const gg=grupoDe(p.titular);const a=el("a","btn",otros>1?"Ver los "+otros+" proyectos de "+(gg?gg.grupo:"esta empresa"):"Ver la página de esta empresa");a.href="#t-"+encodeURIComponent(ekey(p.titular));dd.append(a);app.append(dd)}
+    {const ops=opps(p);const pf=perfil();const mios=pf?pf.rubros||[]:[];const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id)&&E.some(e=>(e.rubros||[]).includes(r.id))).sort((a,b)=>mios.includes(b.id)-mios.includes(a.id));
+     if(rs.length){const k=el("section","panel");k.append(el("h2",null,"Quién podría competir o subcontratar en este proyecto"),el("p","note","Empresas que ya prestan estos servicios a grandes faenas en Chile, según prensa del sector. No significa que tengan un contrato en este proyecto. Si son de tu mismo rubro son tu posible competencia; si son más grandes que tú, también pueden ser a quien ofrecerle un subcontrato."));
+      rs.forEach(r=>{const h=el("p",null,r.n+(mios.includes(r.id)?" (tu rubro)":""));h.style.cssText="font-weight:600;margin:0";k.append(h);const ul=el("ul","emp");E.filter(e=>(e.rubros||[]).includes(r.id)).forEach(e=>ul.append(empLi(e)));k.append(ul)});
+      k.append(el("p","note","La lista parte con pocas empresas por rubro y crece a medida que confirmamos más con una fuente pública."));app.append(k)}}}
   const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
   if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}app.append(d);
   if(p.obras&&p.obras.length){const s=el("section","panel");s.append(el("h2",null,"Partes, obras y acciones que incluye"));const ul=el("ul");ul.style.margin="0";ul.style.paddingLeft="18px";p.obras.forEach(x=>ul.append(el("li",null,x)));s.append(ul);app.append(s)}
@@ -306,23 +311,26 @@ const DD=[
  ["Conducta laboral (Dirección del Trabajo)","La Dirección del Trabajo publica las empresas condenadas por prácticas antisindicales. Úsalo sobre todo para revisar constructoras y contratistas.","https://www.dt.gob.cl"]];
 function ddPanel(t){const s=el("section","panel");s.append(el("h2",null,"Revisar a la empresa antes de ofertar"),el("p","note","Antes de comprometer equipos o dar crédito, revisa a "+t+" en estas fuentes oficiales y públicas. Cada consulta se hace en el sitio del organismo con el nombre o el RUT de la empresa. Esta página no guarda ni muestra esos resultados."));
   const ul=el("ul","emp");DD.forEach(([n,q,u])=>{const li=el("li");li.append(el("b",null,n),el("span",null,q));const a=el("a",null,"Abrir la consulta");a.href=u;a.target="_blank";a.rel="noopener";const sp=el("span");sp.append(a);li.append(sp);ul.append(li)});s.append(ul);return s}
-function titulares(){const m={};P.forEach(p=>{if(!p.titular)return;const k=tkey(p.titular);(m[k]=m[k]||{k,nombre:p.titular,ps:[]}).ps.push(p)});
+const grupoDe=t=>{const n=tkey(t);return G.find(g=>g.re.test(n))||null};
+const ekey=t=>{const g=grupoDe(t);return g?"g:"+tkey(g.grupo):tkey(t)};
+function titulares(){const m={};P.forEach(p=>{if(!p.titular)return;const g=grupoDe(p.titular);const k=ekey(p.titular);const t=m[k]=m[k]||{k,nombre:g?g.grupo:p.titular,g,ps:[],soc:[]};t.ps.push(p);if(!t.soc.some(x=>tkey(x)===tkey(p.titular)))t.soc.push(p.titular)});
   return Object.values(m).map(t=>{const v=t.ps.filter(vigente);t.nv=v.length;t.inv=v.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);t.regs=[...new Set(v.map(p=>regionCorta(p.region)))];t.peak=v.reduce((a,p)=>a+(peak(p)||0),0);return t}).sort((a,b)=>b.inv-a.inv||b.ps.length-a.ps.length)}
 function vEmpresas(app){
   app.append(header("Empresas","Los dueños de los proyectos (mandantes): cuántos proyectos tienen vigentes, cuánto invierten y dónde. Sirve para decidir a qué empresas conviene acercarse primero."));
   const f=el("section","filters");f.innerHTML='<label for="eq">Buscar empresa<input id="eq" type="search" placeholder="Nombre de la empresa"></label><label for="es">Mostrar<select id="es"><option value="v">Con proyectos vigentes</option><option value="">Todas</option></select></label>';app.append(f);
   const cnt=el("p","meta");const slot=el("div");app.append(cnt,slot);const all=titulares();
-  const draw=()=>{const q=norm($("#eq").value),sv=$("#es").value;const rows=all.filter(t=>(!sv||t.nv>0)&&(!q||norm(t.nombre).includes(q)));slot.textContent="";const list=el("section","list");slot.append(list);
+  const draw=()=>{const q=norm($("#eq").value),sv=$("#es").value;const rows=all.filter(t=>(!sv||t.nv>0)&&(!q||norm(t.nombre+" "+t.soc.join(" ")).includes(q)));slot.textContent="";const list=el("section","list");slot.append(list);
     cnt.textContent=rows.length?rows.length+" empresas, ordenadas por inversión vigente":"No encontramos empresas con ese nombre.";
-    if(rows.length)slot.append(pager(list,rows,t=>{const a=el("a","card");a.href="#t-"+encodeURIComponent(t.k);const l=el("div");l.append(el("h3",null,t.nombre),el("p","meta",t.nv+(t.nv===1?" proyecto vigente":" proyectos vigentes")+" de "+t.ps.length+" en el último año"));
+    if(rows.length)slot.append(pager(list,rows,t=>{const a=el("a","card");a.href="#t-"+encodeURIComponent(t.k);const l=el("div");l.append(el("h3",null,t.nombre),el("p","meta",(t.g&&t.soc.length>1?"Grupo de "+t.soc.length+" sociedades · ":"")+t.nv+(t.nv===1?" proyecto vigente":" proyectos vigentes")+" de "+t.ps.length+" en el último año"));
       const inv=el("div","inv","US$ "+money(t.inv));inv.append(el("small",null,"millones"));const tg=el("div","tags");t.regs.slice(0,4).forEach(r=>tg.append(el("span","tag",r)));if(t.regs.length>4)tg.append(el("span","tag","+"+(t.regs.length-4)+" regiones"));if(t.peak)tg.append(el("span","tag",nf(t.peak)+" trabajadores en el peak"));
       a.append(l,inv,tg);return a}))};
   $("#eq").addEventListener("input",draw);$("#es").addEventListener("input",draw);draw();
-  app.append(el("p","note","Una empresa puede aparecer con más de un nombre si presentó proyectos con razones sociales distintas (por ejemplo, filiales). Los montos son los declarados en el SEIA."));
+  app.append(el("p","note","Las filiales se muestran unidas en un grupo solo cuando pudimos confirmar que pertenecen al mismo dueño. El resto aparece por separado. Los montos son los declarados en el SEIA."));
 }
 function vTitular(app,k){const t=titulares().find(x=>x.k===k);const b=el("a","back","← Volver a Empresas");b.href="#empresas";app.append(b);
   if(!t){app.append(header("Empresa no encontrada"));return}
   app.append(header(t.nombre,"Dueño de "+t.ps.length+(t.ps.length===1?" proyecto presentado":" proyectos presentados")+" al SEIA en el último año. "+t.nv+(t.nv===1?" sigue vigente":" siguen vigentes")+", por US$ "+money(t.inv)+" millones."));
+  if(t.g){const gs=el("section","panel");gs.append(el("h2",null,"Sociedades de este grupo"),el("p","desc",t.soc.join(" · ")));const nt=el("p","note",(t.g.nota||"")+" ");if(t.g.fuente_url){const a=el("a",null,"Fuente");a.href=t.g.fuente_url;a.target="_blank";a.rel="noopener";nt.append(a)}gs.append(nt);app.append(gs)}
   const est=group(t.ps,p=>p.estado||"Sin estado",()=>1);const s=el("section","panel");s.append(el("h2",null,"Cómo le va en el SEIA"));s.append(el("p","desc",est.map(([e,n])=>n+" "+e).join(" · ")));s.append(el("p","note","Proyectos desistidos, no admitidos o rechazados indican obras que no se harán o que se atrasan. Cuenta solo lo presentado en los últimos 12 meses."));app.append(s);
   const sec=SECEMP[((t.ps[0].tipologia||"").trim().toLowerCase()[0])];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(t.nombre);const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));
   if(regs.length){const c=el("section","panel");c.append(el("h2",null,"Cómo ser su proveedor"),el("p","note","Registros de proveedores que usan las empresas de este sector. No sabemos cuál usa esta empresa en particular: confírmalo en su sitio."));const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul);app.append(c)}
@@ -387,7 +395,7 @@ function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app")
   const nav=h.startsWith("p-")||h.startsWith("c-")?"inicio":h.startsWith("t-")?"empresas":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}window.addEventListener("hashchange",route);route()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
 </script>
 </body>
