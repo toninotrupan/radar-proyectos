@@ -255,7 +255,7 @@ function vFicha(app,id){
     const conf=PE.filter(x=>x.proyecto_id===p.id);
     if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);const a3=el("a",null,"Ver fuente");a3.href=x.fuente_url;a3.target="_blank";a3.rel="noopener";li.append(a3);ul.append(li)});c.append(ul)}
     else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
-    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec)));const cons=E.filter(e=>e.tipo!=="registro"&&e.sectores.includes(sec));
+    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.sectores.includes(sec));
     const h1=el("p",null,"1. Al dueño del proyecto: "+(p.titular||""));h1.style.cssText="font-weight:600;margin:0";c.append(h1,el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
     if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
     const h2b=el("p",null,"2. A las empresas que suelen construir este tipo de proyecto");h2b.style.cssText="font-weight:600;margin:0";c.append(h2b);
