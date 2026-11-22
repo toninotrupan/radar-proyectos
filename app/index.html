@@ -118,10 +118,13 @@ const sector=p=>SECTOR[(p.tipologia||"").trim().toLowerCase()[0]]||"Otro";
 function plazo(p){const e=norm(p.estado);if(e.includes("aprobado"))return{t:"Corto plazo",c:"ok"};if(e.includes("admision")&&!e.includes("no admitido"))return{t:"Mediano plazo",c:"adm"};if(e.includes("calificacion"))return{t:"Mediano plazo",c:"eval"};return{t:"Cerrado",c:"bad"}}
 const vigente=p=>plazo(p).t!=="Cerrado";
 function opps(p){const letra=(p.tipologia||"").trim().toLowerCase()[0];const texto=(p.nombre||"")+" "+(p.descripcion||"")+" "+(p.tipologia_desc||"");const obras=(p.obras||[]).join(" ");const inv=+p.inversion_mmusd||0;
-  return RUBROS.filter(r=>{if(inv<r.min)return false;const porTip=r.tip.includes(letra);const porKw=r.kw.test(texto);const porObra=r.obra?r.obra.test(obras):false;return (porTip&&(porKw||porObra))||(porKw&&porObra)||(porObra&&inv>=r.min*3)||(porTip&&["civil","carga","ambiental"].includes(r.id))});}
+  return RUBROS.filter(r=>{if(inv<r.min)return false;const porTip=r.tip.includes(letra);const porKw=r.kw.test(texto);const porObra=r.obra?r.obra.test(obras):false;return (porTip&&(porKw||porObra))||(porKw&&porObra)||(porObra&&inv>=r.min*3)||(porTip&&["civil","carga","ambiental"].includes(r.id))||(["personal","campamento"].includes(r.id)&&peak(p)>=(r.id==="personal"?150:300))});}
+const peak=p=>+p.mo_construccion_max||+p.mo_construccion_prom||0;
+const nf=v=>Number(v).toLocaleString("es-CL");
+function porque(r,p){if(["personal","campamento"].includes(r.id)&&peak(p))return r.why+" (el estudio declara "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+")";return r.why}
 function card(p,extra){const a=el("a","card");a.href="#p-"+p.id;const l=el("div");l.append(el("h3",null,p.nombre),el("p","meta",(p.titular||"")+" · "+(p.comuna||"")));
   const inv=el("div","inv","US$ "+money(p.inversion_mmusd));inv.append(el("small",null,"millones"));
-  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));
+  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));if(peak(p))t.append(el("span","tag",nf(peak(p))+" trabajadores en el peak"));
   a.append(l,inv,t);if(extra)a.append(extra);return a}
 function fillSel(sel,vals,first){sel.textContent="";sel.append(new Option(first,""));vals.forEach(v=>sel.append(new Option(v,v)))}
 function pager(list,rows,render){let n=0;const more=el("button","more","Ver más");more.type="button";const step=()=>{rows.slice(n,n+40).forEach(r=>list.append(render(r)));n+=40;more.hidden=n>=rows.length};more.onclick=step;step();return more}
@@ -166,7 +169,7 @@ function vOpps(app){
     res.textContent="";res.append(kpi(rows.length,"proyectos donde calzas"),kpi("US$ "+money(tot)+" M","inversión de esos proyectos"),kpi("US$ "+money(tot*pct/100)+" M","mercado potencial para tu rubro ("+pct+"%)"),kpi(rows.filter(p=>plazo(p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
     list.textContent="";slot.textContent="";
     cnt.textContent=rows.length?"Ordenados por inversión, de mayor a menor":"No encontramos proyectos vigentes para ese rubro en esta zona. Prueba con Todo Chile.";
-    if(rows.length)slot.append(pager(list,rows,p=>{const w=el("p","why");w.append(el("b",null,"Por qué calza: "),document.createTextNode(r.why+". Valor estimado para tu rubro: US$ "+money((+p.inversion_mmusd||0)*pct/100)+" millones."));return card(p,w)}))};
+    if(rows.length)slot.append(pager(list,rows,p=>{const w=el("p","why");w.append(el("b",null,"Por qué calza: "),document.createTextNode(porque(r,p)+". Valor estimado para tu rubro: US$ "+money((+p.inversion_mmusd||0)*pct/100)+" millones."));return card(p,w)}))};
   sel.addEventListener("input",()=>{setPct();draw()});$("#oz").addEventListener("input",draw);$("#op").addEventListener("input",draw);draw();
 }
 function bars(title,entries,fmt){const s=el("section","panel");s.append(el("h2",null,title));const b=el("div","bars");const max=Math.max(...entries.map(e=>e[1]),1);entries.forEach(([k,v])=>{const r=el("div","bar");const i=el("i");i.style.width=(100*v/max)+"%";const w=el("div");w.append(i);r.append(el("span",null,k),w,el("span","v",fmt(v)));b.append(r)});s.append(b);return s}
@@ -180,10 +183,12 @@ function vMercado(app){
       bars("Inversión por sector (US$ millones)",group(rows,sector,inv).slice(0,12),money),
       bars("Inversión por plazo (US$ millones)",group(rows,p=>plazo(p).t+(plazo(p).t==="Corto plazo"?" (aprobado)":" (en evaluación)"),inv),money),
       bars("Proyectos por rubro de proveedor (cantidad)",RUBROS.map(r=>[r.n,rows.filter(p=>opps(p).some(o=>o.id===r.id)).length]).sort((a,b)=>b[1]-a[1]),v=>v),
+      bars("Proyectos con más trabajadores en el peak de construcción",rows.filter(peak).sort((a,b)=>peak(b)-peak(a)).slice(0,10).map(p=>[p.nombre.length>42?p.nombre.slice(0,40)+"…":p.nombre,peak(p)]),nf),
+      bars("Trabajadores en el peak de construcción por región",group(rows.filter(peak),p=>regionCorta(p.region),peak).slice(0,10),nf),
       bars("Mayores titulares (US$ millones)",group(rows,p=>p.titular||"",inv).slice(0,10),money),
       bars("Consultoras ambientales con más proyectos (cantidad)",group(rows.filter(p=>p.consultora),p=>p.consultora,()=>1).slice(0,10),v=>v))};
   $("#mz").addEventListener("input",draw);draw();
-  app.append(el("p","note","Montos declarados por cada titular en el SEIA. Corto plazo: proyecto aprobado. Mediano plazo: en admisión o en evaluación. El largo plazo (proyectos en estudio que aún no entran al SEIA) se sumará con datos de Cochilco."));
+  app.append(el("p","note","Montos declarados por cada titular en el SEIA. Corto plazo: proyecto aprobado. Mediano plazo: en admisión o en evaluación. Los trabajadores son los declarados en cada estudio y solo cuentan los proyectos cuyo estudio ya fue leído. El largo plazo (proyectos en estudio que aún no entran al SEIA) se sumará con datos de Cochilco."));
 }
 function vNovedades(app){
   app.append(header("Novedades","Proyectos nuevos y cambios de estado detectados en cada revisión diaria del SEIA."));
@@ -215,7 +220,7 @@ function vFicha(app,id){
   const o=el("section","panel hl");o.append(el("h2",null,"Oportunidades por rubro"));const ops=opps(p);
   if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
   else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
-  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,r.why[0].toUpperCase()+r.why.slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+r.pct+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
+  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+r.pct+"% de la inversión, supuesto sin validar)."));ul.append(li)});o.append(ul)}
   o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
   g.append(o,a);app.append(g);
   const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
