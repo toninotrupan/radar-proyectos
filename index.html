@@ -240,6 +240,66 @@ footer details p{color:var(--ink-muted)}
 @keyframes d1{to{transform:translate(24%,22%) scale(1.15)}}@keyframes d2{to{transform:translate(-22%,-18%) scale(.9)}}@keyframes d3{to{transform:translate(-26%,-24%) scale(1.2)}}
 .rv{opacity:0;transform:translateY(18px)}.rv.in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*70ms)}
 @media (prefers-reduced-motion:reduce){.aura i{animation:none}}
+
+/* Explorador y gráficos interactivos */
+[hidden]{display:none!important}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--panel);gap:2px;flex-wrap:wrap}
+.seg button,.chips button{font:500 14px var(--body);border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{border:1px solid var(--line);background:var(--panel)}
+.chips button:hover{border-color:var(--accent);color:var(--fg)}
+.chips button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.ctrl{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-bottom:20px}
+.xgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:20px;align-items:start}
+.xkpi{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.xkpi div{min-width:0}.xkpi b{display:block;font:700 19px/1.15 var(--display);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.xkpi span{font-size:13px;color:var(--muted)}
+.hbars{display:flex;flex-direction:column;gap:6px}
+.hbar{display:grid;grid-template-columns:112px minmax(0,1fr) 92px;gap:10px;align-items:center;font-size:14px;border:0;background:transparent;color:var(--fg);padding:6px 8px;border-radius:8px;cursor:pointer;text-align:left;font-family:var(--body);width:100%}
+.hbar:hover{background:var(--soft)}
+.hbar[aria-pressed="true"]{background:var(--accent-soft)}
+.hbar i{display:block;height:14px;border-radius:7px;background:var(--accent);transition:width .45s cubic-bezier(.2,.7,.2,1);min-width:3px}
+.hbar em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px;white-space:nowrap}
+.plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.plist li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;padding:12px 0;border-top:1px solid var(--line)}
+.plist li:first-child{border-top:0;padding-top:0}
+.plist b{font-weight:600;font-size:15px}.plist small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.plist .v{text-align:right;font:600 15px var(--display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stack{display:flex;width:100%;height:44px;border-radius:10px;overflow:hidden;gap:2px}
+.stack button{border:0;cursor:pointer;min-width:10px;padding:0;color:#fff;font:600 13px var(--body);transition:flex-grow .4s,opacity .2s;opacity:.55}
+.stack button[aria-pressed="true"]{opacity:1}
+.stack button:hover{opacity:.85}
+.sdet{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin-top:16px}
+.sdet b{font:700 44px/1 var(--display);font-variant-numeric:tabular-nums}
+.sdet h3{margin-bottom:4px}.sdet p{color:var(--muted);font-size:15px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tabs button{font:500 14px var(--body);border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:10px 16px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px}
+.tabs button svg{width:18px;height:18px;color:var(--accent)}
+.tabs button[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.lee{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:20px;align-items:stretch}
+.lee .box{min-height:150px}
+.lee .flecha{display:grid;place-items:center;color:var(--accent);font:400 30px var(--display)}
+.lee q{quotes:none;font-style:italic;color:var(--muted);display:block;border-left:3px solid var(--accent);padding-left:12px}
+.lee ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.sim input[type=range]{padding:0;accent-color:var(--accent);height:28px;border:0;background:transparent}
+.regla{position:relative;height:74px;margin-top:8px}
+.regla .eje{position:absolute;left:0;right:0;top:36px;height:2px;background:var(--line)}
+.regla .prep{position:absolute;top:22px;height:30px;border-radius:6px;background:var(--accent-soft);border:1px solid var(--accent);transition:left .3s,width .3s}
+.regla .lic{position:absolute;top:8px;bottom:8px;width:3px;background:var(--fg);border-radius:2px;transition:left .3s}
+.regla .lic::after{content:"licitación";position:absolute;top:-6px;left:8px;font-size:12px;color:var(--muted);white-space:nowrap}
+.regla .lic.izq::after{left:auto;right:8px}
+.escala{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.veredicto{border-radius:10px;padding:14px 16px;font-size:15px}
+.veredicto b{display:block;font:600 18px var(--display);margin-bottom:2px}
+.veredicto.si{background:var(--ok-soft);color:var(--ok)}.veredicto.justo{background:var(--warn-soft);color:var(--warn)}.veredicto.no{background:var(--bad-soft);color:var(--bad)}
+.radar circle[data-k]{cursor:pointer;transition:r .15s}
+.radar circle[data-k]:hover,.radar circle[data-k].sel{stroke:#fff;stroke-width:2.5;fill-opacity:1}
+#radar-info{min-height:44px}
+#radar-info b{color:var(--ink-fg);font-weight:600}
+@media (max-width:900px){.xgrid,.sim{grid-template-columns:minmax(0,1fr)}.lee{grid-template-columns:minmax(0,1fr)}.lee .flecha{transform:rotate(90deg)}.hbar{grid-template-columns:96px minmax(0,1fr) 84px}}
+@media (max-width:520px){.xkpi{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sdet{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.hbar i,.stack button,.regla .prep,.regla .lic{transition:none}}
 </style>
 <!--/HEAD-->
 </head>
@@ -283,7 +343,7 @@ footer details p{color:var(--ink-muted)}
   </div>
   <figure class="radar" style="margin:0">
     <svg id="radar-svg" viewBox="0 0 650 520" role="img" aria-label="Radar con los 25 proyectos más grandes del norte presentados al SEIA en los últimos 12 meses"></svg>
-    <figcaption>Cada punto es un proyecto real del norte. El tamaño es la inversión declarada.</figcaption>
+    <figcaption id="radar-info">Cada punto es un proyecto real del norte. Toque uno para ver cuál es.</figcaption>
   </figure>
 </div></section>
 
@@ -318,13 +378,32 @@ footer details p{color:var(--ink-muted)}
 
 <section class="band alt" id="radar"><div class="in">
   <div class="head"><div class="eyebrow">En el radar ahora</div>
-    <h2>Los proyectos más grandes del norte que entraron este año</h2>
-    <p class="lead">Datos reales del SEIA. Cada uno traerá contratos de transporte, campamento, maquinaria y servicios.</p></div>
-  <div class="tablewrap"><table>
-    <thead><tr><th>Proyecto</th><th>Región</th><th>Presentado</th><th>Estado</th><th class="n">Inversión</th></tr></thead>
-    <tbody id="tabla"></tbody>
-  </table></div>
-  <p class="note" style="margin-top:16px">Mostramos 8 de los 374 proyectos de la base. El informe mensual trae los nuevos de cada mes.</p>
+    <h2>Explore los proyectos más grandes que entraron este año</h2>
+    <p class="lead">Datos reales del SEIA. Filtre por zona y rubro, o toque una región del gráfico para ver sus proyectos.</p></div>
+  <div class="ctrl">
+    <div class="seg" id="x-zona" role="group" aria-label="Zona"><button type="button" data-z="norte" aria-pressed="true">Norte</button><button type="button" data-z="todo" aria-pressed="false">Todo Chile</button></div>
+    <div class="chips" id="x-rubro" role="group" aria-label="Rubro"></div>
+  </div>
+  <div class="xgrid">
+    <div class="box">
+      <div class="xkpi" aria-live="polite"><div><b id="x-n">0</b><span>proyectos</span></div><div><b id="x-inv">0</b><span>inversión declarada</span></div><div><b id="x-eia">0</b><span>son EIA (los más complejos)</span></div></div>
+      <h3 style="font-size:16px">Inversión por región</h3>
+      <div class="hbars" id="x-barras"></div>
+    </div>
+    <div class="box">
+      <h3 style="font-size:16px" id="x-titulo">Proyectos</h3>
+      <ul class="plist" id="x-lista"></ul>
+      <button class="btn ghost sm" type="button" id="x-mas" style="align-self:flex-start" hidden>Ver más</button>
+    </div>
+  </div>
+  <p class="note" style="margin-top:16px">Muestra los 45 proyectos de mayor inversión entre los 374 presentados al SEIA en 12 meses (corte al 21/11/2026). El informe mensual trae los nuevos de cada mes.</p>
+
+  <div class="box" style="margin-top:32px;align-items:stretch;text-align:left">
+    <h3>¿Qué pasó con los 374 proyectos?</h3>
+    <p style="color:var(--muted);font-size:15px">Toque cada tramo para ver qué significa para un proveedor.</p>
+    <div class="stack" id="s-barra" role="group" aria-label="Estado de los 374 proyectos"></div>
+    <div class="sdet" aria-live="polite"><b id="s-num">236</b><div><h3 id="s-tit"></h3><p id="s-txt"></p></div></div>
+  </div>
 </div></section>
 
 <section class="band dark" id="como"><div class="in">
@@ -338,6 +417,19 @@ footer details p{color:var(--ink-muted)}
     <li><svg><use href="#i-medidor"/></svg><b>Si está preparado</b><span>Puntaje y brechas frente a lo que piden los mandantes.</span></li>
     <li><svg><use href="#i-escudo"/></svg><b>Cerrar brechas</b><span>Asesoría para llegar a tiempo a la licitación.</span></li>
   </ol>
+</div></section>
+
+<section class="band"><div class="in">
+  <div class="head"><div class="eyebrow">Del papel al negocio</div>
+    <h2>Qué dice un estudio ambiental y qué negocio hay detrás</h2>
+    <p class="lead">Todo titular debe declarar cómo construirá y operará su proyecto. Elija un dato y vea cómo lo traducimos.</p></div>
+  <div class="tabs" id="l-tabs" role="tablist" aria-label="Datos del estudio"></div>
+  <div class="lee" id="l-panel" role="tabpanel" aria-live="polite">
+    <div class="box"><span class="tag soon">Lo que declara el estudio</span><h3 id="l-dato"></h3><q id="l-cita"></q></div>
+    <div class="flecha" aria-hidden="true">→</div>
+    <div class="box"><span class="tag">El negocio para un proveedor</span><ul id="l-neg"></ul></div>
+  </div>
+  <p class="note" style="margin-top:16px">Las frases son ejemplos del tipo de información que traen los estudios, no citas de un proyecto en particular.</p>
 </div></section>
 
 <section class="band" id="ejemplo"><div class="in">
@@ -459,6 +551,22 @@ footer details p{color:var(--ink-muted)}
     <div class="item"><div class="ico"><svg><use href="#i-escudo"/></svg></div><h3>Qué no hacemos</h3><p>No certificamos ni acreditamos. La certificación la otorga un organismo acreditado e independiente. Nuestro trabajo es que usted llegue preparado a esa auditoría.</p>
       <div style="margin-top:12px"><a class="btn ghost" href="#contacto" data-motivo="Asesoría para certificarse">Pedir una reunión</a></div></div>
   </div>
+
+  <div class="box" style="margin-top:32px">
+    <h3>Simulador: ¿alcanza a prepararse antes de la licitación?</h3>
+    <div class="sim">
+      <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+        <label for="p-brecha">Lo que le falta<select id="p-brecha"></select></label>
+        <label for="p-meses">Meses que faltan para la licitación: <b id="p-val">8</b><input id="p-meses" type="range" min="1" max="24" value="8"></label>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div class="regla" aria-hidden="true"><div class="eje"></div><div class="prep" id="p-prep"></div><div class="lic" id="p-lic"></div></div>
+        <div class="escala"><span>hoy</span><span>6</span><span>12</span><span>18</span><span>24 meses</span></div>
+        <div class="veredicto" id="p-ver" aria-live="polite"></div>
+      </div>
+    </div>
+    <p class="note">Plazos típicos referenciales. El tiempo real depende del tamaño de su empresa y del organismo certificador.</p>
+  </div>
 </div></section>
 
 <section class="band dark" id="informe"><div class="in">
@@ -557,9 +665,6 @@ Línea de Transmisión Alfa Solar - Kimal|Pleiades S.A.|Antofagasta|160|12/11/20
   .split("\n").map(l => { const [n,t,r,i,f,e] = l.split("|"); return {n,t,r,i:+i,f,e}; });
 const mm = (n) => "US$ " + Math.round(n).toLocaleString("es-CL") + " MM";
 
-$("tabla").innerHTML = PROY.slice(0, 8).map(p =>
-  `<tr><td>${esc(p.n)}<small>${esc(p.t)}</small></td><td>${esc(p.r)}</td><td class="mono">${p.f}</td><td><span class="tag ${p.e === "Aprobado" ? "" : "soon"}">${p.e}</span></td><td class="n">${mm(p.i)}</td></tr>`).join("");
-
 // Radar: un sector por región, de norte a sur en el sentido del reloj. Distancia al centro = antigüedad del ingreso.
 (function radar(){
   const C = 260, R = 220, svg = $("radar-svg");
@@ -584,7 +689,7 @@ $("tabla").innerHTML = PROY.slice(0, 8).map(p =>
     const rad = 46 + Math.min(1, meses / 12) * (R - 70) * (0.75 + 0.25 * ((k * 37) % 10) / 10);
     const [x,yy] = pol(ang, rad); const r = 3 + Math.sqrt(p.i) / 6;
     const ok = p.e === "Aprobado";
-    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fd0ae" : "#f0a468"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#1c2444" stroke-width="1"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
+    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fd0ae" : "#f0a468"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#1c2444" stroke-width="1" data-k="${k}" tabindex="0" role="button"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
     if (k < 3) etiquetas.push({x:x + r + 8, y:yy + 4, k, i:p.i});
   });
   etiquetas.sort((a,b) => a.y - b.y).forEach((e, j, arr) => { if (j && e.y - arr[j-1].y < 17) e.y = arr[j-1].y + 17; });
@@ -707,6 +812,126 @@ function count(b){var txt=b.textContent,m=txt.match(/\d[\d.]*/);if(!m)return;var
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);if(e.target.matches(".stat b"))count(e.target);else e.target.classList.add("in")})},{rootMargin:"0px 0px -8% 0px"});
 document.querySelectorAll(".stat b").forEach(function(b){io.observe(b)});
 var vh=innerHeight*.9;document.querySelectorAll(".band .in").forEach(function(c){[].forEach.call(c.children,function(n,i){var kids=n.matches(".head")||n.children.length<3||n.matches("form,table,.win,details,ol.steps")?[n]:[].slice.call(n.children);kids.forEach(function(x,j){if(x.getBoundingClientRect().top>vh){x.classList.add("rv");x.style.setProperty("--i",Math.min(j,5));io.observe(x)}})})})})();
+</script>
+<script>
+/* Explorador de proyectos, estados, lectura del estudio y simulador de plazos. */
+(function(){
+const $=(id)=>document.getElementById(id);
+const esc=(s)=>String(s).replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const mm=(n)=>"US$ "+Math.round(n).toLocaleString("es-CL")+" MM";
+// Los 45 proyectos de mayor inversión presentados al SEIA entre 21/11/2025 y 21/11/2026.
+const T=`Continuidad Operacional Minera El Abra y Desarrollo de Planta Concentradora con Transición Hídrica a Agua Desalada|Sociedad Contractual Minera El Abra|Antofagasta|7500|26/03/2026|En calificación|Minería|EIA
+Nueva Planta Concentradora, obras eléctricas, actualización movimiento mina e implementación de obras complementarias en Minera Escondida|Minera Escondida Limitada|Antofagasta|5150|18/03/2026|En calificación|Minería|DIA
+Proyecto Acuario - Producción de Amoniaco Verde|IB Decarb Dos Alfa SpA|Magallanes|4700|22/07/2026|En calificación|Química|EIA
+Modificación de la Operación Actual, Proyecto TED: Transición Hacia Extracción Directa de Litio|Albemarle Limitada|Antofagasta|3100|01/04/2026|En calificación|Minería|EIA
+Continuidad Operacional y Desarrollo Minero Futuro en el Salar de Atacama|Nova Andino Litio SpA|Antofagasta|3000|10/07/2026|En calificación|Minería|EIA
+Proyecto Minero Lobo Marte|Compañía Minera Mantos de Oro|Atacama|1500|10/04/2026|En calificación|Minería|EIA
+Extensión operacional de la Faena Minera Cerro Colorado, con ampliación de instalaciones y nuevo sistema de suministro hídrico|Compañía Minera Cerro Colorado Ltda.|Tarapacá|1500|08/07/2026|En calificación|Minería|EIA
+Continuidad del Proceso de Lixiviación y Adecuaciones al Proyecto Minero División Radomiro Tomic|Codelco Chile, División Radomiro Tomic|Antofagasta|1300|20/01/2026|En calificación|Minería|EIA
+Complejo Tecnológico NorQuim para la Producción y Almacenamiento de Metanol|NorQuim SpA|Antofagasta|1200|02/04/2026|En calificación|Química|EIA
+Complejo tecnológico NorQuim para Carbonato de Sodio, Cloruro de Calcio, Soda Cáustica, Ácido Clorhídrico y Cal|NorQuim SpA|Antofagasta|900|06/05/2026|En calificación|Química|EIA
+Central de Almacenamiento de Energía Renovable por Bombeo Atacama|Central Bombeo Atacama SpA|Atacama|900|17/07/2026|En calificación|Agua|EIA
+Parque Eólico Trumao|wpd Trumao SpA|Los Lagos|700|29/12/2025|En calificación|Energía|EIA
+Perforación y Fracturación Hidráulica de Pozos de Hidrocarburos en el Bloque Dorado - Riquelme y Manzano|Empresa Nacional del Petróleo - Magallanes|Magallanes|690|03/08/2026|En calificación|Minería|DIA
+Parque Eólico Mirador del Sur|Mirador del Sur SpA|Los Lagos|650|30/12/2025|En calificación|Energía|EIA
+Parque Eólico Tulipanes|Parque Eólico Tulipanes SpA|Interregional|625|06/01/2026|En calificación|Energía|EIA
+Delva Subestación, Transmisión y Almacenamiento|Delva Transmisión BESS SpA|Atacama|600|11/02/2026|En calificación|Transmisión|DIA
+Parque Fotovoltaico Antofagasta 1|Solar Antofagasta SpA|Antofagasta|593|03/09/2026|En calificación|Energía|DIA
+Parque Fotovoltaico Elena 2|GR Cabo de Hornos SpA|Antofagasta|577|04/02/2026|Aprobado|Energía|DIA
+Mejoramiento Ruta 68: Santiago - Peaje Lo Prado|Sociedad Concesionaria Ruta 68 a la Costa S.A.|Metropolitana|570|06/11/2026|En calificación|Transporte|EIA
+Parque Fotovoltaico Pampa del Desierto|GR Flor de Loto SpA|Antofagasta|520|04/11/2026|En calificación|Energía|DIA
+Parque Eólico Las Lilas|Parque Eólico Las Lilas SpA|Interregional|510|10/04/2026|En calificación|Energía|DIA
+Parque Fotovoltaico Ckoirama Solar|CI GMF II La Negra ProjectCo SpA|Antofagasta|500|24/12/2025|Aprobado|Energía|DIA
+Mejoras y aumento de capacidad para la continuidad operacional de la Faena Minera de cobre Mantos Blancos|Mantos Copper S.A.|Antofagasta|500|26/06/2026|En calificación|Minería|EIA
+BESS Lo Prado|Lader Energy Chile SpA|Metropolitana|443|23/12/2025|Aprobado|Transmisión|DIA
+Modificación Terminal GNL Quintero: Planta Desalinizadora Aguas El Bato y Extensión Emisario Agua de Mar|GNL Quintero S.A.|Valparaíso|400|08/07/2026|En calificación|Agua|EIA
+Av. Costanera Ribera Sur del Río Biobío en San Pedro de la Paz|Ministerio de Obras Públicas|Biobío|398.6|13/07/2026|En calificación|Transporte|EIA
+Mejoramiento y Ampliación Ruta 5 Sur entre el Acceso Sur al By Pass Rancagua y Paso Superior Los Lingues|Autopistas del Maipo|O'Higgins|398.5|20/04/2026|En calificación|Transporte|DIA
+Desaladora Multipropósito - La Serena|Desaladora La Serena SpA|Coquimbo|370|25/08/2026|En calificación|Agua|EIA
+Modificación de extracción de estéril rajo Rosario, nueva cantera Ujina y ajustes en bombeo de relaves, Faena Cordillera Collahuasi|Compañía Minera Doña Inés de Collahuasi SCM|Tarapacá|345|19/06/2026|En calificación|Minería|DIA
+Modificación del Depósito de Relaves Spence por Optimización e Implementación de Cambios Tecnológicos|Minera Spence S.A.|Antofagasta|318|19/08/2026|En calificación|Minería|DIA
+Nuevo Establecimiento Penitenciario de Copiapó|Sociedad Concesionaria Penitenciario de Copiapó S.A.|Atacama|308.6|21/08/2026|En calificación|Infraestructura|DIA
+Proyecto Desarrollo El Soldado (PDES): Extensión de vida útil de la operación|Anglo American Sur S.A.|Valparaíso|295|14/05/2026|En calificación|Minería|EIA
+Parque Eólico El Parrón|Inversiones Bosquemar SpA|Maule|280|27/02/2026|En calificación|Energía|EIA
+Parque Fotovoltaico El Retiro|Austriaenergy Chile Once SpA|Maule|272|21/11/2025|En calificación|Energía|DIA
+Sistema de Almacenamiento de Energía BESS y Línea de Transmisión - Imilac|FPG Imilac SpA|Antofagasta|270|11/12/2025|Aprobado|Transmisión|DIA
+Sistema de Almacenamiento BESS Las Bateas y Seccionamiento 220 kV|BESS Las Bateas SpA|Metropolitana|266|15/09/2026|En calificación|Transmisión|DIA
+Parque Fotovoltaico y Sistema BESS Chanqueahue|GR Las Chinchillas SpA|O'Higgins|227|23/02/2026|En calificación|Energía|EIA
+Modificación Planta Solar Fotovoltaica Tres Cruces|Sonnedix Chile Holding SpA|Atacama|204.6|02/03/2026|En calificación|Energía|DIA
+Regularización y Modificación Proyecto Conjunto Habitacional Vista Alegre|Inmobiliaria Geosal S.A.|Metropolitana|202.8|13/10/2026|En calificación|Infraestructura|DIA
+Parque Híbrido Eólico, Solar y Almacenamiento de Energía Las Quintas (PHLQ)|Plan 8 Energía Infinita Ltda.|Interregional|200|20/07/2026|En calificación|Energía|EIA
+Prospección Minera Catabela Noreste|Sierra Gorda S.C.M.|Antofagasta|200|22/10/2026|En calificación|Minería|DIA
+Parque Fotovoltaico Las Cardas Solar|Las Cardas Solar SpA|Coquimbo|200|18/11/2026|En admisión|Energía|EIA
+Sistema de Transmisión Lo Aguirre - Peralillo y Sistema de Almacenamiento de Energía (BESS)|EnAccess SpA|Metropolitana|190|30/10/2026|En calificación|Transmisión|EIA
+Ampliación Planta Faenadora Sopraval|Sopraval SpA|Valparaíso|160|06/03/2026|En calificación|Agua|DIA
+Incorporación Línea de Transmisión S/E Alfa Solar - S/E Kimal 2x220 kV|Pleiades S.A.|Antofagasta|160|12/11/2026|En calificación|Transmisión|DIA`.split("\n").map(l=>{const[n,t,r,i,f,e,u,k]=l.split("|");return{n,t,r,i:+i,f,e,u,k}});
+const NORTE=["Arica y Parinacota","Tarapacá","Antofagasta","Atacama","Coquimbo"];
+const st={z:"norte",u:"Todos",r:null,n:6};
+const base=()=>T.filter(p=>(st.z==="todo"||NORTE.includes(p.r))&&(st.u==="Todos"||p.u===st.u));
+function pinta(){
+  const B=base(), F=st.r?B.filter(p=>p.r===st.r):B;
+  $("x-n").textContent=F.length; $("x-inv").textContent=mm(F.reduce((a,p)=>a+p.i,0)); $("x-eia").textContent=F.filter(p=>p.k==="EIA").length;
+  const reg={}; B.forEach(p=>reg[p.r]=(reg[p.r]||0)+p.i);
+  const orden=Object.entries(reg).sort((a,b)=>b[1]-a[1]), max=orden.length?orden[0][1]:1;
+  $("x-barras").innerHTML=orden.length?orden.map(([r,v])=>`<button type="button" class="hbar" data-r="${esc(r)}" aria-pressed="${st.r===r}"><span>${esc(r)}</span><span><i style="width:${(v/max*100).toFixed(1)}%"></i></span><em>${mm(v)}</em></button>`).join(""):'<p style="color:var(--muted);font-size:15px">Ninguno de los 45 proyectos más grandes cumple este filtro.</p>';
+  $("x-titulo").textContent=(st.u==="Todos"?"Proyectos":st.u)+(st.r?" en "+st.r:st.z==="norte"?" en el norte":" en todo Chile");
+  const L=F.slice().sort((a,b)=>b.i-a.i);
+  $("x-lista").innerHTML=L.slice(0,st.n).map(p=>`<li><div style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.t)} · ${esc(p.r)} · ${p.u} · ${p.k} · presentado el ${p.f}</small></div><div class="v">${mm(p.i)}<small><span class="tag ${p.e==="Aprobado"?"":"soon"}">${p.e}</span></small></div></li>`).join("");
+  $("x-mas").hidden=L.length<=st.n; $("x-mas").textContent="Ver los "+L.length;
+}
+const RUBROS=["Todos","Minería","Energía","Transmisión","Agua","Química","Transporte","Infraestructura"];
+$("x-rubro").innerHTML=RUBROS.map(u=>`<button type="button" data-u="${u}" aria-pressed="${u==="Todos"}">${u}</button>`).join("");
+$("x-rubro").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.u=b.dataset.u;st.r=null;st.n=6;[...$("x-rubro").children].forEach(x=>x.setAttribute("aria-pressed",x===b));pinta()});
+$("x-zona").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.z=b.dataset.z;st.r=null;st.n=6;[...$("x-zona").children].forEach(x=>x.setAttribute("aria-pressed",x===b));pinta()});
+$("x-barras").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.r=st.r===b.dataset.r?null:b.dataset.r;st.n=6;pinta()});
+$("x-mas").addEventListener("click",()=>{st.n=99;pinta()});
+pinta();
+
+// Estados de los 374 proyectos (base del 21/11/2026).
+const EST=[
+ {n:236,t:"En calificación",c:"var(--accent)",x:"Están siendo evaluados. Todavía no hay constructora ni contratos adjudicados: es el mejor momento para conocer el proyecto y prepararse."},
+ {n:50,t:"Aprobados",c:"var(--ok)",x:"Ya tienen su resolución ambiental favorable. Lo que sigue es la decisión de inversión y la adjudicación: hay que moverse ahora."},
+ {n:50,t:"Desistidos",c:"#7a8198",x:"El titular retiró el proyecto. Muchos vuelven a presentarse corregidos, así que conviene seguirlos."},
+ {n:35,t:"No admitidos a trámite",c:"var(--bad)",x:"Les faltaron antecedentes para ser evaluados. Suelen reingresar meses después."},
+ {n:3,t:"En admisión",c:"var(--warn)",x:"Recién presentados. El SEA está revisando si cumplen lo mínimo para entrar a evaluación."}];
+$("s-barra").innerHTML=EST.map((e,k)=>`<button type="button" data-k="${k}" style="flex:${e.n} 1 0;background:${e.c}" aria-pressed="${k===0}" aria-label="${e.t}: ${e.n}">${e.n>30?e.n:""}</button>`).join("");
+function est(k){const e=EST[k];$("s-num").textContent=e.n;$("s-num").style.color=e.c;$("s-tit").textContent=e.t+" ("+Math.round(e.n/374*100)+"%)";$("s-txt").textContent=e.x;[...$("s-barra").children].forEach((b,j)=>b.setAttribute("aria-pressed",j===k))}
+$("s-barra").addEventListener("click",e=>{const b=e.target.closest("button");if(b)est(+b.dataset.k)});
+$("s-barra").addEventListener("mouseover",e=>{const b=e.target.closest("button");if(b)est(+b.dataset.k)});
+est(0);
+
+// Qué dice el estudio y qué negocio hay detrás.
+const LEE=[
+ {i:"i-casco",t:"Trabajadores",d:"Mano de obra en el peak de construcción",q:"«Durante la fase de construcción se requerirá un máximo de trabajadores, alojados en un campamento…»",n:["Campamento, hotelería y alimentación","Transporte de personal entre la ciudad y la faena","Ropa de trabajo, elementos de protección y lavandería","Exámenes preocupacionales y servicios de salud"]},
+ {i:"i-camion",t:"Camiones",d:"Flujos vehiculares por ruta y por fase",q:"«Se estima un flujo diario de camiones por la ruta de acceso para el traslado de insumos y equipos…»",n:["Transporte de carga general y sobredimensionada","Escoltas y permisos de tránsito","Mantenimiento de flota y neumáticos","Suministro de combustible"]},
+ {i:"i-radar",t:"Agua",d:"Consumo de agua industrial y potable",q:"«El abastecimiento de agua se realizará mediante camiones aljibe desde un proveedor autorizado…»",n:["Suministro y transporte de agua","Plantas de tratamiento y agua potable","Estanques, piping y bombas","Control de polvo en caminos"]},
+ {i:"i-doc",t:"Residuos",d:"Residuos domiciliarios, industriales y peligrosos",q:"«Los residuos peligrosos serán retirados por empresas autorizadas y dispuestos en sitios habilitados…»",n:["Retiro y transporte de residuos","Disposición final autorizada","Baños químicos y aguas servidas","Reciclaje de chatarra y neumáticos"]},
+ {i:"i-calc",t:"Movimiento de tierra",d:"Volúmenes de excavación, áridos y hormigón",q:"«Las obras consideran excavaciones y rellenos, con áridos provenientes de empréstitos autorizados…»",n:["Arriendo de maquinaria con operador","Áridos y hormigón","Topografía y laboratorio de suelos","Perforación y tronadura"]},
+ {i:"i-reloj",t:"Plazos",d:"Cronograma de construcción y operación",q:"«La fase de construcción tendrá una duración estimada en meses, a partir de la obtención de permisos…»",n:["Saber cuándo se necesitará cada servicio","Preparar certificaciones a tiempo","Ordenar su flota y contrataciones","Buscar socios antes de la licitación"]}];
+$("l-tabs").innerHTML=LEE.map((x,k)=>`<button type="button" role="tab" data-k="${k}" aria-selected="${k===0}"><svg><use href="#${x.i}"/></svg>${x.t}</button>`).join("");
+function lee(k){const x=LEE[k];$("l-dato").textContent=x.d;$("l-cita").textContent=x.q;$("l-neg").innerHTML=x.n.map(v=>`<li>${v}</li>`).join("");[...$("l-tabs").children].forEach((b,j)=>b.setAttribute("aria-selected",j===k))}
+$("l-tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b)lee(+b.dataset.k)});
+lee(0);
+
+// Simulador de plazos.
+const BR=[["ISO 45001 (seguridad y salud)",4,8],["ISO 9001 (calidad)",4,8],["ISO 14001 (medio ambiente)",4,8],["ISO 39001 (seguridad vial)",4,6],["Registro de proveedores mineros",1,2],["Respaldo financiero y garantías",1,3],["Las tres ISO principales a la vez",8,14]];
+$("p-brecha").innerHTML=BR.map((b,k)=>`<option value="${k}">${b[0]}: ${b[1]} a ${b[2]} meses</option>`).join("");
+function sim(){const b=BR[+$("p-brecha").value],m=+$("p-meses").value;$("p-val").textContent=m;
+  $("p-prep").style.left=(b[1]/24*100)+"%";$("p-prep").style.width=((b[2]-b[1])/24*100)+"%";
+  $("p-lic").style.left="calc("+(m/24*100)+"% - 1px)";$("p-lic").classList.toggle("izq",m>18);
+  const v=$("p-ver");
+  if(m>=b[2]+2){v.className="veredicto si";v.innerHTML="<b>Alcanza con holgura</b>Partiendo hoy estaría listo unos "+(m-b[2])+" meses antes de la licitación."}
+  else if(m>=b[1]){v.className="veredicto justo";v.innerHTML="<b>Alcanza justo</b>Solo si parte ahora y el proceso no se atrasa. Cada mes de espera cuenta."}
+  else{v.className="veredicto no";v.innerHTML="<b>No alcanza para esta licitación</b>"+(b[1]-m===1?"Le faltaría al menos 1 mes":"Le faltarían al menos "+(b[1]-m)+" meses")+". Sirve prepararse para la siguiente o entrar como subcontratista."}}
+$("p-brecha").addEventListener("change",sim);$("p-meses").addEventListener("input",sim);sim();
+
+// Radar de la portada: tocar un punto muestra el proyecto.
+const svg=$("radar-svg"),info=$("radar-info");
+function punto(c){if(!c||typeof PROY==="undefined")return;const p=PROY[+c.dataset.k];svg.querySelectorAll("circle.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");info.innerHTML="<b>"+esc(p.n)+"</b><br>"+esc(p.t)+" · "+esc(p.r)+" · "+mm(p.i)+" · "+p.e}
+svg.addEventListener("click",e=>punto(e.target.closest("circle[data-k]")));
+svg.addEventListener("mouseover",e=>punto(e.target.closest("circle[data-k]")));
+svg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();punto(e.target.closest("circle[data-k]"))}});
+})();
 </script>
 </body>
 </html>
