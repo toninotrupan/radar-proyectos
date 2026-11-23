@@ -6,6 +6,18 @@
 <!--CUERPO-->
 <title>Radar de Proyectos</title>
 <meta name="description" content="Proyectos de inversión que entran a evaluación ambiental en Chile, traducidos a oportunidades para proveedores y contratistas.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://toninotrupan.github.io/radar-proyectos/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CL">
+<meta property="og:site_name" content="Radar de Proyectos">
+<meta property="og:title" content="Radar de Proyectos: sepa qué proyectos vienen antes que su competencia">
+<meta property="og:description" content="Los proyectos de inversión que entran al SEIA, traducidos a negocios para proveedores y contratistas. Informe mensual gratis.">
+<meta property="og:url" content="https://toninotrupan.github.io/radar-proyectos/">
+<meta property="og:image" content="https://toninotrupan.github.io/radar-proyectos/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
 <style>
@@ -348,11 +360,11 @@ footer details p{color:var(--ink-muted)}
 </div></section>
 
 <section class="stats" aria-label="Cifras del SEIA"><div class="in">
-  <div class="stat"><b>374</b><span>proyectos presentados al SEIA en los últimos 12 meses</span></div>
-  <div class="stat"><b>236</b><span>siguen en calificación: aún no tienen constructora</span></div>
-  <div class="stat"><b>90</b><span>están entre Arica y Coquimbo</span></div>
-  <div class="stat"><b>US$ 31.700 MM</b><span>suman los 25 más grandes del norte</span></div>
-</div><div class="in src">Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental). Corte al 21/11/2026.</div></section>
+  <div class="stat"><b id="st-n">374</b><span>proyectos presentados al SEIA en los últimos 12 meses</span></div>
+  <div class="stat"><b id="st-cal">236</b><span>siguen en calificación: aún no tienen constructora</span></div>
+  <div class="stat"><b id="st-norte">90</b><span>están entre Arica y Coquimbo</span></div>
+  <div class="stat"><b id="st-inv">US$ 31.700 MM</b><span>suman los 25 más grandes del norte</span></div>
+</div><div class="in src" id="st-src">Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental). Corte al 21/11/2026.</div></section>
 
 <section class="band"><div class="in">
   <div class="head"><div class="eyebrow">El problema</div>
@@ -396,10 +408,10 @@ footer details p{color:var(--ink-muted)}
       <button class="btn ghost sm" type="button" id="x-mas" style="align-self:flex-start" hidden>Ver más</button>
     </div>
   </div>
-  <p class="note" style="margin-top:16px">Muestra los 45 proyectos de mayor inversión entre los 374 presentados al SEIA en 12 meses (corte al 21/11/2026). El informe mensual trae los nuevos de cada mes.</p>
+  <p class="note" style="margin-top:16px" id="x-nota">Muestra los 45 proyectos de mayor inversión entre los 374 presentados al SEIA en 12 meses (corte al 21/11/2026). El informe mensual trae los nuevos de cada mes.</p>
 
   <div class="box" style="margin-top:32px;align-items:stretch;text-align:left">
-    <h3>¿Qué pasó con los 374 proyectos?</h3>
+    <h3>¿Qué pasó con los <span id="s-tot">374</span> proyectos?</h3>
     <p style="color:var(--muted);font-size:15px">Toque cada tramo para ver qué significa para un proveedor.</p>
     <div class="stack" id="s-barra" role="group" aria-label="Estado de los 374 proyectos"></div>
     <div class="sdet" aria-live="polite"><b id="s-num">236</b><div><h3 id="s-tit"></h3><p id="s-txt"></p></div></div>
@@ -518,7 +530,7 @@ footer details p{color:var(--ink-muted)}
       <label for="m-email">Correo de su empresa<input id="m-email" name="email" type="email" required autocomplete="email" placeholder="nombre@empresa.cl"></label>
       <label for="m-empresa">Empresa (opcional)<input id="m-empresa" name="empresa" autocomplete="organization"></label>
     </div>
-    <label class="check" for="m-ok"><input id="m-ok" type="checkbox" required>Acepto que Radar de Proyectos guarde mis respuestas y mi correo para enviarme el resultado y el informe mensual. Puedo pedir que los borren cuando quiera.</label>
+    <label class="check" for="m-ok"><input id="m-ok" type="checkbox" required>Acepto que Radar de Proyectos guarde mis respuestas y mi correo para mostrarme el resultado, contactarme por él y enviarme el informe mensual. Puedo pedir que los borren cuando quiera.</label>
     <div><button class="btn" type="submit">Ver mi puntaje</button></div>
     <div id="m-msg" role="status"></div>
   </form>
@@ -574,7 +586,8 @@ footer details p{color:var(--ink-muted)}
     <div class="head" style="margin:0"><div class="eyebrow">Informe mensual gratis</div>
       <h2>Los proyectos nuevos del mes, en su correo</h2>
       <p class="lead">Una vez al mes: qué proyectos entraron a evaluación, cuáles se aprobaron y qué significan para los proveedores del norte.</p>
-      <ul class="trust"><li><svg><use href="#i-check"/></svg>Gratis</li><li><svg><use href="#i-check"/></svg>Un correo al mes</li><li><svg><use href="#i-check"/></svg>Se da de baja respondiendo BAJA</li></ul></div>
+      <ul class="trust"><li><svg><use href="#i-check"/></svg>Gratis</li><li><svg><use href="#i-check"/></svg>Un correo al mes</li><li><svg><use href="#i-check"/></svg>Se da de baja respondiendo BAJA</li></ul>
+      <div style="margin-top:22px"><a class="btn ghost" href="informe-muestra.html">Ver un informe de muestra</a></div></div>
     <form id="f-informe" class="card" novalidate>
       <label for="i-email">Correo<input id="i-email" name="email" type="email" required autocomplete="email" placeholder="nombre@empresa.cl"></label>
       <div class="row">
@@ -749,12 +762,18 @@ function valido(form, out){
   return false;
 }
 function enviar(form, out, armar, alTerminar){
+  // Campo trampa: las personas no lo ven; los robots lo llenan.
+  const trampa = document.createElement("input");
+  trampa.name = "sitio_web"; trampa.tabIndex = -1; trampa.autocomplete = "off"; trampa.setAttribute("aria-hidden", "true");
+  trampa.style.cssText = "position:absolute;left:-9999px;width:1px;height:1px;opacity:0";
+  form.appendChild(trampa);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if(!valido(form, out)) return;
-    const boton = form.querySelector("button"); boton.disabled = true;
+    const boton = form.querySelector("button[type=submit]"); boton.disabled = true;
     const fila = armar(new FormData(form));
     fila.consentimiento = true;
+    if(trampa.value || performance.now() < 4000){ alTerminar(true, fila); boton.disabled = false; return; }
     try { await guardar(fila); alTerminar(true, fila); }
     catch(err){ alTerminar(false, fila); }
     boton.disabled = false;
@@ -820,7 +839,7 @@ const $=(id)=>document.getElementById(id);
 const esc=(s)=>String(s).replace(/[&<>"]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const mm=(n)=>"US$ "+Math.round(n).toLocaleString("es-CL")+" MM";
 // Los 45 proyectos de mayor inversión presentados al SEIA entre 21/11/2025 y 21/11/2026.
-const T=`Continuidad Operacional Minera El Abra y Desarrollo de Planta Concentradora con Transición Hídrica a Agua Desalada|Sociedad Contractual Minera El Abra|Antofagasta|7500|26/03/2026|En calificación|Minería|EIA
+let T=`Continuidad Operacional Minera El Abra y Desarrollo de Planta Concentradora con Transición Hídrica a Agua Desalada|Sociedad Contractual Minera El Abra|Antofagasta|7500|26/03/2026|En calificación|Minería|EIA
 Nueva Planta Concentradora, obras eléctricas, actualización movimiento mina e implementación de obras complementarias en Minera Escondida|Minera Escondida Limitada|Antofagasta|5150|18/03/2026|En calificación|Minería|DIA
 Proyecto Acuario - Producción de Amoniaco Verde|IB Decarb Dos Alfa SpA|Magallanes|4700|22/07/2026|En calificación|Química|EIA
 Modificación de la Operación Actual, Proyecto TED: Transición Hacia Extracción Directa de Litio|Albemarle Limitada|Antofagasta|3100|01/04/2026|En calificación|Minería|EIA
@@ -877,28 +896,65 @@ function pinta(){
   $("x-titulo").textContent=(st.u==="Todos"?"Proyectos":st.u)+(st.r?" en "+st.r:st.z==="norte"?" en el norte":" en todo Chile");
   const L=F.slice().sort((a,b)=>b.i-a.i);
   $("x-lista").innerHTML=L.slice(0,st.n).map(p=>`<li><div style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.t)} · ${esc(p.r)} · ${p.u} · ${p.k} · presentado el ${p.f}</small></div><div class="v">${mm(p.i)}<small><span class="tag ${p.e==="Aprobado"?"":"soon"}">${p.e}</span></small></div></li>`).join("");
-  $("x-mas").hidden=L.length<=st.n; $("x-mas").textContent="Ver los "+L.length;
+  $("x-mas").hidden=L.length<=st.n; $("x-mas").textContent=L.length-st.n>12?"Ver 12 más":"Ver los "+L.length;
 }
-const RUBROS=["Todos","Minería","Energía","Transmisión","Agua","Química","Transporte","Infraestructura"];
-$("x-rubro").innerHTML=RUBROS.map(u=>`<button type="button" data-u="${u}" aria-pressed="${u==="Todos"}">${u}</button>`).join("");
+let RUBROS=["Todos","Minería","Energía","Transmisión","Agua","Química","Transporte","Infraestructura"];
+function chips(){$("x-rubro").innerHTML=RUBROS.map(u=>`<button type="button" data-u="${u}" aria-pressed="${u===st.u}">${u}</button>`).join("")}
+chips();
 $("x-rubro").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.u=b.dataset.u;st.r=null;st.n=6;[...$("x-rubro").children].forEach(x=>x.setAttribute("aria-pressed",x===b));pinta()});
 $("x-zona").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.z=b.dataset.z;st.r=null;st.n=6;[...$("x-zona").children].forEach(x=>x.setAttribute("aria-pressed",x===b));pinta()});
 $("x-barras").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.r=st.r===b.dataset.r?null:b.dataset.r;st.n=6;pinta()});
-$("x-mas").addEventListener("click",()=>{st.n=99;pinta()});
+$("x-mas").addEventListener("click",()=>{st.n+=12;pinta()});
 pinta();
 
-// Estados de los 374 proyectos (base del 21/11/2026).
+// Estados de los proyectos (se actualizan con la base viva).
+let TOT=374;
 const EST=[
  {n:236,t:"En calificación",c:"var(--accent)",x:"Están siendo evaluados. Todavía no hay constructora ni contratos adjudicados: es el mejor momento para conocer el proyecto y prepararse."},
  {n:50,t:"Aprobados",c:"var(--ok)",x:"Ya tienen su resolución ambiental favorable. Lo que sigue es la decisión de inversión y la adjudicación: hay que moverse ahora."},
  {n:50,t:"Desistidos",c:"#7a8198",x:"El titular retiró el proyecto. Muchos vuelven a presentarse corregidos, así que conviene seguirlos."},
  {n:35,t:"No admitidos a trámite",c:"var(--bad)",x:"Les faltaron antecedentes para ser evaluados. Suelen reingresar meses después."},
  {n:3,t:"En admisión",c:"var(--warn)",x:"Recién presentados. El SEA está revisando si cumplen lo mínimo para entrar a evaluación."}];
-$("s-barra").innerHTML=EST.map((e,k)=>`<button type="button" data-k="${k}" style="flex:${e.n} 1 0;background:${e.c}" aria-pressed="${k===0}" aria-label="${e.t}: ${e.n}">${e.n>30?e.n:""}</button>`).join("");
-function est(k){const e=EST[k];$("s-num").textContent=e.n;$("s-num").style.color=e.c;$("s-tit").textContent=e.t+" ("+Math.round(e.n/374*100)+"%)";$("s-txt").textContent=e.x;[...$("s-barra").children].forEach((b,j)=>b.setAttribute("aria-pressed",j===k))}
+function barra(){$("s-barra").innerHTML=EST.map((e,k)=>`<button type="button" data-k="${k}" style="flex:${Math.max(e.n,1)} 1 0;background:${e.c}" aria-pressed="${k===0}" aria-label="${e.t}: ${e.n}">${e.n/TOT>.08?e.n:""}</button>`).join("")}
+barra();
+function est(k){const e=EST[k];$("s-num").textContent=e.n;$("s-num").style.color=e.c;$("s-tit").textContent=e.t+" ("+Math.round(e.n/TOT*100)+"%)";$("s-txt").textContent=e.x;[...$("s-barra").children].forEach((b,j)=>b.setAttribute("aria-pressed",j===k))}
 $("s-barra").addEventListener("click",e=>{const b=e.target.closest("button");if(b)est(+b.dataset.k)});
 $("s-barra").addEventListener("mouseover",e=>{const b=e.target.closest("button");if(b)est(+b.dataset.k)});
 est(0);
+
+// Base viva: la misma que actualiza la revisión diaria del SEIA. Si no responde, quedan las cifras del 21/11/2026.
+(async function vivo(){
+  if(typeof SUPA_URL==="undefined"||location.protocol==="file:")return;
+  let d;
+  try{
+    const r=await fetch(SUPA_URL+"/rest/v1/radar_proyectos?select=nombre,titular,region,inversion_mmusd,fecha_presentacion,estado,tipologia,tipo,actualizado_at&limit=2000",{headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY}});
+    if(!r.ok)return; d=await r.json();
+  }catch(e){return}
+  if(!Array.isArray(d)||d.length<50)return;
+  const RM={i:"Minería",c:"Energía",b:"Transmisión",a:"Agua",o:"Agua","ñ":"Química",e:"Transporte",g:"Infraestructura",h:"Infraestructura"};
+  const corta=r=>String(r||"Sin región").replace(/^Región Metropolitana.*/,"Metropolitana").replace(/^Región (del |de )/,"").replace(/^Libertador.*/,"O'Higgins").replace(/^Magallanes.*/,"Magallanes").replace(/^Aysén.*/,"Aysén");
+  const baja=e=>{e=String(e||"Sin estado");return e.charAt(0)+e.slice(1).toLowerCase()};
+  const fecha=f=>f?f.slice(8,10)+"/"+f.slice(5,7)+"/"+f.slice(0,4):"";
+  T=d.map(p=>({n:p.nombre||"",t:p.titular||"",r:corta(p.region),i:+p.inversion_mmusd||0,f:fecha(p.fecha_presentacion),e:baja(p.estado),u:RM[(p.tipologia||"").charAt(0)]||"Otros",k:p.tipo||""}));
+  if(T.some(p=>p.u==="Otros")&&!RUBROS.includes("Otros"))RUBROS.push("Otros");
+  TOT=T.length; chips(); pinta();
+  const cuenta=re=>T.filter(p=>re.test(p.e)).length;
+  [/^En calificaci/,/^Aprobado/,/^Desistido/,/^No admitido/,/^En admisi/].forEach((re,k)=>EST[k].n=cuenta(re));
+  barra(); est(0); $("s-tot").textContent=TOT;
+  const norte=T.filter(p=>NORTE.includes(p.r)).sort((a,b)=>b.i-a.i);
+  const inv25=Math.round(norte.slice(0,25).reduce((a,p)=>a+p.i,0)/100)*100;
+  const ult=d.reduce((a,p)=>p.actualizado_at>a?p.actualizado_at:a,"");
+  const dia=ult?new Date(ult).toLocaleDateString("es-CL",{timeZone:"America/Santiago"}):"";
+  const pon=()=>{$("st-n").textContent=TOT.toLocaleString("es-CL");$("st-cal").textContent=EST[0].n.toLocaleString("es-CL");$("st-norte").textContent=norte.length;$("st-inv").textContent="US$ "+inv25.toLocaleString("es-CL")+" MM"};
+  pon(); setTimeout(pon,1200);
+  $("st-src").textContent="Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental)."+(dia?" Actualizado el "+dia+".":"");
+  $("x-nota").textContent="Incluye los "+TOT+" proyectos presentados al SEIA en los últimos 12 meses"+(dia?", actualizados el "+dia:"")+". El informe mensual trae los nuevos de cada mes.";
+})();
+
+// Conteo de visitas propio: una vez por sesión, sin cookies ni datos personales.
+try{if(location.protocol!=="file:"&&typeof SUPA_URL!=="undefined"&&!sessionStorage.getItem("radar_v")){sessionStorage.setItem("radar_v","1");
+  let o="";try{o=document.referrer?new URL(document.referrer).hostname:""}catch(e){}
+  fetch(SUPA_URL+"/rest/v1/rpc/radar_visita",{method:"POST",headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY,"Content-Type":"application/json"},body:JSON.stringify({p_pagina:"inicio",p_origen:o})}).catch(()=>{})}}catch(e){}
 
 // Qué dice el estudio y qué negocio hay detrás.
 const LEE=[
