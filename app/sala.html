@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Sala de datos | Radar de Proyectos</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f2ee;--panel:#ffffff;--fg:#141d21;--muted:#566267;--line:#d8d3ca;--soft:#ebe7e0;--ink:#0a2229;--ink-fg:#eef4f4;--ink-muted:#9db6ba;--accent:#b4531c;--accent-soft:#f5e3d6;--ok:#1f7a4d;--ok-soft:#dcefe4;--warn:#8a6a00;--warn-soft:#f4ecd0;--bad:#a23a2a;--bad-soft:#f6dfda;--eval:#245c8f;--eval-soft:#dde8f3}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1719;--panel:#172124;--fg:#e8eeee;--muted:#9aabad;--line:#2a393d;--soft:#1f2c30;--ink:#081c21;--accent:#e8925a;--accent-soft:#3b2a1f;--ok:#62c795;--ok-soft:#18342a;--warn:#e0c15a;--warn-soft:#383016;--bad:#ee8f80;--bad-soft:#3d221e;--eval:#84b4e6;--eval-soft:#1b2c3d;color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.top{background:var(--ink);color:var(--ink-fg)}
+.top .in{max-width:1120px;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between}
+.brand{font:800 19px/1 Archivo,system-ui,sans-serif;letter-spacing:.01em;color:var(--ink-fg);text-decoration:none}
+.brand small{font:400 11px "IBM Plex Mono",monospace;color:var(--ink-muted);margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:var(--ink-muted);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500;font-size:14px}
+nav a[aria-current="page"]{background:var(--accent);color:#fff}
+nav a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{max-width:1120px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:20px}
+h1{font:700 28px/1.15 Archivo,system-ui,sans-serif;margin:0;text-wrap:balance}
+h2{font:700 18px/1.25 Archivo,system-ui,sans-serif;margin:0}
+.lead{color:var(--muted);margin:6px 0 0;max-width:68ch}
+.stamp{font:400 12px "IBM Plex Mono",monospace;color:var(--muted)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.kpi b{display:block;font:700 24px/1.2 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:13px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.panel.hl{border-color:var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.filters label{display:flex;flex-direction:column;gap:4px;font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex:1 1 165px;min-width:0}
+select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
+.count{color:var(--muted);font-size:13px;margin:0}
+.list{display:flex;flex-direction:column;gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;text-decoration:none;color:inherit}
+.card:hover{border-color:var(--accent)}
+.card h3{font:600 16px/1.3 Inter,system-ui,sans-serif;margin:0;text-wrap:balance}
+.meta{color:var(--muted);font-size:13px;margin:0}
+.inv{text-align:right;font:700 20px/1.1 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.inv small{display:block;font:400 11px Inter,system-ui,sans-serif;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;grid-column:1/-1}
+.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--soft)}
+.tag.rubro{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.ok{background:var(--ok-soft);color:var(--ok);font-weight:600}
+.tag.eval{background:var(--eval-soft);color:var(--eval);font-weight:600}
+.tag.adm{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.tag.bad{background:var(--bad-soft);color:var(--bad);font-weight:600}
+.why{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+.why b{color:var(--fg)}
+.more{align-self:center;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;margin:0;font-size:14px}
+.dl dt{color:var(--muted)}
+.dl dd{margin:0}
+.desc{white-space:pre-line;max-width:75ch;margin:0}
+.opps{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
+.opps li{border-left:3px solid var(--accent);padding:2px 0 2px 12px}
+.opps b{display:block}
+.opps span{font-size:13px;color:var(--muted)}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:minmax(90px,200px) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
+.bar i{display:block;height:10px;background:var(--accent);border-radius:2px;min-width:2px}
+.bar .v{font:500 12px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{color:var(--muted);font-size:13px;max-width:75ch;margin:0}
+.soon{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:14px}
+.soon b{color:var(--fg)}
+.back{font-size:14px}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;border:0;padding:0;margin:0}
+.checks legend{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:0;margin-bottom:6px}
+.checks label{display:flex;gap:8px;align-items:center;font-size:14px}
+.checks input{width:auto}
+.btn{align-self:flex-start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer}
+.cost{width:100%;border-collapse:collapse;font-size:14px}
+.cost th{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:4px 6px}
+.cost td{padding:4px 6px;vertical-align:middle}.cost td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cost input{padding:6px 8px}.tw{overflow-x:auto}
+.btn2{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer;align-self:flex-start}
+@media print{.top,.back,.btn,.btn2,.filters{display:none}body{background:#fff}}
+.emp{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.emp li{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
+.emp b{display:block}.emp span{color:var(--muted);font-size:13px;display:block}
+@media (max-width:560px){.card{grid-template-columns:minmax(0,1fr)}.inv{text-align:left}.dl{grid-template-columns:minmax(0,1fr)}.dl dt{margin-top:6px}}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.form label,.stack label{display:flex;flex-direction:column;gap:4px;font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;min-width:0}
+.form .wide{grid-column:1/-1}
+textarea{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-height:84px;resize:vertical}
+.stack{display:flex;flex-direction:column;gap:12px;max-width:440px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--fg);text-transform:none;letter-spacing:0;font-family:Inter,system-ui,sans-serif}
+.chk input{width:auto;margin-top:3px}
+.form label.chk,.stack label.chk{flex-direction:row;font:14px/1.5 Inter,system-ui,sans-serif;text-transform:none;letter-spacing:0;color:var(--fg)}.form label.chk{grid-column:1/-1}
+.msg{font-size:14px;margin:0;padding:8px 12px;border-radius:8px}
+.msg.ok{background:var(--ok-soft);color:var(--ok)}.msg.bad{background:var(--bad-soft);color:var(--bad)}.msg.info{background:var(--eval-soft);color:var(--eval)}.msg.warn{background:var(--warn-soft);color:var(--warn)}
+.docs{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.docs li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:14px}
+.docs li span{color:var(--muted);font-size:13px;display:block}
+.cat{font:600 14px Inter,system-ui,sans-serif;margin:8px 0 0}
+.cat small{font-weight:400;color:var(--muted);display:block}
+.btn[disabled],.btn2[disabled]{opacity:.55;cursor:default}
+.btn2.danger{color:var(--bad);border-color:var(--bad)}
+.who{color:var(--ink-muted);font-size:13px}
+nav button{background:none;border:0;color:var(--ink-muted);padding:6px 12px;border-radius:999px;font:500 14px Inter,system-ui,sans-serif;cursor:pointer}
+.legal{max-width:75ch}.legal h2{margin-top:14px}.legal p,.legal li{font-size:14px}
+@media (max-width:560px){.docs li{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in">
+  <a class="brand" href="#inicio">Radar de Proyectos<small>sala de datos</small></a>
+  <nav aria-label="Secciones" id="nav"></nav>
+</div></div>
+<main id="app"><p class="lead">Cargando…</p></main>
+<script src="vendor/supabase.js"></script>
+<script>
+const URL_SB="https://uyhdxjnqhkkazrokdjjc.supabase.co";
+const KEY="sb_publishable_C7FEhSMaFO6yX9dXqgjKIA_cxGBjYwk";
+const BUCKET="sala-datos";
+const MAX_MB=25;
+const POLITICA="2026-11-23";
+const REGIONES=["Arica y Parinacota","Tarapacá","Antofagasta","Atacama","Coquimbo","Valparaíso","Metropolitana","O'Higgins","Maule","Ñuble","Biobío","La Araucanía","Los Ríos","Los Lagos","Aysén","Magallanes"];
+// Carpetas de la sala de datos: lo que normalmente pide un banco, un mandante o un inversionista.
+const CATS=[
+ ["presentacion","Presentación de la empresa","Resumen ejecutivo, plan de negocios, organigrama."],
+ ["legal","Legal y societario","Escritura de constitución y modificaciones, certificado de vigencia, poderes, composición de socios."],
+ ["financiero","Estados financieros","Balances y estados de resultados de los últimos 3 años, flujo de caja, deudas vigentes."],
+ ["tributario","Tributario","Carpeta tributaria, declaraciones de IVA (F29) y de renta (F22)."],
+ ["laboral","Laboral y previsional","Certificados F30 y F30-1 de la Dirección del Trabajo, dotación, cotizaciones al día."],
+ ["comercial","Clientes y contratos","Contratos vigentes, órdenes de compra, principales clientes y facturación por cliente."],
+ ["activos","Operación y activos","Listado de equipos y flota, permisos, seguros, propiedades o arriendos."],
+ ["seguridad","Seguridad y certificaciones","Certificados ISO, tasa de accidentabilidad de la mutualidad, acreditaciones de mandantes."],
+ ["otros","Otros documentos","Cualquier otro antecedente que quieras mostrar."]
+];
+const TIPO_NEC={capital:"Socio o aporte de capital",deuda:"Préstamo",factoring:"Adelanto de facturas (factoring)",leasing:"Leasing de equipos",otro:"Otro"};
+const TIPO_INV={persona:"Persona natural",empresa:"Empresa",fondo:"Fondo de inversión",family_office:"Oficina familiar",otro:"Otro"};
+const AVISO_INV="Radar de Proyectos solo muestra información entregada por cada empresa. No recomienda ni evalúa inversiones, no verifica los documentos y no recibe ni administra dinero. Las empresas publicadas no están inscritas en el Registro de Valores de la Comisión para el Mercado Financiero (CMF) y no están sujetas a su fiscalización; sus acciones u otros valores no pueden ofrecerse públicamente en Chile. Toda negociación y acuerdo ocurre directamente entre las partes, fuera de esta plataforma.";
+
+const sb=window.supabase?window.supabase.createClient(URL_SB,KEY):null;
+let U=null,INV=false,INV_PUBLICO=false,RECUPERA=false;
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const fecha=d=>d?new Date(d).toLocaleDateString("es-CL",{day:"2-digit",month:"2-digit",year:"numeric"}):"";
+const fechaHora=d=>d?new Date(d).toLocaleString("es-CL",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}):"";
+const peso=b=>b==null?"":b<1048576?Math.max(1,Math.round(b/1024))+" KB":(b/1048576).toFixed(1).replace(".",",")+" MB";
+const plata=v=>v==null||v===""?"":"$ "+(+v).toLocaleString("es-CL");
+function input(type,val,attrs){const i=el(type==="textarea"?"textarea":"input");if(type!=="textarea")i.type=type;if(val!=null)i.value=val;Object.assign(i,attrs||{});return i}
+function select(opts,val){const s=el("select");opts.forEach(([v,t])=>{const o=el("option",null,t);o.value=v;s.append(o)});if(val!=null)s.value=val;return s}
+function campo(label,ctrl,cls){const l=el("label",cls);l.append(document.createTextNode(label),ctrl);return l}
+function casilla(texto,checked){const l=el("label","chk");const i=input("checkbox");i.checked=!!checked;const s=el("span",null,texto);l.append(i,s);return{l,i,s}}
+function aviso(box,texto,tipo){box.textContent="";if(texto)box.append(el("p","msg "+(tipo||"info"),texto))}
+function errTexto(e){const m=(e&&e.message)||String(e||"");
+  if(/Invalid login credentials/i.test(m))return"El correo o la clave no coinciden.";
+  if(/Email not confirmed/i.test(m))return"Falta confirmar tu correo. Revisa tu bandeja de entrada y aprieta el enlace que te enviamos.";
+  if(/already registered|already been registered/i.test(m))return"Ese correo ya tiene cuenta. Entra con tu clave o usa «Olvidé mi clave».";
+  if(/rate limit|too many/i.test(m))return"Se hicieron muchos intentos seguidos. Espera unos minutos y prueba otra vez.";
+  if(/Signups not allowed|signup is disabled/i.test(m))return"El registro de cuentas nuevas está cerrado por ahora.";
+  if(/password/i.test(m)&&/6|short|weak/i.test(m))return"La clave debe tener al menos 8 caracteres.";
+  if(/row-level security|permission denied|not authorized/i.test(m))return"No tienes permiso para hacer esto.";
+  if(/exceeded the maximum allowed size|too large/i.test(m))return"El archivo supera el máximo de "+MAX_MB+" MB.";
+  if(/Failed to fetch|NetworkError/i.test(m))return"No hay conexión con el servidor. Revisa tu internet y prueba otra vez.";
+  return"No se pudo completar: "+m}
+// Botón de dos pasos para acciones que no se pueden deshacer (sin ventanas emergentes).
+function botonSeguro(texto,confirma,fn){const b=el("button","btn2 danger",texto);b.type="button";let t=null;
+  b.onclick=async()=>{if(!t){b.textContent=confirma;t=setTimeout(()=>{b.textContent=texto;t=null},5000);return}clearTimeout(t);b.disabled=true;b.textContent="Un momento…";try{await fn()}catch(e){b.disabled=false;b.textContent=texto;t=null;throw e}};return b}
+
+function pintarNav(h){const nav=$("#nav");nav.textContent="";
+  const add=(href,txt,key)=>{const a=el("a",null,txt);a.href=href;if(key&&key===h)a.setAttribute("aria-current","page");nav.append(a)};
+  add("./","← Proyectos");
+  if(U){add("#inicio","Mis salas","inicio");if(INV)add("#inversion","Inversión","inversion");add("#datos","Mis datos","datos")}
+  add("#privacidad","Privacidad","privacidad");
+  if(U){const b=el("button",null,"Salir");b.type="button";b.onclick=async()=>{await sb.auth.signOut();location.hash="#inicio"};nav.append(b)}}
+
+async function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
+  const key=h.startsWith("e-")?"inicio":h;pintarNav(key);
+  if(!sb){app.append(el("h1",null,"Sala de datos"),el("p","msg bad","No se pudo cargar una parte de la página. Revisa tu conexión y vuelve a cargar."));return}
+  try{
+    if(h==="privacidad")return vPrivacidad(app);
+    if(RECUPERA)return vNuevaClave(app);
+    if(!U)return vEntrar(app);
+    if(!(await consentido()))return vConsentir(app);
+    if(h.startsWith("e-"))return await vEmpresa(app,h.slice(2));
+    if(h==="inversion"&&INV)return await vInversion(app);
+    if(h==="datos")return await vDatos(app);
+    return await vInicio(app);
+  }catch(e){app.append(el("p","msg bad",errTexto(e)))}}
+
+// ---------- Entrar / crear cuenta ----------
+function vEntrar(app){
+  app.append(el("h1",null,"Sala de datos de tu empresa"),el("p","lead","Un lugar privado para guardar los documentos de tu empresa y mostrárselos solo a quien tú invites: un banco, un mandante o un posible inversionista. Tú decides quién entra y por cuánto tiempo, y ves quién revisó cada documento."));
+  const p=el("section","panel");let modo="entrar";const box=el("div");
+  const pintar=()=>{p.textContent="";const f=el("form","stack");f.noValidate=true;
+    p.append(el("h2",null,modo==="entrar"?"Entrar":modo==="crear"?"Crear cuenta":"Recuperar clave"));
+    const correo=input("email","",{autocomplete:"email",required:true});const clave=input("password","",{autocomplete:modo==="crear"?"new-password":"current-password",minLength:8});
+    f.append(campo("Correo",correo));if(modo!=="recuperar")f.append(campo(modo==="crear"?"Clave (mínimo 8 caracteres)":"Clave",clave));
+    let acepta=null;if(modo==="crear"){acepta=casilla("Acepto la política de privacidad y que mis datos se usen solo para operar esta sala de datos.");const a=el("a",null," Leer la política");a.href="#privacidad";acepta.s.append(a);f.append(acepta.l)}
+    const b=el("button","btn",modo==="entrar"?"Entrar":modo==="crear"?"Crear mi cuenta":"Enviarme el enlace");b.type="submit";f.append(b,box);
+    f.onsubmit=async ev=>{ev.preventDefault();const em=correo.value.trim().toLowerCase();
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return aviso(box,"Escribe un correo válido, por ejemplo nombre@empresa.cl.","bad");
+      if(modo!=="recuperar"&&clave.value.length<8)return aviso(box,"La clave debe tener al menos 8 caracteres.","bad");
+      if(modo==="crear"&&!acepta.i.checked)return aviso(box,"Para crear la cuenta debes aceptar la política de privacidad.","bad");
+      b.disabled=true;aviso(box,"Un momento…");const aqui=location.origin+location.pathname;
+      try{
+        if(modo==="entrar"){const{error}=await sb.auth.signInWithPassword({email:em,password:clave.value});if(error)throw error}
+        else if(modo==="crear"){const{data,error}=await sb.auth.signUp({email:em,password:clave.value,options:{emailRedirectTo:aqui}});if(error)throw error;
+          if(data.user&&data.user.identities&&data.user.identities.length===0)throw new Error("already registered");
+          if(!data.session){b.disabled=false;return aviso(box,"Te enviamos un correo a "+em+". Ábrelo y aprieta el enlace para confirmar tu cuenta; después vuelve aquí y entra con tu clave.","ok")}
+          try{localStorage.setItem("sala_acepto",POLITICA)}catch(e){}}
+        else{const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:aqui});if(error)throw error;b.disabled=false;return aviso(box,"Si ese correo tiene cuenta, recibirá un enlace para elegir una clave nueva.","ok")}
+      }catch(e){b.disabled=false;aviso(box,errTexto(e),"bad")}};
+    p.append(f);const r=el("div","row");
+    const link=(txt,m)=>{const a=el("button","btn2",txt);a.type="button";a.onclick=()=>{modo=m;box.textContent="";pintar()};r.append(a)};
+    if(modo!=="entrar")link("Ya tengo cuenta","entrar");if(modo!=="crear")link("Crear una cuenta nueva","crear");if(modo==="entrar")link("Olvidé mi clave","recuperar");p.append(r)};
+  pintar();app.append(p);
+  const c=el("section","panel");c.append(el("h2",null,"Cómo funciona"));const ul=el("ul","opps");
+  [["Creas tu cuenta y registras tu empresa","Solo necesitas un correo y una clave."],["Subes los documentos por carpeta","Legal, financiero, tributario, laboral, contratos y más. Solo tú puedes subir o borrar."],["Invitas por correo a quien quieras","Esa persona crea su cuenta con ese mismo correo y puede ver y descargar, nada más."],["Ves quién revisó qué","Queda un registro con fecha de cada visita y cada descarga, y puedes quitar el acceso cuando quieras."]].forEach(([a,b])=>{const li=el("li");li.append(el("b",null,a),el("span",null,b));ul.append(li)});
+  c.append(ul);app.append(c)}
+
+function vNuevaClave(app){app.append(el("h1",null,"Elige una clave nueva"));const p=el("section","panel");const f=el("form","stack");const clave=input("password","",{autocomplete:"new-password"});const box=el("div");const b=el("button","btn","Guardar la clave nueva");b.type="submit";
+  f.append(campo("Clave nueva (mínimo 8 caracteres)",clave),b,box);
+  f.onsubmit=async ev=>{ev.preventDefault();if(clave.value.length<8)return aviso(box,"La clave debe tener al menos 8 caracteres.","bad");b.disabled=true;const{error}=await sb.auth.updateUser({password:clave.value});if(error){b.disabled=false;return aviso(box,errTexto(error),"bad")}RECUPERA=false;location.hash="#inicio";route()};
+  p.append(f);app.append(p)}
+
+// ---------- Consentimiento (Ley 21.719) ----------
+let _consent=null;
+async function consentido(){if(_consent===U.id)return true;
+  const{data,error}=await sb.from("sala_consentimientos").select("version").eq("version",POLITICA).limit(1);if(error)throw error;
+  if(data.length){_consent=U.id;return true}
+  let previo=null;try{previo=localStorage.getItem("sala_acepto")}catch(e){}
+  if(previo===POLITICA){const r=await sb.from("sala_consentimientos").insert({version:POLITICA});if(!r.error){_consent=U.id;try{localStorage.removeItem("sala_acepto")}catch(e){}return true}}
+  return false}
+function vConsentir(app){app.append(el("h1",null,"Antes de continuar"),el("p","lead","Para usar la sala de datos necesitamos tu autorización para guardar tu correo, los datos de tu empresa y los documentos que subas."));
+  const p=el("section","panel");const c=casilla("Acepto la política de privacidad y que mis datos se usen solo para operar esta sala de datos.");const a=el("a",null," Leer la política");a.href="#privacidad";c.s.append(a);const box=el("div");
+  const b=el("button","btn","Aceptar y continuar");b.type="button";b.onclick=async()=>{if(!c.i.checked)return aviso(box,"Marca la casilla para continuar.","bad");b.disabled=true;const{error}=await sb.from("sala_consentimientos").insert({version:POLITICA});if(error){b.disabled=false;return aviso(box,errTexto(error),"bad")}_consent=U.id;route()};
+  p.append(c.l,b,box);app.append(p)}
+
+// ---------- Inicio: mis empresas y salas compartidas ----------
+function formEmpresa(e,alGuardar){const f=el("form","form");f.noValidate=true;
+  const nombre=input("text",e.nombre||"",{maxLength:160}),rut=input("text",e.rut||"",{maxLength:15,placeholder:"76.123.456-7"}),rubro=input("text",e.rubro||"",{maxLength:120,placeholder:"Ej.: transporte de carga"});
+  const region=select([["","Elige una región"],...REGIONES.map(r=>[r,r])],e.region||""),sitio=input("url",e.sitio||"",{maxLength:200,placeholder:"https://"}),desc=input("textarea",e.descripcion||"",{maxLength:2000});
+  const box=el("div","wide");const b=el("button","btn",e.id?"Guardar cambios":"Crear la sala de esta empresa");b.type="submit";
+  f.append(campo("Nombre o razón social",nombre),campo("RUT de la empresa (opcional)",rut),campo("Rubro",rubro),campo("Región",region),campo("Sitio web (opcional)",sitio),campo("Descripción breve (opcional)",desc,"wide"),box,b);
+  f.onsubmit=async ev=>{ev.preventDefault();if(nombre.value.trim().length<2)return aviso(box,"Escribe el nombre de la empresa.","bad");
+    const fila={nombre:nombre.value.trim(),rut:rut.value.trim()||null,rubro:rubro.value.trim()||null,region:region.value||null,sitio:sitio.value.trim()||null,descripcion:desc.value.trim()||null};
+    b.disabled=true;const q=e.id?sb.from("sala_empresas").update({...fila,actualizado_at:new Date().toISOString()}).eq("id",e.id).select().single():sb.from("sala_empresas").insert(fila).select().single();
+    const{data,error}=await q;b.disabled=false;if(error)return aviso(box,errTexto(error),"bad");aviso(box,"Guardado.","ok");alGuardar(data)};
+  return f}
+async function vInicio(app){
+  const[{data:emps,error},{data:acc,error:e2}]=await Promise.all([sb.from("sala_empresas").select("*").order("creado_at"),sb.from("sala_accesos").select("empresa_id,vence_at,revocado_at").eq("email",(U.email||"").toLowerCase())]);
+  if(error)throw error;if(e2)throw e2;
+  const mias=emps.filter(e=>e.owner===U.id),otras=emps.filter(e=>e.owner!==U.id);
+  app.append(el("h1",null,"Mis salas de datos"),el("p","lead","Cada empresa tiene su propia sala. Solo tú y las personas que invites pueden ver sus documentos."));
+  const p=el("section","panel");p.append(el("h2",null,"Mis empresas"));
+  if(mias.length){const l=el("div","list");mias.forEach(e=>{const a=el("a","card");a.href="#e-"+e.id;const d=el("div");d.append(el("h3",null,e.nombre),el("p","meta",[e.rubro,e.region].filter(Boolean).join(" · ")||"Sin rubro ni región todavía"));a.append(d,el("span","tag rubro","Abrir sala"));l.append(a)});p.append(l)}
+  else p.append(el("p","note","Todavía no registras ninguna empresa. Completa estos datos para crear su sala."));
+  const nueva=el("details");const sum=el("summary",null,mias.length?"Registrar otra empresa":"Registrar mi empresa");sum.style.cursor="pointer";sum.style.fontWeight="600";nueva.open=!mias.length;nueva.append(sum,formEmpresa({},d=>{location.hash="#e-"+d.id}));nueva.lastChild.style.marginTop="12px";p.append(nueva);app.append(p);
+  const s=el("section","panel");s.append(el("h2",null,"Salas que me compartieron"));
+  if(otras.length){const l=el("div","list");otras.forEach(e=>{const a=el("a","card");a.href="#e-"+e.id;const d=el("div");const ac=acc.find(x=>x.empresa_id===e.id);d.append(el("h3",null,e.nombre),el("p","meta",[e.rubro,e.region,ac&&ac.vence_at?"acceso hasta el "+fecha(ac.vence_at):null].filter(Boolean).join(" · ")));a.append(d,el("span","tag eval","Ver documentos"));l.append(a)});s.append(l)}
+  else s.append(el("p","note","Cuando una empresa te invite con el correo "+U.email+", su sala aparecerá aquí."));
+  app.append(s)}
+
+// ---------- Sala de una empresa ----------
+async function vEmpresa(app,id){
+  const b=el("a","back","← Volver a mis salas");b.href="#inicio";app.append(b);
+  const{data:e,error}=await sb.from("sala_empresas").select("*").eq("id",id).maybeSingle();if(error)throw error;
+  if(!e){app.append(el("h1",null,"Sala no disponible"),el("p","msg warn","No tienes acceso a esta sala. Puede que la invitación haya sido para otro correo (estás usando "+U.email+"), que haya vencido o que la empresa la haya retirado."));return}
+  const duena=e.owner===U.id;
+  app.append(el("h1",null,e.nombre),el("p","lead",[e.rubro,e.region,e.rut?"RUT "+e.rut:null].filter(Boolean).join(" · ")||"Sala de datos"));
+  if(!duena){sb.from("sala_visitas").insert({empresa_id:e.id,accion:"ver_sala"}).then(()=>{});
+    app.append(el("p","msg info","Estás viendo esta sala como invitado. Los documentos son confidenciales y la empresa puede ver qué revisas y descargas. No los compartas sin su autorización."));
+    if(e.descripcion){const d=el("section","panel");d.append(el("h2",null,"Sobre la empresa"),el("p","desc",e.descripcion));if(e.sitio&&/^https?:\/\//i.test(e.sitio)){const a=el("a",null,"Sitio web");a.href=e.sitio;a.target="_blank";a.rel="noopener";d.append(a)}app.append(d)}}
+  const docsBox=el("section","panel");app.append(docsBox);
+  const pintarDocs=async()=>{docsBox.textContent="";docsBox.append(el("h2",null,"Documentos"));
+    const{data:docs,error}=await sb.from("sala_documentos").select("*").eq("empresa_id",e.id).order("subido_at",{ascending:false});if(error){docsBox.append(el("p","msg bad",errTexto(error)));return}
+    const box=el("div");
+    if(duena){const f=el("form","form");const cat=select(CATS.map(c=>[c[0],c[1]]));const per=input("text","",{maxLength:40,placeholder:"Ej.: 2025"});const file=input("file",null,{multiple:true});const bt=el("button","btn","Subir documentos");bt.type="submit";
+      f.append(campo("Carpeta",cat),campo("Año o período (opcional)",per),campo("Archivos (hasta "+MAX_MB+" MB cada uno)",file,"wide"),bt);
+      f.onsubmit=async ev=>{ev.preventDefault();const fs=[...file.files];if(!fs.length)return aviso(box,"Elige al menos un archivo.","bad");
+        const grande=fs.find(x=>x.size>MAX_MB*1048576);if(grande)return aviso(box,"«"+grande.name+"» pesa más de "+MAX_MB+" MB. Redúcelo o divídelo en partes.","bad");
+        bt.disabled=true;let ok=0;const fallas=[];
+        for(const x of fs){aviso(box,"Subiendo "+(ok+fallas.length+1)+" de "+fs.length+": "+x.name+"…");
+          const ext=(x.name.match(/\.([A-Za-z0-9]{1,8})$/)||[])[1];const path=e.id+"/"+crypto.randomUUID()+(ext?"."+ext.toLowerCase():"");
+          const up=await sb.storage.from(BUCKET).upload(path,x,{contentType:x.type||"application/octet-stream"});
+          if(up.error){fallas.push(x.name+" ("+errTexto(up.error)+")");continue}
+          const ins=await sb.from("sala_documentos").insert({empresa_id:e.id,categoria:cat.value,nombre:x.name.slice(0,200),path,tamano:x.size,tipo:x.type||null,periodo:per.value.trim()||null});
+          if(ins.error){await sb.storage.from(BUCKET).remove([path]);fallas.push(x.name+" ("+errTexto(ins.error)+")");continue}ok++}
+        await pintarDocs();const nb=docsBox.querySelector("[data-aviso]");if(nb)aviso(nb,fallas.length?"Se subieron "+ok+" de "+fs.length+". No se pudo subir: "+fallas.join("; "):(ok===1?"Documento subido.":ok+" documentos subidos."),fallas.length?"warn":"ok")};
+      docsBox.append(f)}
+    box.dataset.aviso="1";docsBox.append(box);
+    if(!docs.length&&!duena){docsBox.append(el("p","note","La empresa todavía no sube documentos a esta sala."));return}
+    CATS.forEach(([k,n,ayuda])=>{const ds=docs.filter(d=>d.categoria===k);if(!ds.length&&!duena)return;
+      const h=el("h3","cat",n+(ds.length?" ("+ds.length+")":""));if(duena||!ds.length)h.append(el("small",null,ayuda));docsBox.append(h);
+      if(!ds.length){docsBox.append(el("p","note","Sin documentos todavía."));return}
+      const ul=el("ul","docs");ds.forEach(d=>{const li=el("li");const t=el("div");t.append(el("b",null,d.nombre),el("span",null,[d.periodo,peso(d.tamano),"subido el "+fecha(d.subido_at)].filter(Boolean).join(" · ")));
+        const acc=el("div","row");const ver=el("button","btn2","Ver o descargar");ver.type="button";
+        ver.onclick=async()=>{const w=window.open("","_blank");ver.disabled=true;const{data,error}=await sb.storage.from(BUCKET).createSignedUrl(d.path,120);ver.disabled=false;
+          if(error){if(w)w.close();return aviso(box,errTexto(error),"bad")}
+          if(!duena)sb.from("sala_visitas").insert({empresa_id:e.id,documento_id:d.id,documento_nombre:d.nombre,accion:"descargar"}).then(()=>{});
+          if(w)w.location=data.signedUrl;else location.href=data.signedUrl};
+        acc.append(ver);
+        if(duena)acc.append(botonSeguro("Borrar","¿Seguro? Aprieta otra vez para borrar",async()=>{const r=await sb.storage.from(BUCKET).remove([d.path]);if(r.error){aviso(box,errTexto(r.error),"bad");throw r.error}const x=await sb.from("sala_documentos").delete().eq("id",d.id);if(x.error){aviso(box,errTexto(x.error),"bad");throw x.error}await pintarDocs()}));
+        li.append(t,acc);ul.append(li)});docsBox.append(ul)})};
+  await pintarDocs();
+  if(!duena)return;
+
+  // Quién puede ver
+  const accBox=el("section","panel");app.append(accBox);
+  const pintarAcc=async()=>{accBox.textContent="";accBox.append(el("h2",null,"Quién puede ver esta sala"),el("p","note","Invita por correo. La persona debe crear su cuenta en esta página con ese mismo correo; solo podrá ver y descargar. La plataforma no le envía un aviso: avísale tú y pásale el enlace de abajo."));
+    const enlace=location.origin+location.pathname+"#e-"+e.id;const r0=el("div","row");const cod=input("text",enlace,{readOnly:true});cod.style.flex="1 1 260px";const cp=el("button","btn2","Copiar enlace");cp.type="button";cp.onclick=async()=>{try{await navigator.clipboard.writeText(enlace);cp.textContent="Enlace copiado"}catch(x){cod.select()}};r0.append(cod,cp);accBox.append(r0);
+    const box=el("div");const f=el("form","form");const correo=input("email","",{placeholder:"persona@empresa.cl"}),nota=input("text","",{maxLength:200,placeholder:"Ej.: ejecutivo del banco"}),dur=select([["30","30 días"],["7","7 días"],["90","90 días"],["","Sin vencimiento"]]);const bt=el("button","btn","Dar acceso");bt.type="submit";
+    f.append(campo("Correo de la persona",correo),campo("Quién es (opcional)",nota),campo("El acceso dura",dur),bt);
+    f.onsubmit=async ev=>{ev.preventDefault();const em=correo.value.trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return aviso(box,"Escribe un correo válido.","bad");if(em===(U.email||"").toLowerCase())return aviso(box,"Ese es tu propio correo; tú ya tienes acceso completo.","bad");
+      bt.disabled=true;const vence=dur.value?new Date(Date.now()+dur.value*864e5).toISOString():null;
+      const{error}=await sb.from("sala_accesos").upsert({empresa_id:e.id,email:em,nota:nota.value.trim()||null,vence_at:vence,revocado_at:null},{onConflict:"empresa_id,email"});bt.disabled=false;
+      if(error)return aviso(box,errTexto(error),"bad");await pintarAcc();const nb=accBox.querySelector("[data-aviso]");if(nb)aviso(nb,"Listo: "+em+" ya puede ver esta sala.","ok")};
+    box.dataset.aviso="1";accBox.append(f,box);
+    const{data,error}=await sb.from("sala_accesos").select("*").eq("empresa_id",e.id).order("creado_at",{ascending:false});if(error){accBox.append(el("p","msg bad",errTexto(error)));return}
+    if(!data.length){accBox.append(el("p","note","Nadie más tiene acceso todavía."));return}
+    const ul=el("ul","docs");data.forEach(a=>{const li=el("li");const vencido=a.vence_at&&new Date(a.vence_at)<new Date();const estado=a.revocado_at?"acceso retirado el "+fecha(a.revocado_at):vencido?"venció el "+fecha(a.vence_at):a.vence_at?"vigente hasta el "+fecha(a.vence_at):"vigente, sin vencimiento";
+      const t=el("div");t.append(el("b",null,a.email),el("span",null,[a.nota,estado].filter(Boolean).join(" · ")));const r=el("div","row");
+      if(!a.revocado_at&&!vencido){const q=el("button","btn2 danger","Quitar acceso");q.type="button";q.onclick=async()=>{q.disabled=true;const x=await sb.from("sala_accesos").update({revocado_at:new Date().toISOString()}).eq("id",a.id);if(x.error){q.disabled=false;return aviso(box,errTexto(x.error),"bad")}pintarAcc()};r.append(q)}
+      li.append(t,r);ul.append(li)});accBox.append(ul)};
+  await pintarAcc();
+
+  // Registro de visitas
+  const vis=el("section","panel");vis.append(el("h2",null,"Quién ha revisado la sala"));app.append(vis);
+  const{data:vs,error:ev}=await sb.from("sala_visitas").select("*").eq("empresa_id",e.id).order("en",{ascending:false}).limit(100);
+  if(ev)vis.append(el("p","msg bad",errTexto(ev)));else if(!vs.length)vis.append(el("p","note","Todavía nadie ha entrado. Aquí verás cada visita y cada descarga con su fecha."));
+  else{const ul=el("ul","docs");vs.forEach(v=>{const li=el("li");const t=el("div");t.append(el("b",null,v.email||"Usuario"),el("span",null,(v.accion==="descargar"?"Abrió «"+(v.documento_nombre||"un documento")+"»":"Entró a la sala")+" · "+fechaHora(v.en)));li.append(t);ul.append(li)});vis.append(ul)}
+
+  if(INV)await panelNecesidad(app,e);
+
+  // Datos de la empresa
+  const ed=el("section","panel");ed.append(el("h2",null,"Datos de la empresa"),formEmpresa(e,()=>{}));
+  ed.append(el("p","note","Si eliminas la sala se borran todos sus documentos, invitaciones y registros. No se puede recuperar."));const eb=el("div");
+  ed.append(botonSeguro("Eliminar esta sala","¿Seguro? Aprieta otra vez para eliminar todo",async()=>{
+    const{data:ds}=await sb.from("sala_documentos").select("path").eq("empresa_id",e.id);if(ds&&ds.length){const r=await sb.storage.from(BUCKET).remove(ds.map(d=>d.path));if(r.error){aviso(eb,errTexto(r.error),"bad");throw r.error}}
+    const x=await sb.from("sala_empresas").delete().eq("id",e.id);if(x.error){aviso(eb,errTexto(x.error),"bad");throw x.error}location.hash="#inicio"}),eb);
+  app.append(ed)}
+
+// ---------- Módulo de inversionistas (apagado para el público hasta la autorización de la CMF) ----------
+function avisoPrueba(){return el("p","msg warn","Vista de prueba. Este módulo está apagado para el público y solo lo ven las cuentas de prueba, hasta contar con la inscripción y autorización de la CMF.")}
+async function panelNecesidad(app,e){const p=el("section","panel hl");app.append(p);
+  const pintar=async()=>{p.textContent="";p.append(el("h2",null,"Buscar inversión para esta empresa"));if(!INV_PUBLICO)p.append(avisoPrueba());
+    p.append(el("p","note","Si publicas una necesidad, los inversionistas registrados verán solo el nombre, rubro y región de la empresa y lo que escribas aquí. No ven ningún documento hasta que tú aceptes su solicitud."));
+    const{data,error}=await sb.from("inv_necesidades").select("*").eq("empresa_id",e.id).order("creado_at").limit(1);if(error){p.append(el("p","msg bad",errTexto(error)));return}
+    const n=data[0]||{};const box=el("div","wide");const f=el("form","form");
+    const tipo=select(Object.entries(TIPO_NEC),n.tipo||"capital"),monto=input("number",n.monto??"",{min:0,step:1000000,placeholder:"Ej.: 150000000"}),plazo=input("text",n.plazo||"",{maxLength:80,placeholder:"Ej.: 24 meses"}),destino=input("text",n.destino||"",{maxLength:300,placeholder:"Ej.: compra de 3 camiones para contrato adjudicado"}),desc=input("textarea",n.descripcion||"",{maxLength:2000});
+    const pub=casilla("Publicar esta necesidad para los inversionistas registrados",n.publicada);const bt=el("button","btn","Guardar");bt.type="submit";
+    f.append(campo("Qué buscas",tipo),campo("Monto en pesos",monto),campo("Plazo",plazo),campo("Para qué se usará",destino,"wide"),campo("Detalle (opcional)",desc,"wide"),pub.l,box,bt);
+    f.onsubmit=async ev=>{ev.preventDefault();bt.disabled=true;const fila={empresa_id:e.id,tipo:tipo.value,monto:monto.value===""?null:+monto.value,plazo:plazo.value.trim()||null,destino:destino.value.trim()||null,descripcion:desc.value.trim()||null,publicada:pub.i.checked,actualizado_at:new Date().toISOString()};
+      const r=n.id?await sb.from("inv_necesidades").update(fila).eq("id",n.id):await sb.from("inv_necesidades").insert(fila);bt.disabled=false;if(r.error)return aviso(box,errTexto(r.error),"bad");await pintar();const nb=p.querySelector("[data-aviso]");if(nb)aviso(nb,fila.publicada?"Guardado y publicado.":"Guardado sin publicar.","ok")};
+    box.dataset.aviso="1";p.append(f);
+    if(!n.id)return;
+    const{data:ints,error:e2}=await sb.from("inv_intereses").select("*").eq("necesidad_id",n.id).order("creado_at",{ascending:false});if(e2){p.append(el("p","msg bad",errTexto(e2)));return}
+    p.append(el("h3","cat","Inversionistas interesados"+(ints.length?" ("+ints.length+")":"")));
+    if(!ints.length){p.append(el("p","note","Todavía no hay solicitudes."));return}
+    const{data:perf}=await sb.from("inv_perfiles").select("user_id,nombre,tipo,calificado,descripcion").in("user_id",ints.map(i=>i.user_id));
+    const ul=el("ul","docs");ints.forEach(i=>{const pf=(perf||[]).find(x=>x.user_id===i.user_id)||{};const li=el("li");const t=el("div");
+      t.append(el("b",null,(pf.nombre||"Inversionista")+" · "+(TIPO_INV[pf.tipo]||"")),el("span",null,[i.mensaje,pf.calificado?"Declara ser inversionista calificado":null,"solicitó el "+fecha(i.creado_at),i.estado==="aceptado"?"aceptado: ya puede ver la sala, correo "+i.email:i.estado==="rechazado"?"rechazado":null].filter(Boolean).join(" · ")));
+      const r=el("div","row");if(i.estado==="enviado"){const ok=el("button","btn2","Aceptar y dar acceso a la sala por 30 días");ok.type="button";
+        ok.onclick=async()=>{ok.disabled=true;const a=await sb.from("sala_accesos").upsert({empresa_id:e.id,email:i.email,nota:"Inversionista: "+(pf.nombre||""),vence_at:new Date(Date.now()+30*864e5).toISOString(),revocado_at:null},{onConflict:"empresa_id,email"});if(a.error){ok.disabled=false;return aviso(box,errTexto(a.error),"bad")}
+          const u=await sb.from("inv_intereses").update({estado:"aceptado",respondido_at:new Date().toISOString()}).eq("id",i.id);if(u.error){ok.disabled=false;return aviso(box,errTexto(u.error),"bad")}route()};
+        const no=el("button","btn2 danger","Rechazar");no.type="button";no.onclick=async()=>{no.disabled=true;const u=await sb.from("inv_intereses").update({estado:"rechazado",respondido_at:new Date().toISOString()}).eq("id",i.id);if(u.error){no.disabled=false;return aviso(box,errTexto(u.error),"bad")}pintar()};r.append(ok,no)}
+      li.append(t,r);ul.append(li)});p.append(ul)};
+  await pintar()}
+
+async function vInversion(app){app.append(el("h1",null,"Inversión"),el("p","lead","Empresas proveedoras que buscan financiamiento y que aceptan mostrar sus documentos a inversionistas."));
+  if(!INV_PUBLICO)app.append(avisoPrueba());app.append(el("p","msg info",AVISO_INV));
+  const{data:pfs,error}=await sb.from("inv_perfiles").select("*").eq("user_id",U.id);if(error)throw error;const pf=pfs[0]||{};
+  const p=el("section","panel");p.append(el("h2",null,pf.user_id?"Mi perfil de inversionista":"Crea tu perfil de inversionista"));const box=el("div","wide");const f=el("form","form");
+  const nombre=input("text",pf.nombre||"",{maxLength:160}),tipo=select(Object.entries(TIPO_INV),pf.tipo||"persona"),mn=input("number",pf.monto_min??"",{min:0,step:1000000}),mx=input("number",pf.monto_max??"",{min:0,step:1000000}),rub=input("text",(pf.rubros||[]).join(", "),{placeholder:"Ej.: transporte, obras civiles"}),desc=input("textarea",pf.descripcion||"",{maxLength:2000});
+  const ins=el("fieldset","checks wide");ins.append(el("legend",null,"Qué tipo de operación te interesa"));const insC=Object.entries(TIPO_NEC).map(([k,t])=>{const c=casilla(t,(pf.instrumentos||[]).includes(k));c.k=k;ins.append(c.l);return c});
+  const reg=el("fieldset","checks wide");reg.append(el("legend",null,"Regiones de interés (sin marcar = todo Chile)"));const regC=REGIONES.map(r=>{const c=casilla(r,(pf.regiones||[]).includes(r));c.k=r;reg.append(c.l);return c});
+  const cal=casilla("Declaro que soy inversionista calificado según la normativa de la CMF (Norma de Carácter General N° 216). Si no lo soy, dejo esta casilla sin marcar.",pf.calificado);cal.l.classList.add("wide");
+  const ent=casilla("Entiendo que las empresas publicadas no están inscritas ni fiscalizadas por la CMF, que esta plataforma no recomienda inversiones y que cualquier acuerdo es directo entre las partes.",!!pf.user_id);ent.l.classList.add("wide");
+  const bt=el("button","btn",pf.user_id?"Guardar cambios":"Crear mi perfil");bt.type="submit";
+  f.append(campo("Nombre o razón social",nombre),campo("Tipo de inversionista",tipo),campo("Monto mínimo en pesos",mn),campo("Monto máximo en pesos",mx),campo("Rubros de interés",rub,"wide"),ins,reg,campo("Sobre ti o tu empresa (opcional)",desc,"wide"),cal.l,ent.l,box,bt);
+  f.onsubmit=async ev=>{ev.preventDefault();if(nombre.value.trim().length<2)return aviso(box,"Escribe tu nombre o razón social.","bad");if(!ent.i.checked)return aviso(box,"Debes marcar la casilla «Entiendo que…» para continuar.","bad");
+    bt.disabled=true;const fila={user_id:U.id,nombre:nombre.value.trim(),tipo:tipo.value,monto_min:mn.value===""?null:+mn.value,monto_max:mx.value===""?null:+mx.value,instrumentos:insC.filter(c=>c.i.checked).map(c=>c.k),rubros:rub.value.split(",").map(s=>s.trim()).filter(Boolean),regiones:regC.filter(c=>c.i.checked).map(c=>c.k),calificado:cal.i.checked,declaracion_at:new Date().toISOString(),descripcion:desc.value.trim()||null,actualizado_at:new Date().toISOString()};
+    const r=await sb.from("inv_perfiles").upsert(fila,{onConflict:"user_id"});bt.disabled=false;if(r.error)return aviso(box,errTexto(r.error),"bad");route()};
+  p.append(f);
+  if(!pf.user_id){app.append(p);return}
+  const o=el("section","panel");o.append(el("h2",null,"Empresas que buscan financiamiento"));const obox=el("div");o.append(obox);app.append(o,p);
+  const{data:ops,error:e2}=await sb.rpc("inv_oportunidades");if(e2){o.append(el("p","msg bad",errTexto(e2)));return}
+  if(!ops.length){o.append(el("p","note","Todavía no hay empresas publicadas."));return}
+  const ul=el("ul","docs");ops.forEach(x=>{const li=el("li");const t=el("div");t.append(el("b",null,x.empresa+" · "+(TIPO_NEC[x.tipo]||x.tipo)+(x.monto!=null?" · "+plata(x.monto):"")),el("span",null,[x.rubro,x.region,x.plazo?"plazo "+x.plazo:null,x.destino].filter(Boolean).join(" · ")));if(x.descripcion)t.append(el("span",null,x.descripcion));
+    const r=el("div","row");
+    if(x.mi_estado==="aceptado"){const a=el("a","btn2","Ver la sala de datos");a.href="#e-"+x.empresa_id;a.style.textDecoration="none";r.append(a)}
+    else if(x.mi_estado)r.append(el("span","tag "+(x.mi_estado==="rechazado"?"bad":"eval"),x.mi_estado==="rechazado"?"La empresa no aceptó":"Solicitud enviada"));
+    else{const m=input("text","",{maxLength:1000,placeholder:"Mensaje para la empresa (opcional)"});m.style.flex="1 1 220px";const b=el("button","btn2","Me interesa, pedir acceso");b.type="button";
+      b.onclick=async()=>{b.disabled=true;const q=await sb.from("inv_intereses").insert({necesidad_id:x.id,mensaje:m.value.trim()||null});if(q.error){b.disabled=false;return aviso(obox,errTexto(q.error),"bad")}route()};r.append(m,b)}
+    li.append(t,r);ul.append(li)});o.append(ul)}
+
+// ---------- Mis datos y privacidad ----------
+async function vDatos(app){app.append(el("h1",null,"Mis datos"),el("p","lead","Tu cuenta usa el correo "+U.email+". Aquí puedes pedir ver, corregir o eliminar tus datos personales. Respondemos en un máximo de 30 días corridos."));
+  const p=el("section","panel");p.append(el("h2",null,"Hacer una solicitud"));const box=el("div","wide");const f=el("form","form");
+  const tipo=select([["acceso","Saber qué datos míos guardan"],["rectificacion","Corregir un dato"],["supresion","Eliminar mis datos y mi cuenta"],["oposicion","Oponerme a un uso de mis datos"],["portabilidad","Recibir una copia de mis datos"],["bloqueo","Suspender temporalmente el uso de mis datos"],["otra","Otra consulta"]]);const det=input("textarea","",{maxLength:2000});const bt=el("button","btn","Enviar solicitud");bt.type="submit";
+  f.append(campo("Qué necesitas",tipo),campo("Detalle (opcional)",det,"wide"),box,bt);
+  f.onsubmit=async ev=>{ev.preventDefault();bt.disabled=true;const r=await sb.from("sala_solicitudes").insert({tipo:tipo.value,detalle:det.value.trim()||null});bt.disabled=false;if(r.error)return aviso(box,errTexto(r.error),"bad");route()};
+  p.append(f,el("p","note","Las salas y documentos de tus empresas los puedes borrar tú mismo, de inmediato, dentro de cada sala (al final, «Eliminar esta sala»)."));app.append(p);
+  const{data,error}=await sb.from("sala_solicitudes").select("*").order("creado_at",{ascending:false});if(error)throw error;
+  const s=el("section","panel");s.append(el("h2",null,"Mis solicitudes"));
+  if(!data.length)s.append(el("p","note","No has hecho solicitudes."));else{const ul=el("ul","docs");data.forEach(x=>{const li=el("li");const t=el("div");t.append(el("b",null,tipo.querySelector('option[value="'+x.tipo+'"]').textContent),el("span",null,"Enviada el "+fecha(x.creado_at)+(x.respondido_at?" · respondida el "+fecha(x.respondido_at)+(x.respuesta?": "+x.respuesta:""):" · en revisión")));li.append(t);ul.append(li)});s.append(ul)}
+  app.append(s)}
+
+function vPrivacidad(app){const d=el("section","panel legal");app.append(el("h1",null,"Política de privacidad de la sala de datos"),el("p","stamp","Versión del 23 de noviembre de 2026"),d);
+  const h=t=>d.append(el("h2",null,t)),p=t=>d.append(el("p",null,t)),l=a=>{const ul=el("ul");a.forEach(t=>ul.append(el("li",null,t)));d.append(ul)};
+  h("Quién es responsable");p("Radar de Proyectos opera esta sala de datos y es responsable de los datos personales que se guardan en ella, conforme a la Ley N° 19.628 y a la Ley N° 21.719 sobre protección de datos personales.");
+  h("Qué datos guardamos");l(["Tu correo electrónico y tu clave (la clave se guarda cifrada; no podemos leerla).","Los datos de la empresa que registres: nombre, RUT, rubro, región, sitio web y descripción.","Los documentos que subas a la sala y los correos de las personas a las que invites.","Un registro de quién entra a cada sala y qué documentos abre, con fecha y hora.","Si usas el módulo de inversión: tu perfil de inversionista y las solicitudes que envíes o recibas."]);
+  h("Para qué los usamos");p("Solo para operar la sala de datos: permitir que entres, mostrar los documentos a quienes cada empresa autorice y dejar registro de las visitas. La base legal es tu consentimiento, que das al crear la cuenta y que puedes retirar cuando quieras. No vendemos tus datos ni los usamos para publicidad.");
+  h("Quién puede verlos");l(["Los documentos de una empresa los ve solo quien la registró y las personas que esa empresa invite, mientras dure el acceso.","La empresa ve el correo de quienes entran a su sala y lo que revisan.","El administrador de la plataforma puede acceder a los datos solo para soporte, seguridad o por obligación legal.","Los datos se guardan en servidores de Supabase (proveedor de bases de datos en la nube), ubicados fuera de Chile, con acceso cifrado."]);
+  h("Responsabilidad de quien sube documentos");p("Si los documentos que subes contienen datos de otras personas (socios, trabajadores, clientes), tú eres responsable de tener derecho a compartirlos. Sube solo lo necesario y evita datos sensibles como información de salud.");
+  h("Cuánto tiempo los guardamos");p("Mientras mantengas tu cuenta. Puedes borrar tus salas y documentos en cualquier momento y se eliminan de inmediato. Si pides eliminar tu cuenta, borramos tus datos en un máximo de 30 días, salvo lo que la ley obligue a conservar.");
+  h("Tus derechos");p("Puedes pedir acceso, rectificación, supresión, oposición, portabilidad y bloqueo de tus datos. Entra con tu cuenta, ve a «Mis datos» y envía la solicitud; respondemos en un máximo de 30 días corridos. Si no quedas conforme, puedes reclamar ante la Agencia de Protección de Datos Personales.");
+  h("Seguridad");p("Los documentos están en un almacenamiento privado: no tienen dirección pública y cada descarga usa un enlace temporal que vence a los 2 minutos. Si ocurriera una filtración que te afecte, te avisaremos a ti y a la Agencia.");
+  h("Cambios");p("Si cambiamos esta política te pediremos aceptarla de nuevo antes de seguir usando la sala.")}
+
+// ---------- Arranque ----------
+async function cargarEstado(){INV=false;INV_PUBLICO=false;if(!sb)return;
+  try{const{data}=await sb.from("sala_config").select("valor").eq("clave","inversionistas_habilitado").maybeSingle();INV_PUBLICO=!!data&&data.valor==="true"}catch(e){}
+  if(U){try{const{data}=await sb.rpc("inv_activo");INV=data===true}catch(e){}}}
+window.addEventListener("hashchange",route);
+(async()=>{if(!sb)return route();
+  const{data}=await sb.auth.getSession();U=data.session?data.session.user:null;await cargarEstado();route();
+  sb.auth.onAuthStateChange((ev,s)=>{const antes=U&&U.id;U=s?s.user:null;if(ev==="PASSWORD_RECOVERY")RECUPERA=true;
+    if(ev==="PASSWORD_RECOVERY"||antes!==(U&&U.id))setTimeout(async()=>{_consent=null;await cargarEstado();route()},0)})})();
+</script>
+</body>
+</html>
