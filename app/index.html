@@ -780,35 +780,82 @@ function vEmpresa(app){
   draw();
 }
 const PLANT={transporte:["Conductores","Camiones o equipos (arriendo o cuota)","Combustible","Mantención y neumáticos","Peajes y permisos","Seguros"],personal:["Conductores","Buses o minibuses (arriendo o cuota)","Combustible","Mantención","Seguros"],campamento:["Personal de cocina y aseo","Alimentación (raciones)","Módulos y equipamiento (arriendo)","Servicios básicos","Insumos de aseo y lavandería"],general:["Mano de obra","Equipos y maquinaria","Materiales e insumos","Combustible","Subcontratos","Seguros y garantías"]};
-const plantilla=id=>PLANT[["carga","sobredim","peligrosas","combustible","residuos","aridos"].includes(id)?"transporte":id==="personal"?"personal":id==="campamento"?"campamento":"general"];
+const plantilla=id=>PLANT[tipoPlant(id)];
+/* ---------- Indicadores del día (dólar, UF, UTM, diésel) y costeo automático ---------- */
+let IND=null;
+async function indicadores(){if(IND)return IND;const b=ST.indicadores||{};const hoy=new Date().toISOString().slice(0,10);
+  const o={dolar:b.dolar,uf:b.uf,utm:b.utm,euro:b.euro,diesel:b.diesel,vivo:false,respaldo:b.fecha||null};
+  try{const c=JSON.parse(localStorage.getItem("radar_ind")||"null");if(c&&c.dia===hoy&&c.dolar){Object.assign(o,c.v,{vivo:true});return IND=o}}catch(e){}
+  try{const ac=new AbortController();const k=setTimeout(()=>ac.abort(),6000);const j=await fetch("https://findic.cl/api/",{signal:ac.signal}).then(r=>r.json());clearTimeout(k);const v={};
+    ["dolar","uf","utm","euro"].forEach(x=>{if(j[x]&&+j[x].valor>0)v[x]={v:+j[x].valor,f:j[x].fecha}});
+    if(v.dolar){Object.assign(o,v,{vivo:true});try{localStorage.setItem("radar_ind",JSON.stringify({dia:hoy,dolar:1,v}))}catch(e){}}}catch(e){}
+  return IND=o}
+const DZ=["Tarapac","Antofagasta","Atacama","Coquimbo","Valpara","Higgins","Maule","Biob","Araucan","Lagos","Ays","Magallanes","Metropolitana","Ríos","Arica","Ñuble"];
+function dieselDe(ind,region){const d=ind&&ind.diesel;if(!d)return null;const t=DZ.find(x=>(region||"").includes(x));const k=t&&Object.keys(d.region||{}).find(x=>x.includes(t));return k?{v:d.region[k],donde:"en "+regionCorta(region)}:{v:d.pais,donde:"promedio del país"}}
+function mesesObra(p){const m=(p.cronologia||"").match(/fase de construcci[oó]n[^.]{0,90}?(?:duraci[oó]n|estima|durar[aá]|extender[aá])[^.]{0,60}?(\d(?:\s?\d)?(?:[.,]\d)?)\s*\)?\s*(meses|años)/i);
+  if(m){let n=parseFloat(m[1].replace(/\s/g,"").replace(",","."));if(/a/i.test(m[2]))n*=12;n=Math.round(n);if(n>=2&&n<=120)return{m:n,src:"leídos del cronograma del estudio (conviene verificarlos)"}}
+  const i=+p.inversion_mmusd||0;return{m:i<100?12:i<500?18:i<1000?24:i<3000?36:48,src:"un supuesto según el tamaño de la inversión, porque el estudio leído no trae la duración"}}
+/* Valores de referencia para proponer un costeo: son supuestos nuestros, sin fuente oficial; el usuario los reemplaza por los suyos.
+   Cada rubro se arma por "módulos" (un camión, un bus, 100 personas alojadas, una cuadrilla): [concepto, cantidad por módulo, costo mensual por unidad o "diesel"]. */
+const AUTO={
+ transporte:{u:["camión","camiones"],gg:10,ut:10,f:[["Conductores",1.2,1500000],["Camiones o equipos (arriendo o cuota)",1,3800000],["Combustible (litros de diésel al mes)",5000,"diesel"],["Mantención y neumáticos",1,900000],["Peajes y permisos",1,400000],["Seguros",1,180000]]},
+ personal:{u:["bus de 40 asientos","buses de 40 asientos"],gg:10,ut:10,f:[["Conductores",2,1400000],["Buses o minibuses (arriendo o cuota)",1,3500000],["Combustible (litros de diésel al mes)",2000,"diesel"],["Mantención",1,600000],["Seguros",1,150000]]},
+ campamento:{u:["grupo de 100 personas alojadas","grupos de 100 personas alojadas"],gg:12,ut:8,f:[["Personal de cocina y aseo",8,950000],["Alimentación (personas, 3 raciones diarias)",100,405000],["Módulos y equipamiento (camas en arriendo)",100,180000],["Servicios básicos (por persona)",100,60000],["Insumos de aseo y lavandería (por persona)",100,35000]]},
+ general:{u:["cuadrilla de 10 personas","cuadrillas de 10 personas"],gg:15,ut:10,f:[["Mano de obra",10,1300000],["Equipos y maquinaria",2,4500000],["Materiales e insumos",1,12000000],["Combustible (litros de diésel al mes)",3000,"diesel"],["Subcontratos",1,5000000],["Seguros y garantías",1,600000]]}};
+const tipoPlant=id=>["carga","sobredim","peligrosas","combustible","residuos","aridos"].includes(id)?"transporte":id==="personal"?"personal":id==="campamento"?"campamento":"general";
+function proponer(p,r,pf,ind,parte){const t=tipoPlant(r.id),A=AUTO[t];const ms=/mantencion|ambiental/.test(r.id)?{m:12,src:"el primer año de contrato, por ser un servicio de la operación"}:mesesObra(p);
+  const dz=dieselDe(ind,p.region)||{v:1500,donde:"valor de respaldo"};const cu=f=>f[2]==="diesel"?dz.v:f[2];const cm=A.f.reduce((a,f)=>a+f[1]*cu(f),0);
+  const dol=ind&&ind.dolar?ind.dolar.v:0;const x=estim(p,r,pf);const w=+p.mo_construccion_prom||Math.round(peak(p)*0.6)||0;let n,base;
+  if(t==="campamento"&&w){n=w/100;base="los "+nf(w)+" trabajadores promedio de la construcción que declara el estudio"}
+  else if(t==="personal"&&w){n=w/2/40;base="la mitad de los "+nf(w)+" trabajadores promedio de la construcción (un turno en faena), en buses de 40 asientos"}
+  else if(dol&&x.paquete>0){n=x.paquete*1e6*dol/(1+A.gg/100)/(1+A.ut/100)/ms.m/cm;base="el tamaño estimado de este negocio en el proyecto (US$ "+money(x.paquete)+" millones)"}
+  else{n=1;base="una sola unidad, porque no hay datos para dimensionar"}
+  n=Math.max(1,Math.round(n*parte/100));
+  return{gg:String(A.gg),ut:String(A.ut),dolar:dol?String(Math.round(dol*100)/100):"",filas:A.f.map(f=>({c:f[0],q:String(Math.ceil(f[1]*n)),u:String(cu(f)),m:String(ms.m)})),
+    auto:{n,u:A.u[n===1?0:1],base,meses:ms.m,msrc:ms.src,parte,diesel:dz,gg:A.gg,ut:A.ut,dia:new Date().toISOString().slice(0,10)}}}
+function indicadoresNota(ind,p){const n=el("p","note");const clp=v=>"$ "+Number(v).toLocaleString("es-CL",{maximumFractionDigits:2});const t=[];
+  if(ind.dolar)t.push("dólar "+clp(ind.dolar.v));if(ind.uf)t.push("UF "+clp(ind.uf.v));if(ind.utm)t.push("UTM "+clp(ind.utm.v));const dz=dieselDe(ind,p.region);if(dz)t.push("diésel "+clp(dz.v)+" por litro ("+dz.donde+")");
+  if(!t.length){n.textContent="No se pudieron traer los indicadores de hoy. Escribe el valor del dólar a mano.";return n}
+  n.append(el("b",null,"Valores traídos de internet: "),document.createTextNode(t.join(" · ")+". "+(ind.vivo?"Dólar, UF y UTM de hoy desde ":"No hubo respuesta en vivo; se usa el respaldo del "+fdate(ind.respaldo)+", tomado de ")));
+  n.append(ext("findic.cl","https://findic.cl/"),document.createTextNode(" (datos del Banco Central)"+(dz?"; diésel promedio de las estaciones de servicio según ":"")));if(dz)n.append(ext("Bencina en Línea","https://www.bencinaenlinea.cl/"),document.createTextNode(" (CNE), actualizado en la revisión diaria"));n.append(document.createTextNode(". Puedes cambiar cualquier valor a mano."));return n}
 function vCosteo(app,id){
   const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"));return}
   const b=el("a","back","Volver a la ficha");b.href="#p-"+p.id;app.append(b);
-  app.append(header("Costeo: "+p.nombre,"Calcula cuánto te costaría prestar el servicio y a qué precio ofertar. Tú pones tus costos reales; la página hace las sumas y compara con el tamaño estimado del negocio. Se guarda solo en este navegador."));
+  app.append(header("Costeo: "+p.nombre,"La página propone sola un costeo completo: trae el dólar, la UF, la UTM y el diésel de internet, toma los meses y los trabajadores del estudio y usa valores de referencia. Tú solo cambias lo que quieras por tus costos reales. Se guarda solo en este navegador."));
   const pf=perfil();const ops=opps(p);const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id));if(!rs.length){app.append(el("div","soon","Este proyecto no tiene oportunidades detectadas para costear."));return}
   const K="radar_costeo_"+p.id;let all={};try{all=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
-  const top=el("section","panel");top.innerHTML='<div class="filters"><label for="cr">Rubro a costear<select id="cr"></select></label><label for="cd">Valor del dólar en pesos<input id="cd" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej: el dólar observado de hoy"></label><label for="cg">Gastos generales (%)<input id="cg" type="number" min="0" max="100" step="0.5"></label><label for="cu">Utilidad (%)<input id="cu" type="number" min="0" max="100" step="0.5"></label></div>';app.append(top);
+  const top=el("section","panel");top.innerHTML='<div class="filters"><label for="cr">Rubro a costear<select id="cr"></select></label><label for="cd">Valor del dólar en pesos<input id="cd" type="number" min="1" step="0.01" inputmode="decimal" placeholder="Buscando el dólar de hoy…"></label><label for="cg">Gastos generales (%)<input id="cg" type="number" min="0" max="100" step="0.5"></label><label for="cu">Utilidad (%)<input id="cu" type="number" min="0" max="100" step="0.5"></label><label for="cp">Parte del servicio que tomarías (%)<input id="cp" type="number" min="1" max="100" step="1" inputmode="numeric"></label></div>';const indSlot=el("div");top.append(indSlot);app.append(top);
   const sel=$("#cr");rs.forEach(r=>sel.append(new Option(r.n,r.id)));const mine=pf&&rs.find(r=>pf.rubros.includes(r.id));if(mine)sel.value=mine.id;
   const pn=el("section","panel");pn.append(el("h2",null,"Tus costos directos"));const tw=el("div","tw");const tb=el("table","tbl cost");tw.append(tb);pn.append(tw);
-  const add=el("button","btn2","Agregar otro costo");add.type="button";pn.append(add);app.append(pn);
+  const autoNota=el("div");pn.append(autoNota);const acts=el("div");acts.style.cssText="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px";const add=el("button","btn2","Agregar otro costo");add.type="button";const au=el("button","btn","Proponer costeo automático");au.type="button";const un=el("button","btn2","Deshacer la propuesta");un.type="button";un.hidden=true;acts.append(au,add,un);pn.append(acts);app.append(pn);
   const res=el("section","panel hl");app.append(res);
   const pr=el("button","btn2","Imprimir o guardar como PDF");pr.type="button";pr.onclick=()=>window.print();app.append(pr);
-  const clp=v=>"$ "+Math.round(v).toLocaleString("es-CL");let st;
-  const load=()=>{const r=sel.value;st=all[r]||{dolar:all._dolar||"",gg:"",ut:"",filas:plantilla(r).map(c=>({c,q:"",u:"",m:""}))};$("#cd").value=st.dolar||all._dolar||"";$("#cg").value=st.gg;$("#cu").value=st.ut;draw()};
-  const save=()=>{st.dolar=$("#cd").value;st.gg=$("#cg").value;st.ut=$("#cu").value;all[sel.value]=st;all._dolar=st.dolar;try{localStorage.setItem(K,JSON.stringify(all))}catch(e){}};
+  const clp=v=>"$ "+Math.round(v).toLocaleString("es-CL");let st,ind=null,prev=null;
+  const vacio=()=>st.filas.every(f=>!f.q&&!f.u&&!f.m);
+  const parteDef=()=>{const x=estim(p,RUBROS.find(z=>z.id===sel.value),pf);return x.limita&&x.paquete>0?Math.max(1,Math.round(100*x.val/x.paquete)):100};
+  const nota=()=>{autoNota.textContent="";const a=st.auto;if(!a)return;const n=el("p","note");n.append(el("b",null,"Propuesta automática. "),document.createTextNode("Dimensionada para "+nf(a.n)+" "+a.u+", tomando como base "+a.base+(a.parte<100?", tomando el "+a.parte+"% del servicio":"")+". Los "+a.meses+" meses son "+a.msrc+". El diésel es el precio promedio "+a.diesel.donde+". Gastos generales "+a.gg+"% y utilidad "+a.ut+"% son porcentajes habituales del rubro. Los costos mensuales por unidad son valores de referencia nuestros, no una cotización: reemplázalos por los tuyos."));autoNota.append(n)};
+  const auto=manual=>{if(!ind)return;const r=RUBROS.find(z=>z.id===sel.value);if(manual){prev={r:sel.value,st:JSON.parse(JSON.stringify(st))};un.hidden=false}const pa=Math.min(100,Math.max(1,+$("#cp").value||parteDef()));const o=proponer(p,r,pf,ind,pa);
+    st.filas=o.filas;st.auto=o.auto;st.parte=String(pa);if(manual||!st.gg)st.gg=o.gg;if(manual||!st.ut)st.ut=o.ut;if(!st.dolar)st.dolar=o.dolar;$("#cd").value=st.dolar;$("#cg").value=st.gg;$("#cu").value=st.ut;$("#cp").value=st.parte;draw()};
+  const load=()=>{const r=sel.value;st=all[r]||{dolar:all._dolar||"",gg:"",ut:"",filas:plantilla(r).map(c=>({c,q:"",u:"",m:""}))};$("#cd").value=st.dolar||all._dolar||"";$("#cg").value=st.gg;$("#cu").value=st.ut;$("#cp").value=st.parte||parteDef();un.hidden=true;if(ind&&!$("#cd").value)$("#cd").value=Math.round(ind.dolar.v*100)/100;if(ind&&vacio())auto(false);else draw()};
+  const save=()=>{st.parte=$("#cp").value;st.dolar=$("#cd").value;st.gg=$("#cg").value;st.ut=$("#cu").value;all[sel.value]=st;all._dolar=st.dolar;try{localStorage.setItem(K,JSON.stringify(all))}catch(e){}};
   const calc=()=>{save();const dir=st.filas.reduce((a,f)=>a+(+f.q||0)*(+f.u||0)*(+f.m||0),0);const gg=dir*(+st.gg||0)/100;const ut=(dir+gg)*(+st.ut||0)/100;const precio=dir+gg+ut;const r=RUBROS.find(x=>x.id===sel.value);const x=estim(p,r,pf);const usd=+st.dolar>0?precio/+st.dolar/1e6:null;
     tb.querySelectorAll("tr[data-i]").forEach(tr=>{const f=st.filas[+tr.dataset.i];tr.querySelector(".n").textContent=clp((+f.q||0)*(+f.u||0)*(+f.m||0))});
     res.textContent="";res.append(el("h2",null,"Resultado"));const k=el("div","kpis");k.append(kpi(clp(dir),"costo directo"),kpi(clp(gg),"gastos generales"),kpi(clp(ut),"utilidad"),kpi(clp(precio),"precio de oferta (sin IVA)"));res.append(k);if(dir)res.append(priceStack(dir,gg,ut));
-    if(!dir){res.append(el("p","note","Completa cantidad, costo mensual por unidad y meses en cada fila. El subtotal de cada fila es cantidad por costo mensual por meses."));return}
+    if(!dir){res.append(el("p","note","Presiona \"Proponer costeo automático\" o completa cantidad, costo mensual por unidad y meses en cada fila. El subtotal de cada fila es cantidad por costo mensual por meses."));return}
     if(usd==null){res.append(el("p","note","Escribe el valor del dólar para comparar tu precio con el tamaño estimado del negocio en este proyecto."));return}
     const pct=x.paquete>0?usd/x.paquete*100:0;res.append(el("p",null,"Tu oferta equivale a US$ "+money(usd)+" millones. El paquete estimado de "+r.n.toLowerCase()+" en este proyecto es de US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+"), es decir, tu oferta cubriría cerca del "+(pct<1?pct.toFixed(1).replace(".",","):Math.round(pct))+"% de ese paquete."));
     if(x.tope!=null)res.append(el("p","note",usd>x.tope?"Ojo: supera el contrato anual razonable para el tamaño de la empresa (US$ "+money(x.tope)+" millones). Revisa si tienes espalda financiera, garantías y capital de trabajo para sostenerlo.":"Está dentro del contrato anual razonable para el tamaño de la empresa (US$ "+money(x.tope)+" millones)."));
     if(peak(p))res.append(el("p","note","Dato del estudio para dimensionar: "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+"."));
-    res.append(el("p","note","Es una herramienta de apoyo: los costos son los que tú ingresas y el paquete es una estimación para priorizar, no una cotización ni una garantía de adjudicación."))};
-  const draw=()=>{tb.textContent="";const h=el("tr");["Concepto","Cantidad","Costo mensual por unidad ($)","Meses","Subtotal",""].forEach(t=>h.append(el("th",null,t)));tb.append(h);
+    res.append(el("p","note","Es una herramienta de apoyo: la propuesta automática usa valores de referencia y supuestos que debes revisar con tus costos reales, y el paquete es una estimación para priorizar, no una cotización ni una garantía de adjudicación."))};
+  const draw=()=>{nota();tb.textContent="";const h=el("tr");["Concepto","Cantidad","Costo mensual por unidad ($)","Meses","Subtotal",""].forEach(t=>h.append(el("th",null,t)));tb.append(h);
     st.filas.forEach((f,i)=>{const tr=el("tr");tr.dataset.i=i;[["c","text",f.c,"Concepto"],["q","number",f.q,"Cantidad"],["u","number",f.u,"Costo mensual por unidad"],["m","number",f.m,"Meses"]].forEach(([k2,t,v,lab])=>{const td=el("td");const inp=el("input");inp.type=t;inp.value=v;inp.setAttribute("aria-label",lab+" fila "+(i+1));if(t==="number"){inp.min="0";inp.inputMode="decimal";inp.style.minWidth="90px"}else inp.style.minWidth="180px";inp.addEventListener("input",()=>{f[k2]=inp.value;calc()});td.append(inp);tr.append(td)});
       tr.append(el("td","n",""));const td=el("td");const x=el("button","btn2","Quitar");x.type="button";x.setAttribute("aria-label","Quitar fila "+(i+1));x.onclick=()=>{st.filas.splice(i,1);draw()};td.append(x);tr.append(td);tb.append(tr)});calc()};
-  add.onclick=()=>{st.filas.push({c:"",q:"",u:"",m:""});draw()};sel.addEventListener("input",load);["cd","cg","cu"].forEach(i=>$("#"+i).addEventListener("input",calc));load();
+  add.onclick=()=>{st.filas.push({c:"",q:"",u:"",m:""});draw()};sel.addEventListener("input",load);["cd","cg","cu"].forEach(i=>$("#"+i).addEventListener("input",calc));
+  au.onclick=()=>auto(true);un.onclick=()=>{if(prev&&prev.r===sel.value){st=prev.st;all[sel.value]=st;$("#cg").value=st.gg;$("#cu").value=st.ut;$("#cp").value=st.parte||parteDef();draw()}prev=null;un.hidden=true};
+  $("#cp").addEventListener("change",()=>{if(st.auto)auto(false);else calc()});au.disabled=true;load();
+  indicadores().then(o=>{if(!document.body.contains(top))return;ind=o;au.disabled=false;indSlot.append(indicadoresNota(o,p));if(o.dolar){$("#cd").placeholder="Ej: "+Math.round(o.dolar.v);if(!$("#cd").value){$("#cd").value=Math.round(o.dolar.v*100)/100}
+    else if(Math.abs(+$("#cd").value-o.dolar.v)>=1){const b=el("button","btn2","Usar el dólar de hoy ($ "+Math.round(o.dolar.v).toLocaleString("es-CL")+")");b.type="button";b.onclick=()=>{$("#cd").value=Math.round(o.dolar.v*100)/100;calc();b.remove()};indSlot.append(b)}}
+    if(vacio())auto(false);else calc()});
 }
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
 
