@@ -76,7 +76,7 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
 .btn{align-self:flex-start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer}
 .cost{width:100%;border-collapse:collapse;font-size:14px}
 .cost th{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:4px 6px}
-.cost td{padding:4px 6px;vertical-align:middle}.cost td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cost td{padding:6px 6px;vertical-align:middle;border-top:1px solid var(--line)}.cost td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cost input{padding:6px 8px}.tw{overflow-x:auto}
 .btn2{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer;align-self:flex-start}
 @media print{.top,.back,.btn,.btn2,.filters{display:none}body{background:#fff}}
@@ -92,6 +92,8 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
   <nav aria-label="Secciones">
     <a href="#inicio" data-nav="inicio">Proyectos</a>
     <a href="#oportunidades" data-nav="oportunidades">Oportunidades por rubro</a>
+    <a href="#evaluacion" data-nav="evaluacion">En evaluación</a>
+    <a href="#construccion" data-nav="construccion">En construcción</a>
     <a href="#mercado" data-nav="mercado">Mercado</a>
     <a href="#empresas" data-nav="empresas">Empresas</a>
     <a href="#novedades" data-nav="novedades">Novedades</a>
@@ -123,7 +125,7 @@ const RUBROS=[
  {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
  {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
 ];
-let P=[],C=[],E=[],PE=[],N=[],G=[],SA=[],SR=[];
+let P=[],C=[],E=[],PE=[],N=[],G=[],SA=[],SR=[],CO=[],CE=[],ST={};
 const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
 const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
 function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros)){if(!Array.isArray(o.regiones))o.regiones=o.zona==="norte"?[...new Set(P.map(p=>p.region).filter(r=>NORTE.some(n=>(r||"").includes(n))))]:[];return o}}catch(e){}return null}
@@ -156,7 +158,7 @@ const nf=v=>Number(v).toLocaleString("es-CL");
 function porque(r,p){if(["personal","campamento"].includes(r.id)&&peak(p))return r.why+" (el estudio declara "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+")";return r.why}
 function card(p,extra){const a=el("a","card");a.href="#p-"+p.id;const l=el("div");l.append(el("h3",null,p.nombre),el("p","meta",(p.titular||"")+" · "+(p.comuna||"")));
   const inv=el("div","inv","US$ "+money(p.inversion_mmusd));inv.append(el("small",null,"millones"));
-  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));if(peak(p))t.append(el("span","tag",nf(peak(p))+" trabajadores en el peak"));{const av=avance(p);if(av&&(av.est==="eval"||av.est==="adm")){t.append(el("span","tag",av.f<=1?"Aprobación estimada: "+mesAno(av.fecha):"Sobre el plazo promedio"));if(/suspend/i.test(p.actividad||""))t.append(el("span","tag","Reloj detenido"))}}
+  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));if(peak(p))t.append(el("span","tag",nf(peak(p))+" trabajadores en el peak"));{const av=avance(p);if(av&&(av.est==="eval"||av.est==="adm")){t.append(el("span","tag","Avance "+av.pct+"%"),el("span","tag","Término estimado: "+mesAno(av.fecha)));if(av.prob!=null)t.append(el("span","tag","Prob. de aprobación "+av.prob+"%"));if(/suspend/i.test(p.actividad||""))t.append(el("span","tag","Reloj detenido"))}}
   a.append(l,inv,t);if(extra)a.append(extra);return a}
 function fillSel(sel,vals,first){sel.textContent="";sel.append(new Option(first,""));vals.forEach(v=>sel.append(new Option(v,v)))}
 function pager(list,rows,render){let n=0;const more=el("button","more","Ver más");more.type="button";const step=()=>{rows.slice(n,n+40).forEach(r=>list.append(render(r)));n+=40;more.hidden=n>=rows.length};more.onclick=step;step();return more}
@@ -282,8 +284,17 @@ const DUR={DIA:{def:399,i:410,c:368,b:368,e:349,f:349,a:360,j:360,k:376,o:426,l:
 const mesAno=d=>d.toLocaleDateString("es-CL",{month:"long",year:"numeric"});
 function avance(p){if(!p.fecha_presentacion)return null;const e=norm(p.estado);const tipo=(p.tipo||"").toUpperCase()==="EIA"?"EIA":"DIA";const l=(p.tipologia||"").trim().toLowerCase()[0];const T=DUR[tipo][l]||DUR[tipo].def;const ini=new Date(p.fecha_presentacion+"T12:00:00");const d=Math.max(0,Math.round((Date.now()-ini)/864e5));const add=n=>new Date(ini.getTime()+n*864e5);
   const est=e.includes("aprobado")?"aprobado":e.includes("calificacion")?"eval":(e.includes("admision")&&!e.includes("no admitido"))?"adm":"cerrado";const f=d/T;
-  return{tipo,T,d,f,est,fecha:add(T),min:add(Math.round(T*.75)),max:add(Math.round(T*1.25)),paso:est==="adm"?1:f<.15?2:f<.75?3:4,sec:DUR[tipo][l]?sector(p):null}}
-function avancePanel(p){const a=avance(p);if(!a)return null;const s=el("section","panel");s.append(el("h2",null,"En qué etapa va y cuándo podría aprobarse"));
+  const a={tipo,T,d,f,est,fecha:add(T),min:add(Math.round(T*.75)),max:add(Math.round(T*1.25)),paso:est==="adm"?1:f<.15?2:f<.75?3:4,sec:DUR[tipo][l]?sector(p):null};
+  // porcentaje de avance del trámite: por hitos del expediente cuando se leyó; si no, por tiempo transcurrido
+  const g=est==="eval"&&p.etapa?p.etapa:null;a.real=!!g;
+  a.pct=est==="aprobado"?100:est==="adm"?5:est!=="eval"?null:!g?Math.round(Math.min(90,10+80*f)):g.rca?100:g.ice?92:!g.icsara?Math.round(10+Math.min(20,20*f/.3)):[0,g.adenda>=g.icsara?55:40,g.adenda>=g.icsara?75:65,g.adenda>=g.icsara?85:80][Math.min(g.icsara,3)];
+  if(a.pct!=null&&a.pct<100){const hoy=Date.now(),rest=Math.round((1-a.pct/100)*T),dd=n=>new Date(hoy+n*864e5);
+    if(g||f>1){a.fecha=dd(rest);a.min=dd(Math.round(rest*.6));a.max=dd(Math.round(rest*1.5))}a.fin=true}
+  // probabilidad histórica de aprobación según la etapa a la que llegó
+  const h=(ST.aprobacion||{})[tipo];if(h&&(est==="eval"||est==="adm")){const A=(h.aprobado||0)+(h.caducado||0)+(h.revocado||0)+(h.renuncia||0),R=h.rechazado||0,D=(h.desistido||0)+(h.abandonado||0),NC=h.no_calificado||0,NA=h.no_admitido||0;
+    const niv=est==="adm"?0:!g?1:g.ice?3:g.icsara?2:1;const den=[A+R+D+NC+NA,A+R+D+NC,A+R+D,A+R][niv];if(den>0){a.prob=Math.round(100*A/den);a.probNiv=niv;a.probN=den}}
+  return a}
+function avancePanel(p){const a=avance(p);if(!a)return null;const s=el("section","panel");s.append(el("h2",null,"Avance, fecha de término y probabilidad de aprobación"));
   if(a.est==="aprobado"){s.append(el("p","desc","Ya tiene aprobación ambiental (resolución favorable). Lo que sigue es del dueño: permisos sectoriales, decisión de inversión y licitaciones de construcción."));return s}
   if(a.est==="cerrado"){s.append(el("p","desc","Este proyecto salió de la evaluación ("+p.estado+"). No tiene fecha de aprobación; el dueño puede volver a presentarlo más adelante."));return s}
   const e=a.est==="eval"&&p.etapa?p.etapa:null;if(e)a.paso=e.ice?4:e.icsara>0?3:2;
@@ -292,11 +303,12 @@ function avancePanel(p){const a=avance(p);if(!a)return null;const s=el("section"
     const pr=el("p","desc");pr.append(el("b",null,"Según el expediente: "),document.createTextNode(d1));s.append(pr);
     const lim=a.tipo==="EIA"?[120,180]:[60,90];const dl=parseInt(p.dias_legales,10);const sus=/suspend/i.test(p.actividad||"");
     s.append(el("p","desc",(isNaN(dl)?"":"Reloj legal: lleva "+dl+" de "+lim[0]+" días hábiles (ampliable a "+lim[1]+"). ")+(sus?"Hoy el reloj está detenido, a la espera del dueño.":"Hoy el reloj está corriendo.")+(e.ult?" Último documento: "+e.ult+" ("+e.ult_fecha+").":"")))}
-  const b=el("div","bar");b.style.gridTemplateColumns="minmax(0,1fr) auto";const w=el("div");const i=el("i");i.style.width=Math.min(100,Math.round(a.f*100))+"%";w.append(i);b.append(w,el("span","v",Math.min(999,Math.round(a.f*100))+"% del tiempo promedio"));s.append(b);
+  const b=el("div","bar");b.style.gridTemplateColumns="minmax(0,1fr) auto";const w=el("div");const i=el("i");i.style.width=a.pct+"%";w.append(i);b.append(w,el("span","v",a.pct+"% de avance"));s.append(b);
+  s.append(el("p","desc",a.real?"El avance se calcula por los hitos que ya cumplió en su expediente: admisión, preguntas del SEA, respuestas del dueño e informe final.":"El avance se calcula por el tiempo transcurrido, porque aún no leemos su expediente."));
   const que=(a.tipo==="EIA"?"Un EIA":"Una DIA"+(a.sec?" de "+a.sec.toLowerCase():""));
   s.append(el("p","desc","Lleva "+nf(a.d)+" días desde que se presentó. "+que+" demora en promedio "+nf(a.T)+" días en total."));
-  if(a.f<=1){const pp=el("p","desc");pp.append(el("b",null,"Aprobación estimada: "+mesAno(a.fecha)+"."),document.createTextNode(" Rango razonable: entre "+mesAno(a.min<new Date()?new Date():a.min)+" y "+mesAno(a.max)+"."));s.append(pp)}
-  else s.append(el("p","desc","Ya lleva más que el promedio. Puede resolverse en cualquier momento, o estar detenido a la espera de respuestas del dueño. No damos fecha estimada en este caso."));
+  {const pp=el("p","desc");pp.append(el("b",null,"Posible fecha de término de la evaluación: "+mesAno(a.fecha)+"."),document.createTextNode(" Rango razonable: entre "+mesAno(a.min<new Date()?new Date():a.min)+" y "+mesAno(a.max)+"."+(a.f>1?" Ya lleva más tiempo que el promedio, así que la fecha se calcula con lo que le falta por cumplir.":"")));s.append(pp)}
+  if(a.prob!=null){const h=ST.aprobacion,pp=el("p","desc");pp.append(el("b",null,"Probabilidad de aprobación: "+a.prob+"%."),document.createTextNode(" Es la proporción de "+(a.tipo==="EIA"?"los EIA":"las DIA")+" presentados entre "+h.desde+" y "+h.hasta+" que, habiendo llegado a esta misma etapa ("+["en admisión","admitido, antes de las preguntas del SEA","después de la primera ronda de preguntas","con informe final emitido"][a.probNiv]+"), terminaron aprobados. Sale de "+nf(a.probN)+" casos ya resueltos. Es una estadística del conjunto: no evalúa las debilidades ni la oposición que pueda tener este proyecto en particular."));s.append(pp)}
   const cer=P.filter(x=>plazo(x).t==="Cerrado").length;const n=el("p","note",(e?"La etapa sale del expediente del SEIA (leído el "+fdate(String(p.etapa_at||"").slice(0,10))+"); la fecha es una estimación por promedios. ":"La etapa y la fecha son estimaciones por tiempo transcurrido, no el estado real del expediente. ")+"El plazo legal es de "+(a.tipo==="EIA"?"120 días hábiles, ampliable en 60":"60 días hábiles, ampliable en 30")+", pero el reloj se detiene cada vez que el dueño debe responder preguntas, por eso el tiempo real es mucho mayor. Promedios del SEA: DIA 399 días y EIA 1.124 días en 2025; por sector, DIA calificadas en 2026. De los proyectos que llegan a votación se aprueba cerca del 97%, pero "+Math.round(100*cer/Math.max(P.length,1))+"% de los ingresados en el último año terminó desistido o no admitido. ");
   const l1=el("a",null,"Plazos de tramitación del SEA");l1.href="https://www.sea.gob.cl/documentacion/reportes/informacion-de-plazos-de-tramitacion-en-el-seia";l1.target="_blank";l1.rel="noopener";n.append(l1);s.append(n);return s}
 function vFicha(app,id){
@@ -386,6 +398,45 @@ const grupoDe=t=>{const n=tkey(t);return G.find(g=>g.re.test(n))||null};
 const ekey=t=>{const g=grupoDe(t);return g?"g:"+tkey(g.grupo):tkey(t)};
 function titulares(){const m={};P.forEach(p=>{if(!p.titular)return;const g=grupoDe(p.titular);const k=ekey(p.titular);const t=m[k]=m[k]||{k,nombre:g?g.grupo:p.titular,g,ps:[],soc:[]};t.ps.push(p);if(!t.soc.some(x=>tkey(x)===tkey(p.titular)))t.soc.push(p.titular)});
   return Object.values(m).map(t=>{const v=t.ps.filter(vigente);t.nv=v.length;t.inv=v.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);t.regs=[...new Set(v.map(p=>regionCorta(p.region)))];t.peak=v.reduce((a,p)=>a+(peak(p)||0),0);return t}).sort((a,b)=>b.inv-a.inv||b.ps.length-a.ps.length)}
+function vEvaluacion(app){
+  app.append(header("Proyectos en evaluación","Cuánto lleva avanzado cada estudio, cuándo podría terminar su evaluación y qué probabilidad tiene de ser aprobado."));
+  const f=el("section","filters");f.innerHTML='<label for="vt">Tipo<select id="vt"><option value="">EIA y DIA</option><option value="EIA" selected>Solo EIA</option><option value="DIA">Solo DIA</option></select></label><label for="vr">Región<select id="vr"></select></label><label for="vo">Ordenar por<select id="vo"><option value="inv">Mayor inversión</option><option value="pct">Más avanzado</option><option value="fin">Termina antes</option><option value="prob">Mayor probabilidad</option></select></label><label for="vq">Buscar<input id="vq" type="search" placeholder="Proyecto o titular"></label>';app.append(f);
+  const base=P.map(p=>({p,a:avance(p)})).filter(x=>x.a&&(x.a.est==="eval"||x.a.est==="adm"));
+  fillSel($("#vr"),[...new Set(base.map(x=>x.p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
+  const cnt=el("p","count"),tw=el("div","tw");app.append(cnt,tw);
+  const draw=()=>{const t=$("#vt").value,r=$("#vr").value,o=$("#vo").value,q=norm($("#vq").value.trim());
+    const rows=base.filter(x=>(!t||x.a.tipo===t)&&(!r||x.p.region===r)&&(!q||norm(x.p.nombre+" "+x.p.titular).includes(q)));
+    rows.sort((x,y)=>o==="pct"?y.a.pct-x.a.pct:o==="fin"?x.a.fecha-y.a.fecha:o==="prob"?(y.a.prob||0)-(x.a.prob||0):(+y.p.inversion_mmusd||0)-(+x.p.inversion_mmusd||0));
+    tw.textContent="";cnt.textContent=rows.length?rows.length+" proyectos en evaluación, US$ "+money(rows.reduce((s,x)=>s+(+x.p.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";if(!rows.length)return;
+    const tb=el("table","cost");const hr=el("tr");["Proyecto","US$ millones","Avance","Etapa","Posible término","Prob. de aprobación"].forEach(h=>hr.append(el("th",null,h)));const th=el("thead");th.append(hr);tb.append(th);const bd=el("tbody");tb.append(bd);
+    rows.forEach(({p,a})=>{const tr=el("tr");const c1=el("td");const l=el("a",null,p.nombre);l.href="#p-"+p.id;c1.append(l,el("br"),el("small",null,(p.titular||"")+" · "+regionCorta(p.region)+" · "+a.tipo));
+      const e=p.etapa;const et=a.est==="adm"?"En admisión":!a.real?"En evaluación (expediente sin leer)":e.ice?"Informe final emitido":!e.icsara?"Primera revisión":e.adenda>=e.icsara?"Respondió la ronda "+e.icsara+" de preguntas":"Debe responder la ronda "+e.icsara+" de preguntas";
+      tr.append(c1,el("td",null,money(p.inversion_mmusd)),el("td",null,a.pct+"%"),el("td",null,et+(/suspend/i.test(p.actividad||"")?" (reloj detenido)":"")),el("td",null,mesAno(a.fecha)),el("td",null,a.prob!=null?a.prob+"%":"Sin dato"));bd.append(tr)});tw.append(tb)};
+  ["vt","vr","vo","vq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+  const h=ST.aprobacion;app.append(el("p","note","El avance sale de los hitos del expediente de cada proyecto en el SEIA (admisión, rondas de preguntas, respuestas, informe final). La fecha de término es una estimación con los promedios del SEA (DIA 399 días, EIA 1.124 días en 2025) y puede moverse si el dueño pide más plazo para responder. "+(h?"La probabilidad es histórica: qué parte de los proyectos presentados entre "+h.desde+" y "+h.hasta+" que llegaron a la misma etapa terminó aprobada, según el buscador del SEIA (consultado el "+fdate(h.consultado)+"). No evalúa cada proyecto en particular.":"")));
+}
+const OBRA={"en construcción":"ok","por iniciar":"adm","en operación":"eval","detenido":"bad","sin confirmar":""};
+function vConstruccion(app){
+  app.append(header("Proyectos en construcción","Proyectos grandes con aprobación ambiental desde 2023. Mostramos primero los que tienen construcción confirmada por una fuente pública, con las empresas que los construyen y cómo contactarlas."));
+  const conf=CO.filter(c=>c.estado_obra!=="sin confirmar");const k=el("section","kpis");k.append(kpi(CO.length,"proyectos aprobados grandes"),kpi(CO.filter(c=>c.estado_obra==="en construcción").length,"con construcción confirmada"),kpi(new Set(CE.map(x=>x.empresa_id)).size,"empresas constructoras identificadas"),kpi("US$ "+money(conf.reduce((s,c)=>s+(+c.inversion_mmusd||0),0)/1000)+" mil M","inversión con estado confirmado"));app.append(k);
+  const f=el("section","filters");f.innerHTML='<label for="ce">Estado de la obra<select id="ce"><option value="conf">Con estado confirmado</option><option value="">Todos</option><option>en construcción</option><option>por iniciar</option><option>en operación</option><option>detenido</option><option>sin confirmar</option></select></label><label for="ct">Tipo<select id="ct"><option value="">EIA y DIA</option><option>EIA</option><option>DIA</option></select></label><label for="cr">Región<select id="cr"></select></label><label for="cq">Buscar<input id="cq" type="search" placeholder="Proyecto, dueño o constructora"></label>';app.append(f);
+  fillSel($("#cr"),[...new Set(CO.map(c=>c.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
+  const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
+  const emps=c=>CE.filter(x=>x.proyecto_id===c.id).map(x=>({x,e:E.find(e=>e.id===x.empresa_id)})).filter(v=>v.e);
+  const ord={"en construcción":0,"por iniciar":1,"detenido":2,"en operación":3,"sin confirmar":4};
+  const draw=()=>{const e=$("#ce").value,t=$("#ct").value,r=$("#cr").value,q=norm($("#cq").value.trim());
+    const rows=CO.filter(c=>(e==="conf"?c.estado_obra!=="sin confirmar":!e||c.estado_obra===e)&&(!t||(c.tipo||"").toUpperCase()===t)&&(!r||c.region===r)&&(!q||norm(c.nombre+" "+c.titular+" "+emps(c).map(v=>v.e.nombre).join(" ")).includes(q))).sort((a,b)=>ord[a.estado_obra]-ord[b.estado_obra]||(+b.inversion_mmusd||0)-(+a.inversion_mmusd||0));
+    list.textContent="";slot.textContent="";cnt.textContent=rows.length?rows.length+" proyectos, US$ "+money(rows.reduce((s,c)=>s+(+c.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";
+    if(rows.length)slot.append(pager(list,rows,c=>{const s=el("section","panel");const h=el("h2",null,c.nombre);s.append(h);
+      const tg=el("div","tags");tg.append(el("span","tag "+OBRA[c.estado_obra],c.estado_obra==="sin confirmar"?"Obra sin confirmar":c.estado_obra[0].toUpperCase()+c.estado_obra.slice(1)),el("span","tag rubro",sector(c)),el("span","tag","US$ "+money(c.inversion_mmusd)+" millones"),el("span","tag",c.tipo),el("span","tag",regionCorta(c.region)+(c.comuna?", "+c.comuna:"")));if(c.fecha_rca)tg.append(el("span","tag","Aprobado el "+fdate(c.fecha_rca)));s.append(tg);
+      const d=el("p","desc");d.append(el("b",null,"Dueño: "),document.createTextNode((c.titular||"Sin dato")+". "+(c.tipologia_desc?"Tipo de proyecto: "+c.tipologia_desc+". ":"")+"Presentado al SEIA el "+fdate(c.fecha_presentacion)+"."));s.append(d);
+      if(c.avance_obra||c.nota){const n=el("p","desc");n.append(el("b",null,"Estado de la obra: "),document.createTextNode([c.avance_obra,c.nota].filter(Boolean).join(" ")));s.append(n)}
+      const ev=emps(c);if(ev.length){s.append(el("h3",null,"Quién lo construye y cómo contactar"));const ul=el("ul","emp");ev.forEach(({x,e})=>{const li=empLi(e,"En este proyecto: "+x.rol);if(x.fuente_url){const a=el("a",null,"Fuente del contrato");a.href=x.fuente_url;a.target="_blank";a.rel="noopener";const sp=el("span");sp.append(a);li.append(sp)}ul.append(li)});s.append(ul)}
+      else s.append(el("p","desc",c.estado_obra==="sin confirmar"?"Aún no buscamos información pública sobre el inicio de obras de este proyecto.":"No encontramos una fuente pública que nombre a la empresa constructora."));
+      const ln=el("p","desc");const a1=el("a",null,"Ver el expediente en el SEIA");a1.href="https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+c.id;a1.target="_blank";a1.rel="noopener";ln.append(a1);if(c.fuente_url){const a2=el("a",null,"Fuente del estado de la obra");a2.href=c.fuente_url;a2.target="_blank";a2.rel="noopener";ln.append(document.createTextNode(" · "),a2)}if(c.verificado_at)ln.append(document.createTextNode(" · verificado el "+fdate(c.verificado_at)));s.append(ln);return s}))};
+  ["ce","ct","cr","cq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+  app.append(el("p","note","El SEIA no informa cuándo parte una obra ni quién la construye. El estado de cada obra y las empresas constructoras salen de fuentes públicas (comunicados de las empresas y prensa del sector), con el enlace a cada una. Un proyecto aprobado sin fuente aparece como \"obra sin confirmar\". Los contactos son canales comerciales de cada empresa (sitio web y portal de proveedores), nunca datos de personas. La lista incluye los EIA aprobados desde 2023 y las DIA de US$ 100 millones o más."));
+}
 function vEmpresas(app){
   app.append(header("Empresas","Los dueños de los proyectos (mandantes): cuántos proyectos tienen vigentes, cuánto invierten y dónde. Sirve para decidir a qué empresas conviene acercarse primero."));
   const f=el("section","filters");f.innerHTML='<label for="eq">Buscar empresa<input id="eq" type="search" placeholder="Nombre de la empresa"></label><label for="es">Mostrar<select id="es"><option value="v">Con proyectos vigentes</option><option value="">Todas</option></select></label>';app.append(f);
@@ -464,9 +515,9 @@ function vCosteo(app,id){
 }
 function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
   const nav=h.startsWith("p-")||h.startsWith("c-")?"inicio":h.startsWith("t-")?"empresas":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="evaluacion")vEvaluacion(app);else if(h==="construccion")vConstruccion(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}window.addEventListener("hashchange",route);route()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}try{const [co,ce,st]=await Promise.all([get("radar_construccion?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_construccion_empresas?select=*"),get("radar_estadistica?select=*")]);CO=co;CE=ce;st.forEach(x=>ST[x.clave]=x.valor)}catch(e){CO=[];CE=[];ST={}}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
 </script>
 </body>
