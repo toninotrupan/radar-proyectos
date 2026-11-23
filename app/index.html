@@ -84,6 +84,9 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
 .emp li{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
 .emp b{display:block}.emp span{color:var(--muted);font-size:13px;display:block}
 @media (max-width:560px){.card{grid-template-columns:minmax(0,1fr)}.inv{text-align:left}.dl{grid-template-columns:minmax(0,1fr)}.dl dt{margin-top:6px}}
+.favb{background:none;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;color:inherit}
+.favb[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+#mapa{height:70vh;min-height:420px;border:1px solid var(--line);border-radius:10px;margin-top:12px}
 </style>
 </head>
 <body>
@@ -96,6 +99,8 @@ select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var
     <a href="#construccion" data-nav="construccion">En construcción</a>
     <a href="#mercado" data-nav="mercado">Mercado</a>
     <a href="#empresas" data-nav="empresas">Empresas</a>
+    <a href="#mapa" data-nav="mapa">Mapa</a>
+    <a href="#favoritos" data-nav="favoritos">Favoritos</a>
     <a href="#novedades" data-nav="novedades">Novedades</a>
     <a href="#empresa" data-nav="empresa">Mi empresa</a>
     <a href="sala.html">Sala de datos</a>
@@ -125,7 +130,7 @@ const RUBROS=[
  {id:"mantencion",n:"Mantenimiento industrial",pct:2,tip:["i","k","ñ"],kw:/operaci[oó]n|continuidad operacional|vida [uú]til/i,min:100,why:"mantención de planta y equipos durante la operación"},
  {id:"ambiental",n:"Monitoreo y servicios ambientales",pct:0.5,tip:["i","c","b","a","ñ","o","f","e"],kw:/monitoreo|seguimiento ambiental/i,min:30,why:"compromisos de monitoreo y seguimiento ambiental"}
 ];
-let P=[],C=[],E=[],PE=[],N=[],G=[],SA=[],SR=[],CO=[],CE=[],ST={};
+let P=[],C=[],E=[],PE=[],N=[],G=[],SA=[],SR=[],CO=[],CE=[],ST={},TH=[];
 const TAM=[["","Elige un tamaño",""],["micro","Micro (ventas hasta US$ 0,1 millones al año, aprox.)",0.1],["pequena","Pequeña (hasta US$ 1 millón al año, aprox.)",1],["mediana","Mediana (hasta US$ 4 millones al año, aprox.)",4],["grande","Grande (más de US$ 4 millones al año)",10]];
 const TOPE=0.5; // supuesto: un contrato no debería superar la mitad de las ventas anuales de la empresa
 function perfil(){try{const o=JSON.parse(localStorage.getItem("radar_empresa")||"null");if(o&&Array.isArray(o.rubros)){if(!Array.isArray(o.regiones))o.regiones=o.zona==="norte"?[...new Set(P.map(p=>p.region).filter(r=>NORTE.some(n=>(r||"").includes(n))))]:[];return o}}catch(e){}return null}
@@ -227,6 +232,7 @@ function vMercado(app){
       bars("Mayores titulares (US$ millones)",group(rows,p=>p.titular||"",inv).slice(0,10),money),
       bars("Consultoras ambientales con más proyectos (cantidad)",group(rows.filter(p=>p.consultora),p=>p.consultora,()=>1).slice(0,10),v=>v))};
   $("#mz").addEventListener("input",draw);draw();
+  {const cp=cochilcoPanel();if(cp)app.append(cp)}
   app.append(el("p","note","Montos declarados por cada titular en el SEIA. Corto plazo: proyecto aprobado. Mediano plazo: en admisión o en evaluación. Los trabajadores son los declarados en cada estudio y solo cuentan los proyectos cuyo estudio ya fue leído. El largo plazo (proyectos en estudio que aún no entran al SEIA) se sumará con datos de Cochilco."));
 }
 function vNovedades(app){
@@ -317,6 +323,9 @@ function vFicha(app,id){
   const pl=plazo(p);const h=header(p.nombre);const t=el("div","tags");t.style.marginTop="10px";t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag "+pl.c,pl.t),el("span","tag",p.tipo==="EIA"?"Estudio de Impacto Ambiental":"Declaración de Impacto Ambiental"));h.append(t);app.append(h);
   const k=el("section","kpis");k.append(kpi("US$ "+money(p.inversion_mmusd)+" M","inversión declarada"),kpi(fdate(p.fecha_presentacion),"fecha de presentación"),kpi(p.dias_legales||"0","días legales transcurridos"),kpi(p.actividad||"","tramitación"));app.append(k);
   {const av=avancePanel(p);if(av)app.append(av)}
+  app.append(favBtn(p));
+  {const op=oposicionPanel(p);if(op)app.append(op)}
+  {const hp=historialPanel(p.titular);if(hp)app.append(hp)}
   if(p.estudio_leido_at&&(p.mo_construccion_max||p.mo_operacion_max||p.vida_util||p.superficie)){const e=el("section","panel");e.append(el("h2",null,"Cifras declaradas en el estudio"));const n=v=>v==null?"s/i":Number(v).toLocaleString("es-CL");
     const kk=el("div","kpis");
     if(p.mo_construccion_max!=null||p.mo_construccion_prom!=null)kk.append(kpi(n(p.mo_construccion_max),"trabajadores en el peak de construcción (promedio "+n(p.mo_construccion_prom)+")"));
@@ -413,6 +422,7 @@ function vEvaluacion(app){
       const e=p.etapa;const et=a.est==="adm"?"En admisión":!a.real?"En evaluación (expediente sin leer)":e.ice?"Informe final emitido":!e.icsara?"Primera revisión":e.adenda>=e.icsara?"Respondió la ronda "+e.icsara+" de preguntas":"Debe responder la ronda "+e.icsara+" de preguntas";
       tr.append(c1,el("td",null,money(p.inversion_mmusd)),el("td",null,a.pct+"%"),el("td",null,et+(/suspend/i.test(p.actividad||"")?" (reloj detenido)":"")),el("td",null,mesAno(a.fecha)),el("td",null,a.prob!=null?a.prob+"%":"Sin dato"));bd.append(tr)});tw.append(tb)};
   ["vt","vr","vo","vq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+  app.append(csvBtn("proyectos_en_evaluacion",()=>base.map(({p,a})=>({Proyecto:p.nombre,Titular:p.titular,Tipo:a.tipo,Region:regionCorta(p.region),Comuna:p.comuna,"Inversion MMUSD":p.inversion_mmusd,"Avance %":a.pct,"Termino estimado":mesAno(a.fecha),"Prob. aprobacion %":a.prob,"Observaciones ciudadanas":p.oposicion?p.oposicion.obs:"",Expediente:"https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id}))));
   const h=ST.aprobacion;app.append(el("p","note","El avance sale de los hitos del expediente de cada proyecto en el SEIA (admisión, rondas de preguntas, respuestas, informe final). La fecha de término es una estimación con los promedios del SEA (DIA 399 días, EIA 1.124 días en 2025) y puede moverse si el dueño pide más plazo para responder. "+(h?"La probabilidad es histórica: qué parte de los proyectos presentados entre "+h.desde+" y "+h.hasta+" que llegaron a la misma etapa terminó aprobada, según el buscador del SEIA (consultado el "+fdate(h.consultado)+"). No evalúa cada proyecto en particular.":"")));
 }
 const OBRA={"en construcción":"ok","por iniciar":"adm","en operación":"eval","detenido":"bad","sin confirmar":""};
@@ -435,8 +445,49 @@ function vConstruccion(app){
       else s.append(el("p","desc",c.estado_obra==="sin confirmar"?"Aún no buscamos información pública sobre el inicio de obras de este proyecto.":"No encontramos una fuente pública que nombre a la empresa constructora."));
       const ln=el("p","desc");const a1=el("a",null,"Ver el expediente en el SEIA");a1.href="https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+c.id;a1.target="_blank";a1.rel="noopener";ln.append(a1);if(c.fuente_url){const a2=el("a",null,"Fuente del estado de la obra");a2.href=c.fuente_url;a2.target="_blank";a2.rel="noopener";ln.append(document.createTextNode(" · "),a2)}if(c.verificado_at)ln.append(document.createTextNode(" · verificado el "+fdate(c.verificado_at)));s.append(ln);return s}))};
   ["ce","ct","cr","cq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+  app.append(csvBtn("proyectos_aprobados_y_obras",()=>CO.map(c=>({Proyecto:c.nombre,Titular:c.titular,Tipo:c.tipo,Region:regionCorta(c.region),Comuna:c.comuna,"Inversion MMUSD":c.inversion_mmusd,"Estado de la obra":c.estado_obra,Detalle:c.avance_obra||"",Empresas:emps(c).map(v=>v.e.nombre+" ("+v.x.rol+")").join("; "),Fuente:c.fuente_url||"",Expediente:"https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+c.id}))));
   app.append(el("p","note","El SEIA no informa cuándo parte una obra ni quién la construye. El estado de cada obra y las empresas constructoras salen de fuentes públicas (comunicados de las empresas y prensa del sector), con el enlace a cada una. Un proyecto aprobado sin fuente aparece como \"obra sin confirmar\". Los contactos son canales comerciales de cada empresa (sitio web y portal de proveedores), nunca datos de personas. La lista incluye los EIA aprobados desde 2023 y las DIA de US$ 100 millones o más."));
 }
+// ---- Oposición, historial del dueño, favoritos, descarga, mapa y cartera Cochilco ----
+function oposicionPanel(p){const o=p.oposicion;if(!o)return null;const s=el("section","panel");s.append(el("h2",null,"Oposición y participación"));
+  const niv=o.obs>=200||o.pci>0?["Alta","bad"]:o.obs>=20?["Media","adm"]:o.obs>0?["Baja","eval"]:["Sin observaciones","ok"];const tg=el("div","tags");tg.append(el("span","tag "+niv[1],"Señal de oposición: "+niv[0]));s.append(tg);
+  const ul=el("ul","opps");const li=t=>{const x=el("li");x.append(el("span",null,t));ul.append(x)};
+  li(o.obs>0?nf(o.obs)+" observaciones ciudadanas recibidas"+(o.obs_pj?" ("+nf(o.obs_pj)+" de organizaciones o empresas)":"")+".":o.pac?"Tuvo participación ciudadana y no registra observaciones.":"No registra observaciones ciudadanas en su expediente.");
+  li(o.pci>0?"Tiene documentos de consulta indígena en su expediente. Es el trámite que más alarga una evaluación.":"No registra consulta indígena.");
+  if(o.recl>0)li("Registra "+o.recl+" documentos de reclamación.");s.append(ul);
+  s.append(el("p","note","Son cantidades contadas en el expediente público del SEIA"+(p.opos_at?" (leído el "+fdate(String(p.opos_at).slice(0,10))+")":"")+". Muchas observaciones no significan rechazo, pero suelen traer más rondas de preguntas y más plazo. La probabilidad de aprobación de arriba no considera esta señal."));return s}
+function historialPanel(titular){const h=TH.find(x=>x.titular_key===tkey(titular));if(!h||!h.total)return null;const s=el("section","panel");s.append(el("h2",null,"Historial del dueño en el SEIA"));
+  const res=h.aprobados+h.rechazados+h.desistidos+h.no_admitidos;const k=el("div","kpis");k.append(kpi(h.total+(h.total>=100?"+":""),"proyectos presentados"),kpi(h.aprobados,"aprobados"),kpi(h.desistidos+h.no_admitidos,"retirados o no admitidos"),kpi(h.rechazados,"rechazados"),kpi(h.en_tramite,"en trámite"));s.append(k);
+  if(res>=3)s.append(el("p","desc","De sus "+res+" proyectos ya resueltos, "+Math.round(100*h.aprobados/res)+"% terminó aprobado."));
+  s.append(el("p","note","Proyectos presentados al SEIA con exactamente este nombre de titular"+(h.desde?", desde "+fdate(h.desde):"")+". Una misma empresa puede usar otras sociedades que aquí no se suman."+(h.total>=100?" Se cuentan solo los 100 más recientes.":"")));return s}
+const favs=()=>{try{return JSON.parse(localStorage.getItem("radar_fav")||"[]")}catch(e){return[]}};
+function favBtn(p){const b=el("button","favb");b.type="button";const pinta=()=>{const on=favs().includes(p.id);b.setAttribute("aria-pressed",on);b.textContent=on?"★ En tus favoritos":"☆ Seguir este proyecto"};
+  b.onclick=()=>{let f=favs();f=f.includes(p.id)?f.filter(x=>x!==p.id):f.concat(p.id);try{localStorage.setItem("radar_fav",JSON.stringify(f))}catch(e){}pinta()};pinta();return b}
+function vFavoritos(app){app.append(header("Tus favoritos","Los proyectos que marcaste para seguir. Se guardan solo en este navegador."));const f=favs();const rows=P.filter(p=>f.includes(p.id));
+  if(!rows.length){app.append(el("p","lead","Aún no sigues ningún proyecto. Entra a una ficha y aprieta \"Seguir este proyecto\"."));return}
+  const cam=C.filter(c=>f.includes(c.proyecto_id)&&c.tipo!=="nuevo").slice(0,20);const s=el("section","panel");s.append(el("h2",null,"Cambios recientes en tus favoritos"));
+  if(cam.length){const ul=el("ul","opps");cam.forEach(c=>{const p=P.find(x=>x.id===c.proyecto_id);const li=el("li");const a=el("a",null,p?p.nombre:"Proyecto");a.href="#p-"+c.proyecto_id;li.append(a,el("span",null,(c.tipo==="estado"?"Cambió de estado":"Cambió su reloj")+": de "+(c.antes||"sin dato")+" a "+(c.despues||"sin dato")+" ("+fdate(String(c.detectado_at).slice(0,10))+")"));ul.append(li)});s.append(ul)}
+  else s.append(el("p","desc","Sin cambios detectados todavía."));app.append(s);
+  const list=el("section","list");rows.forEach(p=>list.append(card(p)));app.append(list);
+  app.append(csvBtn("mis_favoritos",()=>rows.map(p=>{const a=avance(p)||{};return{Proyecto:p.nombre,Titular:p.titular,Estado:p.estado,Region:regionCorta(p.region),"Inversion MMUSD":p.inversion_mmusd,"Avance %":a.pct==null?"":a.pct,Expediente:"https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id}})));
+  app.append(el("p","note","Los favoritos viven en este navegador: si cambias de computador o borras los datos del navegador, se pierden. El aviso por correo cuando un favorito cambia necesita una cuenta de usuario, que todavía no está activa."))}
+function csvBtn(nombre,filas){const b=el("button","btn2","Descargar esta lista para Excel");b.type="button";b.style.marginTop="14px";b.onclick=()=>{const r=filas();if(!r.length)return;const cols=Object.keys(r[0]);const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const txt="\ufeff"+[cols.map(q).join(";")].concat(r.map(x=>cols.map(c=>q(typeof x[c]==="number"?String(x[c]).replace(".",","):x[c])).join(";"))).join("\r\n");const a=el("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/csv;charset=utf-8"}));a.download=nombre+".csv";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)};return b}
+function cochilcoPanel(){const c=ST.cochilco;if(!c)return null;const s=el("section","panel");s.style.marginTop="16px";s.append(el("h2",null,"Largo plazo: la cartera minera a diez años"));
+  s.append(el("p","desc","Cochilco registra US$ "+money(c.total)+" millones en proyectos mineros para "+c.periodo+" (el año anterior eran US$ "+money(c.anterior)+" millones). Incluye proyectos que todavía no entran al SEIA."));
+  const g=el("div","grid2");const pc=v=>v+"%";g.append(bars("Qué tan segura es la inversión (% del total)",Object.entries(c.condicion),pc),bars("Permiso ambiental (% del total)",Object.entries(c.permiso),pc),bars("Etapa del proyecto (% del total)",Object.entries(c.etapa),pc),bars("Inversión por región (US$ millones)",Object.entries(c.regiones),money));s.append(g);
+  const n=el("p","note","Publicado en "+c.publicado+". Solo proyectos de US$ "+c.umbral+" millones o más. El informe no trae la lista proyecto por proyecto: viene en un anexo en Excel que no pudimos leer. ");const a=el("a",null,"Informe de Cochilco");a.href=c.url;a.target="_blank";a.rel="noopener";n.append(a);s.append(n);return s}
+let _leaf=null;const leaflet=()=>_leaf||(_leaf=new Promise((ok,no)=>{const l=el("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const sc=el("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";sc.onload=()=>ok(window.L);sc.onerror=()=>{_leaf=null;no(new Error("mapa"))};document.head.append(sc)}));
+function vMapa(app){app.append(header("Mapa de proyectos","Dónde está cada proyecto, según el punto que su dueño declaró en el SEIA. El tamaño del círculo crece con la inversión."));
+  const f=el("section","filters");f.innerHTML='<label for="mq">Mostrar<select id="mq"><option value="eval">En evaluación</option><option value="obra">Aprobados grandes y sus obras</option><option value="todo">Todos</option></select></label><label for="mi">Inversión mínima<select id="mi"><option value="0">Cualquiera</option><option value="50">US$ 50 millones</option><option value="200">US$ 200 millones</option><option value="1000">US$ 1.000 millones</option></select></label>';app.append(f);
+  const cnt=el("p","count"),box=el("div");box.id="mapa";app.append(cnt,box);
+  const pts=()=>{const q=$("#mq").value,mi=+$("#mi").value;const a=q==="obra"?[]:P.filter(p=>p.lat&&vigente(p)&&plazo(p).t!=="Corto plazo").map(p=>({lat:+p.lat,lon:+p.lon,n:p.nombre,t:p.titular,inv:+p.inversion_mmusd||0,h:"#p-"+p.id,e:p.estado,c:"#2563eb"}));
+    const b=q==="eval"?[]:CO.filter(c=>c.lat).map(c=>({lat:+c.lat,lon:+c.lon,n:c.nombre,t:c.titular,inv:+c.inversion_mmusd||0,h:"#construccion",e:c.estado_obra==="sin confirmar"?"Aprobado, obra sin confirmar":"Obra "+c.estado_obra,c:c.estado_obra==="en construcción"?"#16a34a":c.estado_obra==="sin confirmar"?"#6b7280":"#d97706"}));return a.concat(b).filter(x=>x.inv>=mi)};
+  leaflet().then(L=>{if(!document.body.contains(box))return;const m=L.map(box).setView([-27,-70.5],5);L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:14,attribution:"© OpenStreetMap"}).addTo(m);const capa=L.layerGroup().addTo(m);
+    const draw=()=>{capa.clearLayers();const r=pts();cnt.textContent=r.length?r.length+" proyectos con ubicación":"Aún no hay proyectos con ubicación para ese filtro.";
+      r.forEach(x=>{const d=el("div");const a=el("a",null,x.n);a.href=x.h;d.append(a,el("br"),document.createTextNode((x.t||"")+" · US$ "+money(x.inv)+" millones · "+x.e));L.circleMarker([x.lat,x.lon],{radius:Math.max(5,Math.min(22,4+Math.sqrt(x.inv)/2.2)),color:x.c,weight:1,fillOpacity:.55}).bindPopup(d).addTo(capa)})};
+    $("#mq").addEventListener("input",draw);$("#mi").addEventListener("input",draw);draw()}).catch(()=>{box.textContent="No se pudo cargar el mapa. Revisa tu conexión y vuelve a intentar."});
+  app.append(el("p","note","Azul: en evaluación. Verde: obra en construcción. Naranjo: obra por iniciar, detenida o ya en operación. Gris: aprobado sin confirmación de obra. El punto es uno solo por proyecto, aunque la obra se extienda por muchos kilómetros. Solo aparecen los proyectos cuya ubicación ya leímos del SEIA."))}
 function vEmpresas(app){
   app.append(header("Empresas","Los dueños de los proyectos (mandantes): cuántos proyectos tienen vigentes, cuánto invierten y dónde. Sirve para decidir a qué empresas conviene acercarse primero."));
   const f=el("section","filters");f.innerHTML='<label for="eq">Buscar empresa<input id="eq" type="search" placeholder="Nombre de la empresa"></label><label for="es">Mostrar<select id="es"><option value="v">Con proyectos vigentes</option><option value="">Todas</option></select></label>';app.append(f);
@@ -515,9 +566,9 @@ function vCosteo(app,id){
 }
 function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
   const nav=h.startsWith("p-")||h.startsWith("c-")?"inicio":h.startsWith("t-")?"empresas":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="evaluacion")vEvaluacion(app);else if(h==="construccion")vConstruccion(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="evaluacion")vEvaluacion(app);else if(h==="mapa")vMapa(app);else if(h==="favoritos")vFavoritos(app);else if(h==="construccion")vConstruccion(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}try{const [co,ce,st]=await Promise.all([get("radar_construccion?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_construccion_empresas?select=*"),get("radar_estadistica?select=*")]);CO=co;CE=ce;st.forEach(x=>ST[x.clave]=x.valor)}catch(e){CO=[];CE=[];ST={}}window.addEventListener("hashchange",route);route()}
+(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}try{const [co,ce,st]=await Promise.all([get("radar_construccion?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_construccion_empresas?select=*"),get("radar_estadistica?select=*")]);CO=co;CE=ce;st.forEach(x=>ST[x.clave]=x.valor)}catch(e){CO=[];CE=[];ST={}}try{TH=await get("radar_titular_historial?select=*")}catch(e){TH=[]}window.addEventListener("hashchange",route);route()}
  catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
 </script>
 </body>
