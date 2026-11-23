@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: bandas a todo el ancho, columna de 1120px. Portada oscura con un radar dibujado con proyectos reales; el cobre marca acciones y cifras; las etiquetas de datos van en monoespaciada, como en un plano. */
 :root{
@@ -312,6 +312,7 @@ footer details p{color:var(--ink-muted)}
 @media (max-width:900px){.xgrid,.sim{grid-template-columns:minmax(0,1fr)}.lee{grid-template-columns:minmax(0,1fr)}.lee .flecha{transform:rotate(90deg)}.hbar{grid-template-columns:96px minmax(0,1fr) 84px}}
 @media (max-width:520px){.xkpi{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sdet{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.hbar i,.stack button,.regla .prep,.regla .lic{transition:none}}
+.check a{color:inherit}
 </style>
 <!--/HEAD-->
 </head>
@@ -530,7 +531,8 @@ footer details p{color:var(--ink-muted)}
       <label for="m-email">Correo de su empresa<input id="m-email" name="email" type="email" required autocomplete="email" placeholder="nombre@empresa.cl"></label>
       <label for="m-empresa">Empresa (opcional)<input id="m-empresa" name="empresa" autocomplete="organization"></label>
     </div>
-    <label class="check" for="m-ok"><input id="m-ok" type="checkbox" required>Acepto que Radar de Proyectos guarde mis respuestas y mi correo para mostrarme el resultado, contactarme por él y enviarme el informe mensual. Puedo pedir que los borren cuando quiera.</label>
+    <label class="check" for="m-ok"><input id="m-ok" type="checkbox" required>Acepto que Radar de Proyectos guarde mis respuestas, mi puntaje y mis datos de contacto para entregarme el resultado y contactarme sobre él. <a href="#privacidad">Política de privacidad</a></label>
+    <label class="check" for="m-inf"><input id="m-inf" name="quiere_informe" type="checkbox">Quiero recibir también el informe mensual gratis (opcional).</label>
     <div><button class="btn" type="submit">Ver mi puntaje</button></div>
     <div id="m-msg" role="status"></div>
   </form>
@@ -540,7 +542,7 @@ footer details p{color:var(--ink-muted)}
       <div style="min-width:0;flex:1 1 260px"><h3 id="r-titulo" style="font-size:24px"></h3><p class="lead" id="r-texto" style="margin-top:6px;font-size:16px"></p></div>
     </div>
     <div class="item" style="margin-top:20px"><h3>Sus brechas principales</h3><ul class="gaps" id="r-brechas"></ul></div>
-    <p class="note" style="margin-top:16px">Puntaje referencial basado en requisitos habituales de mandantes mineros. Cada licitación define sus propias exigencias y los plazos indicados son típicos, no garantizados.</p>
+    <p class="note" style="margin-top:16px">Puntaje orientativo, basado solo en sus respuestas y en requisitos habituales de mandantes mineros. Cada licitación define sus propias exigencias y los plazos indicados son típicos, no garantizados.</p>
   </div>
 </div></section>
 
@@ -594,7 +596,7 @@ footer details p{color:var(--ink-muted)}
         <label for="i-rubro">Su rubro<select id="i-rubro" name="rubro"><option value="">Elija uno</option><option>Transporte de carga</option><option>Transporte de personal</option><option>Maquinaria y movimiento de tierra</option><option>Campamento y alimentación</option><option>Mantenimiento y montaje</option><option>Residuos y medio ambiente</option><option>Otro</option></select></label>
         <label for="i-region">Región de interés<select id="i-region" name="region"><option value="">Todas</option><option>Arica y Parinacota</option><option>Tarapacá</option><option>Antofagasta</option><option>Atacama</option><option>Coquimbo</option><option>Otra</option></select></label>
       </div>
-      <label class="check" for="i-ok" style="color:var(--muted)"><input id="i-ok" type="checkbox" required>Acepto recibir el informe mensual de Radar de Proyectos en este correo. Puedo darme de baja cuando quiera.</label>
+      <label class="check" for="i-ok" style="color:var(--muted)"><input id="i-ok" type="checkbox" required>Acepto que Radar de Proyectos use mi correo para enviarme el informe mensual. Puedo darme de baja cuando quiera. <a href="#privacidad">Política de privacidad</a></label>
       <div><button class="btn" type="submit">Suscribirme gratis</button></div>
       <div id="i-msg" role="status"></div>
     </form>
@@ -626,7 +628,8 @@ footer details p{color:var(--ink-muted)}
       </div>
       <label for="k-motivo">Motivo<select id="k-motivo" name="motivo"><option>Quiero acceso anticipado a la plataforma</option><option>Asesoría para certificarse</option><option>Otra consulta</option></select></label>
       <label for="k-msg">Mensaje (opcional)<textarea id="k-msg" name="mensaje" rows="3"></textarea></label>
-      <label class="check" for="k-ok"><input id="k-ok" type="checkbox" required>Acepto que Radar de Proyectos use estos datos para responder mi consulta.</label>
+      <label class="check" for="k-ok"><input id="k-ok" type="checkbox" required>Acepto que Radar de Proyectos use mis datos para responder esta consulta. <a href="#privacidad">Política de privacidad</a></label>
+      <label class="check" for="k-inf"><input id="k-inf" name="quiere_informe" type="checkbox">Quiero recibir también el informe mensual gratis (opcional).</label>
       <div><button class="btn" type="submit">Enviar</button></div>
       <div id="k-out" role="status"></div>
     </form>
@@ -636,8 +639,29 @@ footer details p{color:var(--ink-muted)}
 <footer><div class="in">
   <div class="brand"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#aab6ff" stroke-width="2"/><path d="M13 13l8-8" stroke="#aab6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#aab6ff"/></svg>Radar de Proyectos</div>
   <p>Las estimaciones de oportunidades, plazos, costos y relaciones entre empresas son referenciales y no constituyen asesoría financiera, legal ni una oferta comercial.</p>
-  <details><summary>Política de privacidad</summary><p>Guardamos solo los datos que usted entrega en esta página (correo, nombre, empresa, rubro, región y respuestas del medidor) y los usamos para enviarle el informe mensual, su resultado y responder sus consultas. No los vendemos ni los compartimos con terceros. Puede pedir acceso, corrección o eliminación de sus datos en cualquier momento escribiéndonos por el formulario de contacto, conforme a la legislación chilena de protección de datos personales.</p></details>
-  <details><summary>Términos de uso</summary><p>El contenido de este sitio se basa en fuentes públicas y se entrega con fines informativos. Radar de Proyectos no garantiza que un proyecto se construya, ni los plazos, montos u oportunidades estimadas. Cada usuario es responsable de sus decisiones comerciales. No certificamos ni acreditamos normas.</p></details>
+  <details id="privacidad"><summary>Política de privacidad</summary>
+    <p><b>Quién es responsable.</b> Radar de Proyectos es un emprendimiento en formación, operado por su fundador como persona natural, con domicilio en Chile. Se le contacta por el formulario de esta página.</p>
+    <p><b>Qué datos pedimos.</b> Correo, nombre, empresa, rubro, región, teléfono o WhatsApp (opcional), su mensaje y, si usa el medidor, sus respuestas y puntaje.</p>
+    <p><b>Para qué los usamos.</b> Para enviarle el informe mensual si lo pidió, entregarle y comentar con usted el resultado del medidor, y responder su consulta y ofrecerle nuestros servicios. No vendemos ni cedemos sus datos, ni tomamos decisiones automáticas sobre usted.</p>
+    <p><b>Por qué podemos usarlos.</b> Porque usted nos dio su consentimiento al marcar la casilla. Puede retirarlo cuando quiera.</p>
+    <p><b>Dónde se guardan.</b> En Supabase (servidores en Brasil). El sitio está alojado en GitHub (Estados Unidos) y los correos se envían con Gmail (Google, Estados Unidos). Esos países pueden tener reglas distintas a las chilenas.</p>
+    <p><b>Cuánto tiempo.</b> Informe mensual: hasta que pida la baja. Medidor y contacto: 24 meses desde su último contacto. Después los borramos.</p>
+    <p><b>Seguridad.</b> La conexión es cifrada y los datos guardados no se pueden leer desde internet. Si ocurre un incidente que lo afecte, le avisaremos.</p>
+    <p><b>Sus derechos.</b> Puede pedir, gratis, saber qué datos suyos tenemos, corregirlos, borrarlos, bloquearlos u oponerse a su uso, escribiendo por el formulario de contacto. Respondemos en 2 días hábiles. Si no queda conforme, puede recurrir a los tribunales y, cuando entre en vigencia la Ley 21.719, a la Agencia de Protección de Datos Personales.</p>
+    <p><b>Baja del informe.</b> Responda BAJA a cualquier informe o pídalo por el formulario de contacto.</p>
+    <p><b>Visitas.</b> Contamos las visitas por día, sin cookies y sin identificarlo. Las tipografías se cargan desde este mismo sitio.</p>
+    <p>Última actualización: 23 de noviembre de 2026.</p></details>
+  <details id="terminos"><summary>Términos de uso</summary>
+    <p><b>Qué es.</b> Un servicio de información para empresas proveedoras, basado en datos públicos del Sistema de Evaluación de Impacto Ambiental (SEIA). No tenemos vínculo con el Servicio de Evaluación Ambiental ni con las empresas titulares de los proyectos.</p>
+    <p><b>Datos del SEIA.</b> Los nombres de titulares y los montos de inversión son los declarados en el SEIA a la fecha indicada. Pueden cambiar o traer errores de origen. Si ve un error, escríbanos y lo corregimos.</p>
+    <p><b>Estimaciones.</b> Las oportunidades, plazos y costeos son cálculos propios y referenciales. No garantizan que un proyecto se apruebe, se construya ni que contrate proveedores.</p>
+    <p><b>Lo que no hacemos.</b> No damos asesoría de inversión, legal ni financiera. No certificamos: ayudamos a prepararse, y la certificación la decide un organismo certificador independiente.</p>
+    <p><b>Medidor.</b> El puntaje es orientativo y se basa solo en sus respuestas. No es una auditoría.</p>
+    <p><b>Informe mensual.</b> Es gratis y puede darse de baja cuando quiera.</p>
+    <p><b>Servicios pagados.</b> Sus condiciones y precio se acordarán por escrito antes de contratar.</p>
+    <p><b>Uso del contenido.</b> Puede citarlo indicando la fuente. No se permite la copia masiva ni la reventa.</p>
+    <p><b>Responsabilidad y ley aplicable.</b> Respondemos conforme a la ley chilena. Las decisiones que tome con esta información son suyas.</p>
+    <p>Última actualización: 23 de noviembre de 2026.</p></details>
   <p class="mono" style="font-size:12px">© 2026 Radar de Proyectos · Datos del SEIA: Servicio de Evaluación Ambiental, información pública.</p>
 </div></footer>
 
@@ -772,7 +796,7 @@ function enviar(form, out, armar, alTerminar){
     if(!valido(form, out)) return;
     const boton = form.querySelector("button[type=submit]"); boton.disabled = true;
     const fila = armar(new FormData(form));
-    fila.consentimiento = true;
+    fila.consentimiento = true; fila.texto_version = "2026-11-23";
     if(trampa.value || performance.now() < 4000){ alTerminar(true, fila); boton.disabled = false; return; }
     try { await guardar(fila); alTerminar(true, fila); }
     catch(err){ alTerminar(false, fila); }
@@ -782,18 +806,18 @@ function enviar(form, out, armar, alTerminar){
 const limpio = (s) => (s || "").toString().trim().slice(0, 500) || null;
 
 enviar($("f-informe"), $("i-msg"),
-  (d) => ({origen:"informe", email:limpio(d.get("email")), rubro:limpio(d.get("rubro")), region:limpio(d.get("region"))}),
+  (d) => ({origen:"informe", quiere_informe:true, email:limpio(d.get("email")), rubro:limpio(d.get("rubro")), region:limpio(d.get("region"))}),
   (ok) => aviso($("i-msg"), ok, ok ? "Listo. Quedó suscrito al informe mensual." : FALLO));
 
 enviar($("f-contacto"), $("k-out"),
-  (d) => ({origen:"contacto", email:limpio(d.get("email")), nombre:limpio(d.get("nombre")), empresa:limpio(d.get("empresa")), telefono:limpio(d.get("telefono")), motivo:limpio(d.get("motivo")), mensaje:limpio(d.get("mensaje"))}),
+  (d) => ({origen:"contacto", quiere_informe:d.get("quiere_informe")==="on", email:limpio(d.get("email")), nombre:limpio(d.get("nombre")), empresa:limpio(d.get("empresa")), telefono:limpio(d.get("telefono")), motivo:limpio(d.get("motivo")), mensaje:limpio(d.get("mensaje"))}),
   (ok) => { aviso($("k-out"), ok, ok ? "Recibido. Le responderemos a la brevedad." : FALLO); if(ok) $("f-contacto").reset(); });
 
 enviar($("f-medidor"), $("m-msg"),
   (d) => {
     const resp = {}; let puntos = 0;
     PREGUNTAS.forEach(q => { const i = +d.get(q.id); resp[q.id] = q.o[i]; puntos += q.p * (i === 0 ? 1 : i === 1 ? 0.5 : 0); });
-    return {origen:"medidor", email:limpio(d.get("email")), empresa:limpio(d.get("empresa")), puntaje:Math.round(puntos), respuestas:resp};
+    return {origen:"medidor", quiere_informe:d.get("quiere_informe")==="on", email:limpio(d.get("email")), empresa:limpio(d.get("empresa")), puntaje:Math.round(puntos), respuestas:resp};
   },
   (ok, fila) => {
     const p = fila.puntaje;
