@@ -7,28 +7,28 @@
 <title>Radar de Proyectos</title>
 <meta name="description" content="Proyectos de inversión que entran a evaluación ambiental en Chile, traducidos a oportunidades para proveedores y contratistas.">
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
 <style>
 /* Layout: bandas a todo el ancho, columna de 1120px. Portada oscura con un radar dibujado con proyectos reales; el cobre marca acciones y cifras; las etiquetas de datos van en monoespaciada, como en un plano. */
 :root{
-  --bg:#f4f2ee;--panel:#ffffff;--fg:#141d21;--muted:#566267;--line:#d8d3ca;--soft:#ebe7e0;
-  --ink:#0a2229;--ink2:#103039;--ink-fg:#eef4f4;--ink-muted:#9db6ba;--ink-line:#24474f;
-  --accent:#b4531c;--accent-hi:#e8925a;--accent-fg:#ffffff;--accent-soft:#f5e3d6;
-  --ok:#1f7a4d;--ok-soft:#dcefe4;--warn:#8a6a00;--warn-soft:#f4ecd0;--bad:#a23a2a;--bad-soft:#f6dfda;
-  --display:Archivo,"Arial Narrow",system-ui,sans-serif;--body:Inter,system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --shadow:0 1px 2px rgba(10,34,41,.06),0 12px 32px -12px rgba(10,34,41,.22);
+  --bg:#f2f4f8;--panel:#ffffff;--fg:#0d1830;--muted:#55607a;--line:#dce2ec;--soft:#e9eef5;
+  --ink:#0b1736;--ink2:#14244d;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#22335f;
+  --accent:#2748d8;--accent-hi:#8ea6ff;--accent-fg:#ffffff;--accent-soft:#e3e9fc;
+  --ok:#0b7f62;--ok-soft:#d9f1e9;--warn:#8a6500;--warn-soft:#f6ebc8;--bad:#b3362b;--bad-soft:#f8dfdb;
+  --display:Geologica,"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:Geologica,"Instrument Sans",system-ui,sans-serif;
+  --shadow:0 1px 2px rgba(13,24,48,.06),0 12px 32px -12px rgba(13,24,48,.22);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1518;--panel:#182024;--fg:#e8ecee;--muted:#9aa7ad;--line:#2c373d;--soft:#1f282d;
-  --ink:#071a20;--ink2:#0d2a32;--ink-fg:#e6eff0;--ink-muted:#8faaae;--ink-line:#1f4048;
-  --accent:#e08a55;--accent-hi:#f0a878;--accent-fg:#1a0f08;--accent-soft:#3a2a20;
-  --ok:#5fc592;--ok-soft:#1c3529;--warn:#e0c15a;--warn-soft:#383016;--bad:#ee8f7f;--bad-soft:#3d221d;
+  --bg:#080e1f;--panel:#101930;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
+  --ink:#060b19;--ink2:#101930;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#1c2848;
+  --accent:#93a9ff;--accent-hi:#a9bbff;--accent-fg:#07102a;--accent-soft:#1b2752;
+  --ok:#5fd0ae;--ok-soft:#10332b;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.6);color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0f1518;--panel:#182024;--fg:#e8ecee;--muted:#9aa7ad;--line:#2c373d;--soft:#1f282d;
-  --ink:#071a20;--ink2:#0d2a32;--ink-fg:#e6eff0;--ink-muted:#8faaae;--ink-line:#1f4048;
-  --accent:#e08a55;--accent-hi:#f0a878;--accent-fg:#1a0f08;--accent-soft:#3a2a20;
-  --ok:#5fc592;--ok-soft:#1c3529;--warn:#e0c15a;--warn-soft:#383016;--bad:#ee8f7f;--bad-soft:#3d221d;
+  --bg:#080e1f;--panel:#101930;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
+  --ink:#060b19;--ink2:#101930;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#1c2848;
+  --accent:#93a9ff;--accent-hi:#a9bbff;--accent-fg:#07102a;--accent-soft:#1b2752;
+  --ok:#5fd0ae;--ok-soft:#10332b;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.6);color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
@@ -46,7 +46,7 @@ h3{font-size:19px;line-height:1.3;font-weight:600}
 p{margin:0;max-width:65ch}
 .lead{color:var(--muted);margin-top:14px;font-size:18px}
 .dark .lead{color:var(--ink-muted)}
-.eyebrow{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow{font:500 12px var(--mono);color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .eyebrow::before{content:"";width:24px;height:2px;background:var(--accent)}
 .dark .eyebrow{color:var(--accent-hi)}.dark .eyebrow::before{background:var(--accent-hi)}
 .head{display:flex;flex-direction:column;margin-bottom:40px}
@@ -70,7 +70,7 @@ a{color:inherit}
 /* portada */
 .hero{background:radial-gradient(1000px 520px at 78% 40%,var(--ink2),var(--ink) 70%);color:var(--ink-fg);overflow:hidden}
 .hero .in{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:48px;padding-block:72px 80px;align-items:center}
-.pill{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted);border:1px solid var(--ink-line);border-radius:999px;padding:6px 12px;margin-bottom:22px}
+.pill{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--ink-muted);border:1px solid var(--ink-line);border-radius:999px;padding:6px 12px;margin-bottom:22px}
 .pill i{width:8px;height:8px;border-radius:50%;background:var(--accent-hi);animation:pulso 2s infinite}
 @keyframes pulso{50%{opacity:.3}}
 .hero p.sub{color:var(--ink-muted);margin-top:20px;font-size:19px;max-width:54ch}
@@ -82,7 +82,7 @@ a{color:inherit}
 .radar svg{width:100%;height:auto;display:block;overflow:visible}
 .radar .barrido{transform-origin:260px 260px;animation:giro 9s linear infinite}
 @keyframes giro{to{transform:rotate(360deg)}}
-.radar figcaption{font:400 12px var(--mono);color:var(--ink-muted);text-align:center;margin-top:8px}
+.radar figcaption{font:400 12.5px var(--mono);color:var(--ink-muted);text-align:center;margin-top:8px}
 /* cifras */
 .stats{background:var(--ink);color:var(--ink-fg);border-top:1px solid var(--ink-line)}
 .stats .in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-block:0}
@@ -90,7 +90,7 @@ a{color:inherit}
 .stat:first-child{border-left:0;padding-left:0}
 .stat b{display:block;font:800 clamp(28px,3.4vw,42px)/1 var(--display);font-variant-numeric:tabular-nums}
 .stat span{display:block;color:var(--ink-muted);font-size:14px;margin-top:8px}
-.src{font:400 12px var(--mono);color:var(--ink-muted);padding-block:0 20px}
+.src{font:400 12.5px var(--mono);color:var(--ink-muted);padding-block:0 20px}
 /* rejillas */
 .grid{display:grid;gap:20px}
 .g3{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
@@ -118,13 +118,13 @@ a{color:inherit}
 /* tabla */
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel);box-shadow:var(--shadow)}
 table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
-th{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--soft)}
+th{font:500 12.5px var(--mono);color:var(--muted);text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--soft)}
 td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:last-child td{border-bottom:0}
 td.n,th.n{text-align:right;white-space:nowrap}
 td.n{font:500 15px var(--mono);font-variant-numeric:tabular-nums}
 td small{display:block;color:var(--muted);font-size:13px}
-.tag{display:inline-block;font:500 11px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--ok-soft);color:var(--ok);align-self:flex-start;white-space:nowrap}
+.tag{display:inline-block;font:500 12.5px var(--mono);padding:3px 8px;border-radius:999px;background:var(--ok-soft);color:var(--ok);align-self:flex-start;white-space:nowrap}
 .tag.soon{background:var(--warn-soft);color:var(--warn)}
 /* pasos */
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;counter-reset:s}
@@ -140,15 +140,15 @@ td small{display:block;color:var(--muted);font-size:13px}
 /* ventana de la ficha */
 .win{border:1px solid var(--line);border-radius:14px;background:var(--panel);box-shadow:var(--shadow);overflow:hidden}
 .band.alt .win{background:var(--bg)}
-.winbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--soft);font:400 12px var(--mono);color:var(--muted)}
+.winbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--soft);font:400 12.5px var(--mono);color:var(--muted)}
 .winbar i{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
 .winbar span{margin-left:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .winbody{padding:28px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px}
 .col{display:flex;flex-direction:column;gap:20px;min-width:0}
 .money{font:800 40px/1 var(--display);font-variant-numeric:tabular-nums;color:var(--accent)}
-.money small{display:block;font:400 12px var(--mono);color:var(--muted);margin-top:6px}
+.money small{display:block;font:400 12.5px var(--mono);color:var(--muted);margin-top:6px}
 dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 20px;margin:0}
-dt{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+dt{font:500 12.5px var(--mono);color:var(--muted)}
 dd{margin:2px 0 0;font-weight:500}
 .ops{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0}
 .ops li{font-size:14px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel)}
@@ -196,12 +196,12 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-
 /* planes */
 .plan{border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:12px;background:var(--panel);min-width:0;position:relative}
 .plan.main{border:2px solid var(--accent);box-shadow:var(--shadow)}
-.plan.main::before{content:"El más completo para licitar";position:absolute;top:-12px;left:20px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--accent);color:var(--accent-fg);padding:3px 10px;border-radius:999px}
+.plan.main::before{content:"El más completo para licitar";position:absolute;top:-12px;left:20px;font:500 12.5px var(--mono);background:var(--accent);color:var(--accent-fg);padding:3px 10px;border-radius:999px}
 .plan ul{margin:0;padding:0;list-style:none;color:var(--muted);font-size:15px;display:flex;flex-direction:column;gap:8px;flex:1}
 .plan li{display:flex;gap:8px;align-items:flex-start}
 .plan li svg{width:16px;height:16px;color:var(--ok);flex:none;margin-top:4px}
 .plan .price{font:700 22px var(--display)}
-.plan .when{font:400 12px var(--mono);color:var(--muted)}
+.plan .when{font:400 12.5px var(--mono);color:var(--muted)}
 details{border-top:1px solid var(--line);padding-block:16px}
 details:last-of-type{border-bottom:1px solid var(--line)}
 summary{font:600 17px var(--display);cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px}
@@ -222,6 +222,15 @@ footer details p{color:var(--ink-muted)}
 }
 @media (max-width:520px){.out{grid-template-columns:minmax(0,1fr)}.calc,dl{grid-template-columns:minmax(0,1fr)}.card{padding:20px}}
 @media (prefers-reduced-motion:reduce){.radar .barrido,.pill i{animation:none}html{scroll-behavior:auto}.btn,.mod{transition:none}}
+.steps li{cursor:pointer;transition:transform .26s cubic-bezier(.2,.7,.2,1),border-color .26s,background .26s,box-shadow .26s}
+.steps li:hover{border-color:var(--accent-hi)}
+.steps li:focus-visible{outline:2px solid var(--accent-hi);outline-offset:3px}
+.steps li.on{border-color:var(--accent-hi);background:color-mix(in srgb,var(--accent-hi) 16%,var(--ink2));transform:translateY(-6px);box-shadow:0 14px 30px -14px rgba(0,0,0,.6)}
+.steps li.on svg{color:#fff}
+.steps li.done::after{color:var(--accent-hi)}
+.stepbar{height:4px;border-radius:4px;background:var(--ink-line);margin:22px 0 0;overflow:hidden}
+.stepbar i{display:block;height:100%;width:calc(100%*var(--k,1)/6);background:var(--accent-hi);border-radius:4px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.steps li,.stepbar i{transition:none}.steps li.on{transform:none}}
 </style>
 <!--/HEAD-->
 </head>
@@ -241,7 +250,7 @@ footer details p{color:var(--ink-muted)}
 </defs></svg>
 
 <div class="top"><div class="in">
-  <a class="brand" href="#inicio"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#e8925a" stroke-width="2"/><circle cx="13" cy="13" r="5.500" stroke="#e8925a" stroke-width="2" opacity=".55"/><path d="M13 13l8-8" stroke="#e8925a" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#e8925a"/></svg>Radar de Proyectos</a>
+  <a class="brand" href="#inicio"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#8ea6ff" stroke-width="2"/><circle cx="13" cy="13" r="5.500" stroke="#8ea6ff" stroke-width="2" opacity=".55"/><path d="M13 13l8-8" stroke="#8ea6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#8ea6ff"/></svg>Radar de Proyectos</a>
   <nav class="nav" aria-label="Secciones">
     <a href="#radar">Proyectos</a><a href="#como">Cómo funciona</a><a href="#ejemplo">Ejemplo</a><a href="#medidor">Medidor</a><a href="#planes">Planes</a>
     <a class="btn sm" href="#informe">Informe gratis</a>
@@ -495,7 +504,7 @@ footer details p{color:var(--ink-muted)}
 </div></section>
 
 <footer><div class="in">
-  <div class="brand"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#e8925a" stroke-width="2"/><path d="M13 13l8-8" stroke="#e8925a" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#e8925a"/></svg>Radar de Proyectos</div>
+  <div class="brand"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#8ea6ff" stroke-width="2"/><path d="M13 13l8-8" stroke="#8ea6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#8ea6ff"/></svg>Radar de Proyectos</div>
   <p>Las estimaciones de oportunidades, plazos, costos y relaciones entre empresas son referenciales y no constituyen asesoría financiera, legal ni una oferta comercial.</p>
   <details><summary>Política de privacidad</summary><p>Guardamos solo los datos que usted entrega en esta página (correo, nombre, empresa, rubro, región y respuestas del medidor) y los usamos para enviarle el informe mensual, su resultado y responder sus consultas. No los vendemos ni los compartimos con terceros. Puede pedir acceso, corrección o eliminación de sus datos en cualquier momento escribiéndonos por el formulario de contacto, conforme a la legislación chilena de protección de datos personales.</p></details>
   <details><summary>Términos de uso</summary><p>El contenido de este sitio se basa en fuentes públicas y se entrega con fines informativos. Radar de Proyectos no garantiza que un proyecto se construya, ni los plazos, montos u oportunidades estimadas. Cada usuario es responsable de sus decisiones comerciales. No certificamos ni acreditamos normas.</p></details>
@@ -548,16 +557,16 @@ $("tabla").innerHTML = PROY.slice(0, 8).map(p =>
   const SECT = {"Tarapacá":[-90,-30],"Antofagasta":[-30,150],"Atacama":[150,225],"Coquimbo":[225,270]};
   const hoy = new Date(2026, 10, 21);
   const pol = (ang, rad) => { const a = ang * Math.PI / 180; return [C + rad * Math.cos(a), C + rad * Math.sin(a)]; };
-  let h = `<defs><radialGradient id="rg"><stop offset="0" stop-color="#e8925a" stop-opacity=".16"/><stop offset="1" stop-color="#e8925a" stop-opacity="0"/></radialGradient>
-    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e8925a" stop-opacity="0"/><stop offset="1" stop-color="#e8925a" stop-opacity=".38"/></linearGradient></defs>
+  let h = `<defs><radialGradient id="rg"><stop offset="0" stop-color="#8ea6ff" stop-opacity=".16"/><stop offset="1" stop-color="#8ea6ff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ea6ff" stop-opacity="0"/><stop offset="1" stop-color="#8ea6ff" stop-opacity=".38"/></linearGradient></defs>
     <circle cx="${C}" cy="${C}" r="${R}" fill="url(#rg)"/>`;
-  [.25,.5,.75,1].forEach(k => h += `<circle cx="${C}" cy="${C}" r="${R*k}" fill="none" stroke="#9db6ba" stroke-opacity="${k===1?.5:.22}" stroke-width="1"/>`);
+  [.25,.5,.75,1].forEach(k => h += `<circle cx="${C}" cy="${C}" r="${R*k}" fill="none" stroke="#9dabc9" stroke-opacity="${k===1?.5:.22}" stroke-width="1"/>`);
   Object.entries(SECT).forEach(([reg,[a,b]]) => {
-    const [x,y] = pol(a, R); h += `<line x1="${C}" y1="${C}" x2="${x}" y2="${y}" stroke="#9db6ba" stroke-opacity=".22"/>`;
+    const [x,y] = pol(a, R); h += `<line x1="${C}" y1="${C}" x2="${x}" y2="${y}" stroke="#9dabc9" stroke-opacity=".22"/>`;
     const [lx,ly] = pol((a+b)/2, R + 18);
-    h += `<text x="${lx}" y="${ly}" fill="#9db6ba" font-family="IBM Plex Mono,monospace" font-size="11" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">${reg.toUpperCase()}</text>`;
+    h += `<text x="${lx}" y="${ly}" fill="#9dabc9" font-family="Geologica,sans-serif" font-size="11" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">${reg.toUpperCase()}</text>`;
   });
-  h += `<g class="barrido"><path d="M${C} ${C}L${C} ${C-R}A${R} ${R} 0 0 1 ${pol(-35,R).join(" ")}Z" fill="url(#sw)"/><line x1="${C}" y1="${C}" x2="${pol(-35,R)[0]}" y2="${pol(-35,R)[1]}" stroke="#e8925a" stroke-width="1.500"/></g>`;
+  h += `<g class="barrido"><path d="M${C} ${C}L${C} ${C-R}A${R} ${R} 0 0 1 ${pol(-35,R).join(" ")}Z" fill="url(#sw)"/><line x1="${C}" y1="${C}" x2="${pol(-35,R)[0]}" y2="${pol(-35,R)[1]}" stroke="#8ea6ff" stroke-width="1.500"/></g>`;
   const cuenta = {}, etiquetas = [];
   PROY.forEach((p, k) => {
     const [a,b] = SECT[p.r]; const tot = PROY.filter(x => x.r === p.r).length; const j = cuenta[p.r] = (cuenta[p.r] || 0) + 1;
@@ -566,13 +575,13 @@ $("tabla").innerHTML = PROY.slice(0, 8).map(p =>
     const rad = 46 + Math.min(1, meses / 12) * (R - 70) * (0.75 + 0.25 * ((k * 37) % 10) / 10);
     const [x,yy] = pol(ang, rad); const r = 3 + Math.sqrt(p.i) / 6;
     const ok = p.e === "Aprobado";
-    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fc592" : "#e8925a"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#0a2229" stroke-width="1"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
+    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fd0ae" : "#f0a468"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#0b1736" stroke-width="1"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
     if (k < 3) etiquetas.push({x:x + r + 8, y:yy + 4, k, i:p.i});
   });
   etiquetas.sort((a,b) => a.y - b.y).forEach((e, j, arr) => { if (j && e.y - arr[j-1].y < 17) e.y = arr[j-1].y + 17; });
-  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef4f4" font-family="Inter,sans-serif" font-size="12" font-weight="600">${["El Abra","Escondida","Albemarle"][e.k]} <tspan fill="#9db6ba" font-weight="400">${mm(e.i)}</tspan></text>`; });
-  h += `<circle cx="${C}" cy="${C}" r="4" fill="#eef4f4"/>
-    <g font-family="IBM Plex Mono,monospace" font-size="11" fill="#9db6ba"><circle cx="18" cy="500" r="5" fill="#e8925a"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fc592"/><text x="162" y="504">Aprobado</text></g>`;
+  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef2fb" font-family="Inter,sans-serif" font-size="12" font-weight="600">${["El Abra","Escondida","Albemarle"][e.k]} <tspan fill="#9dabc9" font-weight="400">${mm(e.i)}</tspan></text>`; });
+  h += `<circle cx="${C}" cy="${C}" r="4" fill="#eef2fb"/>
+    <g font-family="Geologica,sans-serif" font-size="11" fill="#9dabc9"><circle cx="18" cy="500" r="5" fill="#8ea6ff"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fd0ae"/><text x="162" y="504">Aprobado</text></g>`;
   svg.innerHTML = h;
 })();
 
@@ -669,6 +678,15 @@ enviar($("f-medidor"), $("m-msg"),
   });
 
 document.querySelectorAll("[data-motivo]").forEach(a => a.addEventListener("click", () => { $("k-motivo").value = a.dataset.motivo; }));
+</script>
+<script>
+/* Flujograma del recorrido: se puede tocar cada paso; la primera vez que aparece en pantalla se recorre solo. */
+(function(){var ol=document.querySelector("#como .steps");if(!ol)return;var li=[].slice.call(ol.children),bar=document.createElement("div"),i=document.createElement("i");bar.className="stepbar";bar.setAttribute("aria-hidden","true");bar.appendChild(i);ol.after(bar);
+var rm=matchMedia("(prefers-reduced-motion: reduce)").matches,t=null;
+function sel(n){li.forEach(function(x,k){x.classList.toggle("on",k===n);x.classList.toggle("done",k<n);x.setAttribute("aria-current",k===n?"step":"false")});bar.style.setProperty("--k",n+1)}
+li.forEach(function(x,k){x.tabIndex=0;x.addEventListener("click",function(){clearInterval(t);sel(k)});x.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();clearInterval(t);sel(k)}else if(e.key==="ArrowRight"&&li[k+1]){clearInterval(t);sel(k+1);li[k+1].focus()}else if(e.key==="ArrowLeft"&&li[k-1]){clearInterval(t);sel(k-1);li[k-1].focus()}})});
+sel(0);if(rm||!("IntersectionObserver" in window))return;
+var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.disconnect();var n=0;t=setInterval(function(){n++;if(n>=li.length){clearInterval(t);return}sel(n)},900)},{threshold:.6});io.observe(ol)})();
 </script>
 </body>
 </html>

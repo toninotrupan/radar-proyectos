@@ -2,111 +2,433 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1736">
 <title>Radar de Proyectos | Plataforma</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
+<script>try{var t=localStorage.getItem("radar_tema");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
 <style>
-:root{--bg:#f4f2ee;--panel:#ffffff;--fg:#141d21;--muted:#566267;--line:#d8d3ca;--soft:#ebe7e0;--ink:#0a2229;--ink-fg:#eef4f4;--ink-muted:#9db6ba;--accent:#b4531c;--accent-soft:#f5e3d6;--ok:#1f7a4d;--ok-soft:#dcefe4;--warn:#8a6a00;--warn-soft:#f4ecd0;--bad:#a23a2a;--bad-soft:#f6dfda;--eval:#245c8f;--eval-soft:#dde8f3}
-@media (prefers-color-scheme:dark){:root{--bg:#0f1719;--panel:#172124;--fg:#e8eeee;--muted:#9aabad;--line:#2a393d;--soft:#1f2c30;--ink:#081c21;--accent:#e8925a;--accent-soft:#3b2a1f;--ok:#62c795;--ok-soft:#18342a;--warn:#e0c15a;--warn-soft:#383016;--bad:#ee8f80;--bad-soft:#3d221e;--eval:#84b4e6;--eval-soft:#1b2c3d;color-scheme:dark}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 Inter,system-ui,sans-serif}
-a{color:var(--accent)}
-.top{background:var(--ink);color:var(--ink-fg)}
-.top .in{max-width:1120px;margin:0 auto;padding:14px 16px;display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between}
-.brand{font:800 19px/1 Archivo,system-ui,sans-serif;letter-spacing:.01em;color:var(--ink-fg);text-decoration:none}
-.brand small{font:400 11px "IBM Plex Mono",monospace;color:var(--ink-muted);margin-left:8px;letter-spacing:.08em;text-transform:uppercase}
-nav{display:flex;gap:4px;flex-wrap:wrap}
-nav a{color:var(--ink-muted);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500;font-size:14px}
-nav a[aria-current="page"]{background:var(--accent);color:#fff}
-nav a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-main{max-width:1120px;margin:0 auto;padding:24px 16px 64px;display:flex;flex-direction:column;gap:20px}
-h1{font:700 28px/1.15 Archivo,system-ui,sans-serif;margin:0;text-wrap:balance}
-h2{font:700 18px/1.25 Archivo,system-ui,sans-serif;margin:0}
-.lead{color:var(--muted);margin:6px 0 0;max-width:68ch}
-.stamp{font:400 12px "IBM Plex Mono",monospace;color:var(--muted)}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.kpi b{display:block;font:700 24px/1.2 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums}
-.kpi span{color:var(--muted);font-size:13px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
-.panel.hl{border-color:var(--accent)}
-.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
-.filters label{display:flex;flex-direction:column;gap:4px;font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;flex:1 1 165px;min-width:0}
-select,input{font:15px Inter,system-ui,sans-serif;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
-.count{color:var(--muted);font-size:13px;margin:0}
-.list{display:flex;flex-direction:column;gap:10px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 16px;text-decoration:none;color:inherit}
-.card:hover{border-color:var(--accent)}
-.card h3{font:600 16px/1.3 Inter,system-ui,sans-serif;margin:0;text-wrap:balance}
-.meta{color:var(--muted);font-size:13px;margin:0}
-.inv{text-align:right;font:700 20px/1.1 Archivo,system-ui,sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
-.inv small{display:block;font:400 11px Inter,system-ui,sans-serif;color:var(--muted)}
-.tags{display:flex;flex-wrap:wrap;gap:6px;grid-column:1/-1}
-.tag{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--soft)}
-.tag.rubro{background:var(--accent-soft);color:var(--accent);font-weight:600}
+/* ---------- Colores: minerales del cobre (azurita, malaquita, cobre) sobre salar y noche de desierto ---------- */
+:root{
+  --bg:#f2f4f8;--panel:#fff;--panel2:#f7f9fc;--fg:#0d1830;--muted:#55607a;--line:#dce2ec;--soft:#e9eef5;
+  --ink:#0b1736;--ink2:#14244d;--ink-line:#22335f;--ink-fg:#eef2fb;--ink-muted:#9dabc9;
+  --pri:#2748d8;--pri-fg:#fff;--pri-soft:#e3e9fc;
+  --ok:#0b7f62;--ok-soft:#d9f1e9;--cu:#b3591c;--cu-soft:#f8e8da;
+  --warn:#8a6500;--warn-soft:#f6ebc8;--bad:#b3362b;--bad-soft:#f8dfdb;
+  --eval:var(--pri);--eval-soft:var(--pri-soft);
+  --sh1:0 1px 2px rgba(13,24,48,.06);--sh2:0 10px 30px -12px rgba(13,24,48,.25);
+  --r1:8px;--r2:14px;--r3:22px;
+  --disp:Geologica,"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;
+  --t1:140ms;--t2:260ms;--t3:600ms;--ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#080e1f;--panel:#101930;--panel2:#0c1428;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
+  --ink:#060b19;--ink2:#101930;--ink-line:#1c2848;
+  --pri:#93a9ff;--pri-fg:#07102a;--pri-soft:#1b2752;
+  --ok:#5fd0ae;--ok-soft:#10332b;--cu:#efa066;--cu-soft:#3a2516;
+  --warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
+  --sh1:none;--sh2:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}}
+:root[data-theme=dark]{
+  --bg:#080e1f;--panel:#101930;--panel2:#0c1428;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
+  --ink:#060b19;--ink2:#101930;--ink-line:#1c2848;
+  --pri:#93a9ff;--pri-fg:#07102a;--pri-soft:#1b2752;
+  --ok:#5fd0ae;--ok-soft:#10332b;--cu:#efa066;--cu-soft:#3a2516;
+  --warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
+  --sh1:none;--sh2:0 10px 30px -12px rgba(0,0,0,.7);color-scheme:dark}
+
+/* ---------- Base ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:120px}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--pri);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--disp);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-weight:650;font-size:clamp(24px,3.2vw,32px);line-height:1.12}
+h2{font-weight:600;font-size:18px;line-height:1.25}
+h3{font-weight:600;font-size:16px;line-height:1.3}
+p{margin:0}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:8px;top:-60px;background:var(--pri);color:var(--pri-fg);padding:10px 14px;border-radius:var(--r1);z-index:100;text-decoration:none}
+.skip:focus{top:8px}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.num{font-family:var(--disp);font-variant-numeric:tabular-nums}
+
+/* ---------- Estructura: barra lateral + contenido ---------- */
+.side{position:fixed;inset:0 auto 0 0;width:252px;background:var(--ink);color:var(--ink-fg);display:flex;flex-direction:column;padding:18px 12px 14px;gap:18px;overflow-y:auto;z-index:40;border-right:1px solid var(--ink-line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink-fg);text-decoration:none;font:650 17px/1.1 var(--disp);padding:4px 8px}
+.brand small{display:block;font:400 12px/1.2 var(--body);color:var(--ink-muted);margin-top:2px}
+.mark{width:34px;height:34px;flex:none}
+.mark .sweep{transform-origin:20px 20px;animation:sweep 6s linear infinite}
+.mark .blip{animation:blip 6s ease-out infinite}
+@keyframes sweep{to{transform:rotate(360deg)}}
+@keyframes blip{0%,12%{opacity:0}18%{opacity:1}60%,100%{opacity:0}}
+.side nav{display:flex;flex-direction:column;gap:14px}
+.grp{display:flex;flex-direction:column;gap:2px}
+.grp>span{font-size:12px;color:var(--ink-muted);padding:0 10px 4px}
+.side nav a,.side-foot a,.side-foot button{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--r1);color:var(--ink-muted);text-decoration:none;font-weight:500;font-size:14.5px;border:0;background:none;cursor:pointer;text-align:left;width:100%;transition:background var(--t1),color var(--t1)}
+.side nav a:hover,.side-foot a:hover,.side-foot button:hover{background:var(--ink2);color:var(--ink-fg)}
+.side nav a[aria-current=page]{background:var(--ink2);color:#fff;box-shadow:inset 3px 0 0 var(--nav-accent,#7f9bff)}
+.side nav a[aria-current=page] .ic{color:#9fb4ff}
+.side-foot{margin-top:auto;display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--ink-line);padding-top:10px}
+.stamp{font-size:12px;color:var(--ink-muted);padding:8px 10px 0;line-height:1.4}
+.wrap{margin-left:252px;min-height:100vh;display:flex;flex-direction:column}
+.bar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:12px;padding:10px 28px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color var(--t2)}
+.bar.scrolled{border-bottom-color:var(--line)}
+.bar .brand{display:none;color:var(--fg);padding:0}
+.iconbtn{display:none;width:44px;height:44px;border-radius:var(--r1);border:1px solid var(--line);background:var(--panel);align-items:center;justify-content:center;cursor:pointer;flex:none}
+.search{position:relative;flex:1;max-width:560px}
+.search .ic{position:absolute;left:12px;top:50%;translate:0 -50%;color:var(--muted);pointer-events:none}
+.search input[type=search]{width:100%;height:44px;padding:0 44px 0 40px;border:1px solid var(--line);border-radius:999px;background:var(--panel);box-shadow:var(--sh1)}
+.search kbd{position:absolute;right:12px;top:50%;translate:0 -50%;font:500 12px var(--body);color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 7px;background:var(--panel2)}
+.qres{position:absolute;left:0;right:0;top:50px;margin:0;padding:6px;list-style:none;background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);box-shadow:var(--sh2);max-height:min(60vh,420px);overflow:auto;z-index:50}
+.qres li{padding:9px 10px;border-radius:var(--r1);cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px}
+.qres li[aria-selected=true],.qres li:hover{background:var(--pri-soft)}
+.qres b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qres small{color:var(--muted);grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qres em{font-style:normal;color:var(--muted);font-size:13px;grid-row:1/3;grid-column:2;align-self:center}
+.qres .none{cursor:default;color:var(--muted);display:block}
+.mechip{margin-left:auto;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg);text-decoration:none;font-weight:500;font-size:14px;white-space:nowrap;max-width:240px;box-shadow:var(--sh1)}
+.mechip span{overflow:hidden;text-overflow:ellipsis}
+.mechip i{width:8px;height:8px;border-radius:50%;background:var(--line);flex:none}
+.mechip.on i{background:var(--ok)}
+main{width:100%;max-width:1120px;margin:0 auto;padding:20px 28px 96px;display:flex;flex-direction:column;gap:20px;outline:0}
+main:focus-visible{outline:0}
+.tabs,.scrim{display:none}
+
+/* ---------- Piezas comunes ---------- */
+.lead{color:var(--muted);margin-top:8px;max-width:68ch;font-size:16px}
+.note{color:var(--muted);font-size:13.5px;max-width:78ch}
+.desc{white-space:pre-line;max-width:76ch}
+.count{color:var(--muted);font-size:14px}
+.meta{color:var(--muted);font-size:13.5px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--sh1)}
+.panel.hl{border-color:color-mix(in srgb,var(--pri) 45%,var(--line));background:linear-gradient(180deg,color-mix(in srgb,var(--pri-soft) 55%,var(--panel)),var(--panel) 120px)}
+.panel>h2{display:flex;align-items:center;gap:10px}
+.sub{font-weight:600;margin-top:6px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:20px}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;text-decoration:none;align-self:flex-start;min-height:32px}
+.back .ic{rotate:180deg;width:16px;height:16px}
+
+/* cifras: una sola franja con divisiones, no una fila de tarjetas */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh1)}
+.kpi{padding:16px 18px;box-shadow:-1px 0 0 var(--line),0 -1px 0 var(--line)}
+.kpi b{display:block;font:600 26px/1.15 var(--disp);font-variant-numeric:tabular-nums;letter-spacing:-.02em;overflow-wrap:anywhere}
+.kpi span{color:var(--muted);font-size:13.5px;display:block;margin-top:2px}
+.panel .kpis{box-shadow:none;background:var(--panel2)}
+
+/* filtros */
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:end}
+.filters label{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:500;color:var(--muted);flex:1 1 170px;min-width:0}
+select,input[type=text],input[type=search],input[type=number],input:not([type]){height:44px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:var(--r1);padding:0 12px;width:100%;min-width:0;font-size:15px;transition:border-color var(--t1),box-shadow var(--t1)}
+select:hover,input:hover{border-color:color-mix(in srgb,var(--pri) 40%,var(--line))}
+select:focus,input:focus{outline:0;border-color:var(--pri);box-shadow:0 0 0 3px var(--pri-soft)}
+.filterbar{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;box-shadow:var(--sh1)}
+
+/* botones */
+.btn,.btn2{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 18px;border-radius:var(--r1);font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;align-self:flex-start;transition:transform var(--t1),background var(--t1),border-color var(--t1)}
+.btn{background:var(--pri);color:var(--pri-fg);border:1px solid var(--pri)}
+.btn:hover{background:color-mix(in srgb,var(--pri) 88%,#000)}
+.btn2{background:var(--panel);color:var(--fg);border:1px solid var(--line);font-weight:500}
+.btn2:hover{border-color:var(--pri);color:var(--pri)}
+.btn:active,.btn2:active{transform:scale(.98)}
+.more{align-self:center}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* etiquetas */
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;line-height:1.5;padding:2px 9px;border-radius:12px;background:var(--soft);color:var(--fg);max-width:100%}
+.tag.wrapok{white-space:normal}
+.tag.rubro{background:var(--cu-soft);color:var(--cu);font-weight:600}
 .tag.ok{background:var(--ok-soft);color:var(--ok);font-weight:600}
 .tag.eval{background:var(--eval-soft);color:var(--eval);font-weight:600}
 .tag.adm{background:var(--warn-soft);color:var(--warn);font-weight:600}
 .tag.bad{background:var(--bad-soft);color:var(--bad);font-weight:600}
-.why{grid-column:1/-1;font-size:13px;color:var(--muted);margin:0}
+
+/* tarjeta de proyecto */
+.list{display:flex;flex-direction:column;gap:10px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:16px 18px 14px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px;text-decoration:none;color:inherit;box-shadow:var(--sh1);transition:border-color var(--t1),box-shadow var(--t2),transform var(--t2) var(--ease)}
+.card::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:0 4px 4px 0;background:var(--rail,var(--line))}
+.card.c-ok{--rail:var(--ok)}.card.c-eval{--rail:var(--pri)}.card.c-adm{--rail:var(--warn)}.card.c-bad{--rail:var(--bad)}
+a.card:hover{border-color:color-mix(in srgb,var(--pri) 50%,var(--line));box-shadow:var(--sh2);transform:translateY(-1px)}
+.card .tags+h3{margin-top:8px}
+.card>.tags{grid-column:1/-1}
+.meta.sp{display:flex;flex-wrap:wrap;gap:2px 16px}
+.card .meta{margin-top:3px}
+.inv{text-align:right;font:600 22px/1.1 var(--disp);font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:-.02em}
+.inv small{display:block;font:400 12.5px var(--body);color:var(--muted);letter-spacing:0;margin-top:2px}
+.card .foot{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:13.5px;color:var(--muted)}
+.mini{display:flex;align-items:center;gap:10px;flex:1 1 260px;min-width:0;color:var(--fg)}
+.track{flex:1;height:8px;border-radius:99px;background:var(--soft);overflow:hidden;min-width:60px}
+.track i{display:block;height:100%;width:var(--w,0%);border-radius:99px;background:var(--pri);transform-origin:left;animation:grow var(--t3) var(--ease) both}
+.track.ok i{background:var(--ok)}
+@keyframes grow{from{transform:scaleX(0)}}
+.why{grid-column:1/-1;font-size:14px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px}
 .why b{color:var(--fg)}
-.more{align-self:center;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-.dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 16px;margin:0;font-size:14px}
-.dl dt{color:var(--muted)}
-.dl dd{margin:0}
-.desc{white-space:pre-line;max-width:75ch;margin:0}
-.opps{display:flex;flex-direction:column;gap:8px;margin:0;padding:0;list-style:none}
-.opps li{border-left:3px solid var(--accent);padding:2px 0 2px 12px}
-.opps b{display:block}
-.opps span{font-size:13px;color:var(--muted)}
-.bars{display:flex;flex-direction:column;gap:6px}
-.bar{display:grid;grid-template-columns:minmax(90px,200px) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13px}
-.bar i{display:block;height:10px;background:var(--accent);border-radius:2px;min-width:2px}
-.bar .v{font:500 12px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
-.note{color:var(--muted);font-size:13px;max-width:75ch;margin:0}
-.soon{border:1px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-size:14px}
-.soon b{color:var(--fg)}
-.back{font-size:14px}
-.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px 16px;border:0;padding:0;margin:0}
-.checks legend{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:0;margin-bottom:6px}
-.checks label{display:flex;gap:8px;align-items:center;font-size:14px}
-.checks input{width:auto}
-.btn{align-self:flex-start;background:var(--accent);color:#fff;border:0;border-radius:8px;padding:10px 18px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer}
-.cost{width:100%;border-collapse:collapse;font-size:14px}
-.cost th{font:500 11px "IBM Plex Mono",monospace;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;text-align:left;padding:4px 6px}
-.cost td{padding:6px 6px;vertical-align:middle;border-top:1px solid var(--line)}.cost td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.cost input{padding:6px 8px}.tw{overflow-x:auto}
-.btn2{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:500 14px Inter,system-ui,sans-serif;color:var(--fg);cursor:pointer;align-self:flex-start}
-@media print{.top,.back,.btn,.btn2,.filters{display:none}body{background:#fff}}
-.emp{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
-.emp li{border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:14px}
-.emp b{display:block}.emp span{color:var(--muted);font-size:13px;display:block}
-@media (max-width:560px){.card{grid-template-columns:minmax(0,1fr)}.inv{text-align:left}.dl{grid-template-columns:minmax(0,1fr)}.dl dt{margin-top:6px}}
-.favb{background:none;border:1px solid var(--line);border-radius:8px;padding:8px 14px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;color:inherit}
-.favb[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
-#mapa{height:70vh;min-height:420px;border:1px solid var(--line);border-radius:10px;margin-top:12px}
+.enter{animation:enter var(--t2) var(--ease) both;animation-delay:calc(var(--i,0)*28ms)}
+@keyframes enter{from{opacity:0;transform:translateY(8px)}}
+
+/* listas de definición, oportunidades, empresas */
+.dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;margin:0;font-size:14.5px}
+.dl dt{color:var(--muted)}.dl dd{margin:0}
+.opps{display:flex;flex-direction:column;gap:10px;margin:0;padding:0;list-style:none}
+.opps li{border-left:3px solid var(--cu);padding:2px 0 2px 14px}
+.opps li.no{border-left-color:var(--line)}
+.opps b{display:block}.opps span{font-size:13.5px;color:var(--muted)}
+.emp{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px;margin:0;padding:0;list-style:none}
+.emp li{border:1px solid var(--line);border-radius:var(--r1);padding:12px 14px;font-size:14.5px;background:var(--panel2);display:flex;flex-direction:column;gap:3px}
+.emp b{display:block}.emp span{color:var(--muted);font-size:13.5px;display:block}
+.soon{border:1px dashed var(--line);border-radius:var(--r2);padding:22px;color:var(--muted);background:var(--panel2);display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.soon b{color:var(--fg);font:600 16px var(--disp)}
+details>summary{font-weight:600;cursor:pointer;padding:6px 0;min-height:32px}
+.actrow{margin:3px 0;font-size:14.5px;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}
+.actrow a{font-size:12.5px}
+
+/* barras de mercado */
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar-r{display:grid;grid-template-columns:minmax(90px,38%) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.bar-r>span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-r .v{font:500 13px var(--disp);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* tablas */
+.tw{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th{font-size:13px;font-weight:500;color:var(--muted);text-align:left;padding:8px 10px;white-space:nowrap}
+.tbl td{padding:12px 10px;vertical-align:middle;border-top:1px solid var(--line)}
+.tbl td.n,.tbl th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl td small{color:var(--muted)}
+.tbl tbody tr{transition:background var(--t1)}
+.tbl.hov tbody tr:hover{background:var(--panel2)}
+.tbl a{font-weight:600;text-decoration:none;color:var(--fg)}
+.tbl a:hover{color:var(--pri)}
+.tw.boxed{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:4px 10px;box-shadow:var(--sh1)}
+.tbl a:hover{text-decoration:underline}
+.tbl .mini{min-width:130px}
+.cost input{height:40px}
+.ring{--p:0;width:64px;height:64px;flex:none;position:relative;display:grid;place-items:center;font:600 16px var(--disp);font-variant-numeric:tabular-nums}
+.ring svg{position:absolute;inset:0;rotate:-90deg}
+.ring circle{fill:none;stroke-width:6;stroke:var(--soft)}
+.ring circle+circle{stroke:var(--rc,var(--pri));stroke-linecap:round;stroke-dasharray:calc(var(--p)*1.634) 163.4;animation:ring var(--t3) var(--ease) both}
+@keyframes ring{from{stroke-dasharray:0 163.4}}
+.gauges{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:12px}
+.gauge{display:flex;gap:14px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:var(--r2);padding:14px}
+.gauge b{display:block;font:600 16px/1.25 var(--disp)}
+.gauge span{font-size:13.5px;color:var(--muted)}
+.gauge .cal{width:64px;height:64px;flex:none;border-radius:16px;background:var(--pri-soft);color:var(--pri);display:grid;place-items:center}
+.gauge .cal .ic{width:28px;height:28px}
+
+/* ---------- Flujograma 1: la ruta, del expediente al contrato ---------- */
+.hero{background:var(--ink);color:var(--ink-fg);border-radius:var(--r3);padding:28px 28px 24px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;background:
+  radial-gradient(600px 300px at 85% -10%,#2a48c8 0,transparent 70%),
+  repeating-radial-gradient(circle at 12% 130%,transparent 0 38px,rgba(255,255,255,.045) 38px 39px)}
+.hero h1{color:#fff;max-width:22ch}
+.hero .lead{color:var(--ink-muted)}
+.ruta{margin-top:14px}
+.ruta-map{position:relative;height:196px}
+.ruta-map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ruta-map path{fill:none;stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.ruta-map .base{stroke:#33457a;stroke-dasharray:1 7}
+.ruta-map .done{stroke:#8ea6ff;stroke-width:3;stroke-dasharray:100 100;stroke-dashoffset:calc(100 - var(--prog,0));transition:stroke-dashoffset 700ms var(--ease)}
+.st{position:absolute;left:var(--x);top:var(--y);translate:-50% -50%;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;padding:0;cursor:pointer;color:var(--ink-muted);width:150px;text-align:center;animation:pop 420ms var(--ease) both;animation-delay:calc(180ms + var(--i)*90ms)}
+.st.up{flex-direction:column-reverse}
+.st.up{translate:-50% calc(-100% + 23px)}
+.st.dn{translate:-50% -23px}
+@keyframes pop{from{opacity:0;scale:.8}}
+.st .dot{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--ink2);border:2px solid #33457a;color:#c9d4f3;font:600 17px var(--disp);transition:background var(--t2),border-color var(--t2),color var(--t2),scale var(--t2) var(--ease);flex:none}
+.st:hover .dot{border-color:#8ea6ff;scale:1.06}
+.st.past .dot{border-color:#8ea6ff;color:#fff}
+.st[aria-selected=true] .dot{background:#8ea6ff;border-color:#8ea6ff;color:#07102a;scale:1.12;box-shadow:0 0 0 6px rgba(142,166,255,.18)}
+.st .lb{display:flex;flex-direction:column;line-height:1.25}
+.st:focus-visible{outline:0}.st:focus-visible .dot{outline:2px solid #fff;outline-offset:3px}
+.search input:not(:placeholder-shown)~kbd{display:none}
+.st .lb b{font:600 14.5px var(--disp);color:var(--ink-fg)}
+.st .lb small{font-size:12.5px}
+.st[aria-selected=true] .lb b{color:#fff}
+.ruta-detail{margin-top:8px;background:var(--ink2);border:1px solid var(--ink-line);border-radius:var(--r2);padding:18px 20px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px 28px;align-items:center}
+.ruta-detail.swap>*{animation:enter var(--t2) var(--ease) both}
+.ruta-detail h2{color:#fff;font-size:20px}
+.ruta-detail p{color:var(--ink-muted);margin-top:6px;max-width:60ch}
+.ruta-detail .row{margin-top:14px}
+.ruta-detail .btn{background:#8ea6ff;border-color:#8ea6ff;color:#07102a}
+.ruta-detail .btn:hover{background:#a9bbff}
+.ruta-detail .btn2{background:transparent;border-color:#33457a;color:var(--ink-fg)}
+.ruta-detail .btn2:hover{border-color:#8ea6ff;color:#fff}
+.facts{display:flex;flex-wrap:wrap;gap:14px 28px}
+.fact b{display:block;white-space:nowrap;font:600 22px/1.1 var(--disp);color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.fact span{font-size:13px;color:var(--ink-muted)}
+
+/* ---------- Flujograma 2: las fases de la evaluación en el SEIA ---------- */
+.seia{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));position:relative;margin:4px 0 0;padding:0;list-style:none}
+.seia::before,.seia::after{content:"";position:absolute;left:10%;right:10%;top:21px;height:4px;border-radius:4px;background:var(--line)}
+.seia::after{right:auto;width:calc(80%*var(--prog,0));background:var(--pri);transition:width 700ms var(--ease);animation:growx 700ms var(--ease) both;transform-origin:left}
+@keyframes growx{from{transform:scaleX(0)}}
+.ph{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;background:none;border:0;padding:0 4px;cursor:pointer;text-align:center;width:100%;color:var(--muted)}
+.ph .dot{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--panel);border:2px solid var(--line);font:600 16px var(--disp);color:var(--muted);transition:all var(--t2) var(--ease)}
+.ph:hover .dot{border-color:var(--pri)}
+.ph.past .dot{background:var(--pri);border-color:var(--pri);color:var(--pri-fg)}
+.ph.now .dot{border-color:var(--pri);color:var(--pri);box-shadow:0 0 0 6px var(--pri-soft)}
+.ph.now .dot::after{content:"";position:absolute;width:46px;height:46px;border-radius:50%;border:2px solid var(--pri);animation:ping 2.4s ease-out infinite}
+@keyframes ping{from{opacity:.7;scale:1}to{opacity:0;scale:1.7}}
+.ph.end.past .dot,.ph.end.now .dot{background:var(--ok);border-color:var(--ok);color:#fff;box-shadow:0 0 0 6px var(--ok-soft)}
+.ph[aria-pressed=true] .dot{outline:2px solid var(--fg);outline-offset:3px}
+.ph .txt{display:flex;flex-direction:column;gap:2px}
+.ph b{font:600 14px/1.25 var(--disp);color:var(--fg)}
+.ph small{font-size:12.5px;line-height:1.3}
+.ph .cnt{font:600 20px/1 var(--disp);color:var(--fg);font-variant-numeric:tabular-nums}
+.phinfo{background:var(--panel2);border:1px solid var(--line);border-radius:var(--r2);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.phinfo.swap>*{animation:enter var(--t2) var(--ease) both}
+.phinfo b{font-family:var(--disp)}
+
+/* ficha */
+.fhead{display:flex;flex-direction:column;gap:12px}
+.secnav{position:sticky;top:64px;z-index:20;display:flex;gap:6px;overflow-x:auto;padding:8px 0;background:var(--bg);scrollbar-width:none;margin:-8px 0}
+.secnav::-webkit-scrollbar{display:none}
+.secnav a{flex:none;padding:7px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:all var(--t1)}
+.secnav a.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.sec{display:flex;flex-direction:column;gap:20px;scroll-margin-top:128px}
+
+/* favoritos y mapa */
+.favb{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg);font-weight:600;font-size:14.5px;cursor:pointer;align-self:flex-start;transition:all var(--t1)}
+.favb:hover{border-color:var(--cu);color:var(--cu)}
+.favb[aria-pressed=true]{background:var(--cu-soft);border-color:var(--cu);color:var(--cu)}
+#mapa{height:70vh;min-height:420px;border:1px solid var(--line);border-radius:var(--r2);position:relative;z-index:0;isolation:isolate;overflow:hidden}
+#mapa:not(.leaflet-container){padding:16px;color:var(--muted)}
+
+/* mi empresa: casillas como fichas */
+.checks{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.checks legend{font-size:13px;font-weight:500;color:var(--muted);padding:0;margin-bottom:8px}
+.checks label{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px 0 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-size:14.5px;cursor:pointer;transition:all var(--t1);user-select:none}
+.checks label:hover{border-color:var(--pri)}
+.checks input{appearance:none;width:18px;height:18px;border:1.5px solid var(--muted);border-radius:5px;margin:0;display:grid;place-items:center;flex:none;transition:all var(--t1)}
+.checks input:checked{background:var(--pri);border-color:var(--pri)}
+.checks input:checked::after{content:"";width:9px;height:5px;border:2px solid var(--pri-fg);border-top:0;border-right:0;rotate:-45deg;translate:0 -1px}
+.checks label:has(input:checked){background:var(--pri-soft);border-color:var(--pri);color:var(--fg);font-weight:500}
+.checks label:has(input:focus-visible){outline:2px solid var(--pri);outline-offset:2px}
+
+/* costeo: composición del precio */
+.stack{display:flex;height:14px;border-radius:99px;overflow:hidden;background:var(--soft)}
+.stack i{display:block;transition:flex-grow var(--t2) var(--ease);min-width:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+
+/* novedades: línea de tiempo */
+.day{display:flex;flex-direction:column;gap:10px;position:relative;padding-left:22px}
+.day::before{content:"";position:absolute;left:5px;top:8px;bottom:-20px;width:2px;background:var(--line)}
+.day:last-child::before{bottom:0}
+.day>h2{font-size:15px;position:relative}
+.day>h2::before{content:"";position:absolute;left:-22px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--pri);box-shadow:0 0 0 4px var(--bg)}
+
+/* carga */
+.sk{border-radius:var(--r2);background:linear-gradient(90deg,var(--soft) 25%,var(--panel) 50%,var(--soft) 75%);background-size:200% 100%;animation:sk 1.4s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+
+/* transición entre vistas */
+::view-transition-old(root){animation:120ms ease-out both vout}
+::view-transition-new(root){animation:260ms var(--ease) both vin}
+@keyframes vout{to{opacity:0}}
+@keyframes vin{from{opacity:0;transform:translateY(6px)}}
+
+/* ---------- Celulares y tabletas ---------- */
+@media (max-width:1020px){
+  .side{translate:-100% 0;transition:translate var(--t2) var(--ease);width:min(300px,86vw);box-shadow:var(--sh2)}
+  .side.open{translate:0 0}
+  .scrim{display:block;position:fixed;inset:0;background:rgba(5,10,25,.5);z-index:35;opacity:0;pointer-events:none;transition:opacity var(--t2)}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .wrap{margin-left:0}
+  .bar{padding:8px 16px}
+  .bar .brand{display:flex}.bar .brand span{display:none}
+  .iconbtn{display:inline-flex}
+  .search kbd{display:none}
+  .mechip span{display:none}.mechip{padding:0;width:44px;justify-content:center}
+  main{padding:14px 16px 110px}
+  .tabs{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--panel);border-top:1px solid var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom))}
+  .tabs a,.tabs button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:52px;border:0;background:none;color:var(--muted);text-decoration:none;font-size:11.5px;font-weight:500;border-radius:var(--r1);cursor:pointer}
+  .tabs a[aria-current=page]{color:var(--pri)}
+  .tabs a[aria-current=page] .ic{stroke-width:2.2}
+  .secnav{top:60px}
+}
+@media (max-width:820px){
+  .hero{padding:22px 18px 18px;border-radius:var(--r2)}
+  .ruta-map{height:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+  .st .lb{min-width:0}.st .lb b{font-size:13.5px;overflow-wrap:anywhere}
+  .ruta-map svg{display:none}
+  .st,.st.up,.st.dn{position:static;translate:none;flex-direction:row;width:auto;text-align:left;gap:10px;padding:8px;border-radius:var(--r2);border:1px solid var(--ink-line);min-height:60px}
+  .st[aria-selected=true]{background:var(--ink2);border-color:#8ea6ff}
+  .st .dot{width:36px;height:36px;font-size:15px}
+  .st[aria-selected=true] .dot{scale:1;box-shadow:none}
+  .st .lb small{display:none}
+  .ruta-detail{grid-template-columns:minmax(0,1fr);padding:16px}
+  .seia{grid-template-columns:minmax(0,1fr);gap:4px}
+  .seia::before,.seia::after{left:22px;right:auto;top:23px;bottom:23px;width:4px;height:auto}
+  .seia::after{bottom:auto;width:4px;height:calc((100% - 46px)*var(--prog,0));animation-name:growy;transform-origin:top}
+  @keyframes growy{from{transform:scaleY(0)}}
+  .ph{flex-direction:row;text-align:left;gap:12px;padding:6px 0;min-height:52px;align-items:center}
+  .ph .dot{flex:none}
+  .ph .txt{display:flex;flex-direction:column}
+  /* tablas que se vuelven tarjetas */
+  .tbl.resp thead{display:none}
+  .tbl.resp,.tbl.resp tbody,.tbl.resp tr,.tbl.resp td{display:block;width:100%}
+  .tbl.resp tr{background:var(--panel);border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;margin-bottom:10px}
+  .tbl.resp td{border:0;padding:4px 0;text-align:left!important;white-space:normal!important}
+  .tbl.resp td[data-l]{display:grid;grid-template-columns:42% minmax(0,1fr);gap:10px;align-items:center}
+  .tbl.resp td[data-l]::before{content:attr(data-l);color:var(--muted);font-size:13px}
+}
+@media (max-width:560px){
+  .card{grid-template-columns:minmax(0,1fr);padding:14px 14px 12px 18px}
+  .inv{text-align:left}
+  .dl{grid-template-columns:minmax(0,1fr);gap:2px}.dl dt{margin-top:8px;font-size:13px}
+  .panel{padding:16px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi b{font-size:22px}
+  .bar-r{grid-template-columns:minmax(0,1fr) auto;gap:2px 10px}
+  .bar-r .track{grid-column:1/-1;grid-row:2}
+  .btn,.btn2{align-self:stretch}
+  .filters label{flex:1 1 130px}
+  .row .btn,.row .btn2{flex:1 1 auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .mark .blip{opacity:1}
+  ::view-transition-old(root),::view-transition-new(root){animation:none}
+}
+@media print{
+  .side,.bar,.tabs,.back,.btn,.btn2,.filters,.secnav,.skip{display:none!important}
+  .wrap{margin:0}body{background:#fff}main{padding:0;max-width:none}.panel,.kpis{box-shadow:none;break-inside:avoid}
+}
 </style>
 </head>
 <body>
-<div class="top"><div class="in">
-  <a class="brand" href="#inicio">Radar de Proyectos<small>plataforma</small></a>
-  <nav aria-label="Secciones">
-    <a href="#inicio" data-nav="inicio">Proyectos</a>
-    <a href="#oportunidades" data-nav="oportunidades">Oportunidades por rubro</a>
-    <a href="#evaluacion" data-nav="evaluacion">En evaluación</a>
-    <a href="#construccion" data-nav="construccion">En construcción</a>
-    <a href="#mercado" data-nav="mercado">Mercado</a>
-    <a href="#empresas" data-nav="empresas">Empresas</a>
-    <a href="#mapa" data-nav="mapa">Mapa</a>
-    <a href="#favoritos" data-nav="favoritos">Favoritos</a>
-    <a href="#novedades" data-nav="novedades">Novedades</a>
-    <a href="#empresa" data-nav="empresa">Mi empresa</a>
-    <a href="sala.html">Sala de datos</a>
-  </nav>
-</div></div>
-<main id="app"><p class="lead">Cargando proyectos…</p></main>
+<a class="skip" href="#app">Saltar al contenido</a>
+<aside class="side" id="side" aria-label="Menú principal">
+  <a class="brand" href="#inicio">
+    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#14244d" stroke="#33457a"/><circle cx="20" cy="20" r="11.5" fill="none" stroke="#33457a"/><circle cx="20" cy="20" r="5" fill="none" stroke="#33457a"/><g class="sweep"><path d="M20 20 L20 2 A18 18 0 0 1 35.6 11 Z" fill="#8ea6ff" opacity=".28"/><path d="M20 20 L20 2" stroke="#8ea6ff" stroke-width="1.5"/></g><circle class="blip" cx="27" cy="12" r="2.2" fill="#f0a468"/></svg>
+    <span>Radar de Proyectos<small>Plataforma</small></span>
+  </a>
+  <nav aria-label="Secciones" id="nav"></nav>
+  <div class="side-foot">
+    <a href="sala.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a1 1 0 011-1h5l2 2h8a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/></svg>Sala de datos</a>
+    <button type="button" id="tema"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14A8 8 0 0110 4a8 8 0 1010 10z"/></svg><span>Cambiar a modo oscuro</span></button>
+    <p class="stamp" id="stamp"></p>
+  </div>
+</aside>
+<div class="scrim" id="scrim"></div>
+<div class="wrap">
+  <header class="bar" id="bar">
+    <button class="iconbtn" type="button" id="menu" aria-label="Abrir el menú" aria-controls="side" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <div class="search" role="search">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 18a7 7 0 100-14 7 7 0 000 14zM20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Buscar un proyecto o una empresa" aria-label="Buscar un proyecto o una empresa" role="combobox" aria-expanded="false" aria-controls="qres" aria-autocomplete="list" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+      <ul class="qres" id="qres" role="listbox" aria-label="Resultados" hidden></ul>
+    </div>
+    <a class="mechip" id="mechip" href="#empresa"><i></i><span>Configurar mi empresa</span></a>
+  </header>
+  <main id="app" tabindex="-1"><div class="sk" style="height:300px"></div><div class="sk" style="height:84px"></div><div class="sk" style="height:120px"></div><div class="sk" style="height:120px"></div><p class="count" role="status">Cargando proyectos…</p></main>
+</div>
+<nav class="tabs" id="tabs" aria-label="Accesos rápidos"></nav>
 <script>
 const SUPA="https://uyhdxjnqhkkazrokdjjc.supabase.co/rest/v1/";
 const KEY="sb_publishable_C7FEhSMaFO6yX9dXqgjKIA_cxGBjYwk";
@@ -161,23 +483,17 @@ const refCorta=r=>r.ref?"calibrado con el "+FUENTE:"supuesto sin validar";
 const peak=p=>+p.mo_construccion_max||+p.mo_construccion_prom||0;
 const nf=v=>Number(v).toLocaleString("es-CL");
 function porque(r,p){if(["personal","campamento"].includes(r.id)&&peak(p))return r.why+" (el estudio declara "+nf(peak(p))+" trabajadores en el peak de construcción"+(p.mo_operacion_max?" y "+nf(p.mo_operacion_max)+" en operación":"")+")";return r.why}
-function card(p,extra){const a=el("a","card");a.href="#p-"+p.id;const l=el("div");l.append(el("h3",null,p.nombre),el("p","meta",(p.titular||"")+" · "+(p.comuna||"")));
-  const inv=el("div","inv","US$ "+money(p.inversion_mmusd));inv.append(el("small",null,"millones"));
-  const t=el("div","tags");const pl=plazo(p);t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",regionCorta(p.region)),el("span","tag",p.tipo),el("span","tag","Presentado "+fdate(p.fecha_presentacion)));if(peak(p))t.append(el("span","tag",nf(peak(p))+" trabajadores en el peak"));{const av=avance(p);if(av&&(av.est==="eval"||av.est==="adm")){t.append(el("span","tag","Avance "+av.pct+"%"),el("span","tag","Término estimado: "+mesAno(av.fecha)));if(av.prob!=null)t.append(el("span","tag","Prob. de aprobación "+av.prob+"%"));if(/suspend/i.test(p.actividad||""))t.append(el("span","tag","Reloj detenido"))}}
-  a.append(l,inv,t);if(extra)a.append(extra);return a}
 function fillSel(sel,vals,first){sel.textContent="";sel.append(new Option(first,""));vals.forEach(v=>sel.append(new Option(v,v)))}
-function pager(list,rows,render){let n=0;const more=el("button","more","Ver más");more.type="button";const step=()=>{rows.slice(n,n+40).forEach(r=>list.append(render(r)));n+=40;more.hidden=n>=rows.length};more.onclick=step;step();return more}
 function header(t,lead){const h=el("header");h.append(el("h1",null,t));if(lead)h.append(el("p","lead",lead));return h}
-function kpi(v,l){const k=el("div","kpi");k.append(el("b",null,v),el("span",null,l));return k}
 const lastUpd=()=>{const m=P.reduce((a,p)=>p.actualizado_at>a?p.actualizado_at:a,"");return m?new Date(m).toLocaleString("es-CL",{dateStyle:"long",timeStyle:"short"}):""};
 
-function vInicio(app){
+function vProyectos(app){
   app.append(header("Proyectos en el SEIA","Todos los proyectos presentados al Sistema de Evaluación de Impacto Ambiental en los últimos 12 meses. Entra a cada uno para ver su ficha."));
-  app.append(el("p","stamp","Última lectura del SEIA: "+lastUpd()));
+  app.append(el("p","count","Última lectura del SEIA: "+lastUpd()));
   const k=el("section","kpis");const vig=P.filter(vigente);
   k.append(kpi(P.length,"proyectos presentados"),kpi(P.filter(p=>plazo(p).t==="Mediano plazo").length,"en evaluación"),kpi(P.filter(p=>plazo(p).t==="Corto plazo").length,"aprobados"),kpi(P.filter(esNorte).length,"en el norte"),kpi("US$ "+money(vig.reduce((s,p)=>s+(+p.inversion_mmusd||0),0)/1000)+" mil M","inversión vigente"));
   app.append(k);
-  const f=el("section","filters");f.innerHTML='<label for="fz">Zona<select id="fz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="fr">Región<select id="fr"></select></label><label for="fs">Sector<select id="fs"></select></label><label for="fe">Estado<select id="fe"></select></label><label for="fq">Buscar<input id="fq" type="search" placeholder="Proyecto o titular"></label>';
+  const f=el("section","filters filterbar");f.innerHTML='<label for="fz">Zona<select id="fz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="fr">Región<select id="fr"></select></label><label for="fs">Sector<select id="fs"></select></label><label for="fe">Estado<select id="fe"></select></label><label for="fq">Buscar<input id="fq" type="search" placeholder="Proyecto o titular"></label>';
   app.append(f);
   const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
   fillSel($("#fr"),[...new Set(P.map(p=>p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
@@ -216,11 +532,10 @@ function vOpps(app){
     if(rows.length)slot.append(pager(list,rows,p=>{const w=el("p","why");w.append(el("b",null,"Por qué calza: "),document.createTextNode(porque(r,p)+". Valor estimado para tu rubro: US$ "+money((+p.inversion_mmusd||0)*pct/100)+" millones."));return card(p,w)}))};
   sel.addEventListener("input",()=>{setPct();draw()});$("#oz").addEventListener("input",draw);$("#op").addEventListener("input",draw);draw();
 }
-function bars(title,entries,fmt){const s=el("section","panel");s.append(el("h2",null,title));const b=el("div","bars");const max=Math.max(...entries.map(e=>e[1]),1);entries.forEach(([k,v])=>{const r=el("div","bar");const i=el("i");i.style.width=(100*v/max)+"%";const w=el("div");w.append(i);r.append(el("span",null,k),w,el("span","v",fmt(v)));b.append(r)});s.append(b);return s}
 function group(rows,key,val){const m={};rows.forEach(p=>{const k=key(p);m[k]=(m[k]||0)+val(p)});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
 function vMercado(app){
   app.append(header("Mercado","Dónde está la inversión que viene. Solo proyectos vigentes: en admisión, en evaluación o aprobados."));
-  const f=el("section","filters");f.innerHTML='<label for="mz">Zona<select id="mz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label>';app.append(f);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="mz">Zona<select id="mz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label>';app.append(f);
   const out=el("div","grid2");app.append(out);
   const draw=()=>{const rows=P.filter(p=>vigente(p)&&(!$("#mz").value||esNorte(p)));const inv=p=>+p.inversion_mmusd||0;out.textContent="";
     out.append(bars("Inversión por región (US$ millones)",group(rows,p=>regionCorta(p.region),inv).slice(0,12),money),
@@ -234,17 +549,6 @@ function vMercado(app){
   $("#mz").addEventListener("input",draw);draw();
   {const cp=cochilcoPanel();if(cp)app.append(cp)}
   app.append(el("p","note","Montos declarados por cada titular en el SEIA. Corto plazo: proyecto aprobado. Mediano plazo: en admisión o en evaluación. Los trabajadores son los declarados en cada estudio y solo cuentan los proyectos cuyo estudio ya fue leído. El largo plazo (proyectos en estudio que aún no entran al SEIA) se sumará con datos de Cochilco."));
-}
-function vNovedades(app){
-  app.append(header("Novedades","Proyectos nuevos y cambios de estado detectados en cada revisión diaria del SEIA."));
-  const rows=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));const list=el("section","list");
-  if(!rows.length){app.append(el("div","soon","Todavía no hay novedades. La base se cargó el 21 de noviembre de 2026; desde la próxima revisión diaria aparecerán aquí los proyectos nuevos y los cambios de estado."));return}
-  const byId=Object.fromEntries(P.map(p=>[p.id,p]));const pf=perfil();let solo=false;
-  if(pf&&pf.rubros.length){const f=el("section","filters");f.innerHTML='<label for="nm">Mostrar<select id="nm"><option value="mias">Solo lo que calza con mi empresa</option><option value="">Todas las novedades</option></select></label>';app.append(f);solo=true;$("#nm").addEventListener("input",()=>{solo=$("#nm").value==="mias";pinta()})}
-  const pinta=()=>{list.textContent="";let n=0;
-  rows.forEach(c=>{if(solo&&byId[c.proyecto_id]&&!calzaPerfil(byId[c.proyecto_id],pf))return;n++;const p=byId[c.proyecto_id];if(!p)return;const w=el("p","why");const d=new Date(c.detectado_at).toLocaleDateString("es-CL");w.append(el("b",null,d+": "),document.createTextNode(c.tipo==="nuevo"?"proyecto nuevo en el SEIA.":c.tipo==="estado"?"cambió de estado: "+c.antes+" → "+c.despues+".":"cambió de actividad: "+c.antes+" → "+c.despues+"."));list.append(card(p,w))});
-  if(!n)list.append(el("div","soon","No hay novedades que calcen con los rubros y regiones de tu empresa. Cambia a \"Todas las novedades\" para ver el resto."))};
-  pinta();app.append(list);
 }
 const CIERRE=[["civil","Desmontaje y retiro de instalaciones"],["residuos","Retiro y disposición de residuos"],["tierra","Reperfilado y cierre de terrenos"],["ambiental","Monitoreo posterior al cierre"]];
 const ACT={
@@ -300,93 +604,6 @@ function avance(p){if(!p.fecha_presentacion)return null;const e=norm(p.estado);c
   const h=(ST.aprobacion||{})[tipo];if(h&&(est==="eval"||est==="adm")){const A=(h.aprobado||0)+(h.caducado||0)+(h.revocado||0)+(h.renuncia||0),R=h.rechazado||0,D=(h.desistido||0)+(h.abandonado||0),NC=h.no_calificado||0,NA=h.no_admitido||0;
     const niv=est==="adm"?0:!g?1:g.ice?3:g.icsara?2:1;const den=[A+R+D+NC+NA,A+R+D+NC,A+R+D,A+R][niv];if(den>0){a.prob=Math.round(100*A/den);a.probNiv=niv;a.probN=den}}
   return a}
-function avancePanel(p){const a=avance(p);if(!a)return null;const s=el("section","panel");s.append(el("h2",null,"Avance, fecha de término y probabilidad de aprobación"));
-  if(a.est==="aprobado"){s.append(el("p","desc","Ya tiene aprobación ambiental (resolución favorable). Lo que sigue es del dueño: permisos sectoriales, decisión de inversión y licitaciones de construcción."));return s}
-  if(a.est==="cerrado"){s.append(el("p","desc","Este proyecto salió de la evaluación ("+p.estado+"). No tiene fecha de aprobación; el dueño puede volver a presentarlo más adelante."));return s}
-  const e=a.est==="eval"&&p.etapa?p.etapa:null;if(e)a.paso=e.ice?4:e.icsara>0?3:2;
-  const pasos=["Admisión: el SEA revisa que el estudio esté completo","Primera revisión de los servicios públicos","Preguntas del SEA y respuestas del dueño (ICSARA y Adendas)","Informe final y votación"];const ol=el("ol");ol.style.cssText="margin:0 0 10px;padding-left:20px";pasos.forEach((t,i)=>{const li=el("li",null,t+(i+1<a.paso?" (ya pasó)":i+1===a.paso?(a.est==="adm"||e?" (está aquí)":" (probablemente está aquí)"):""));if(i+1===a.paso)li.style.fontWeight="600";else if(i+1<a.paso)li.style.color="var(--muted,#667)";ol.append(li)});s.append(ol);
-  if(e){const d1=e.ice?"El informe final se emitió el "+e.f_ice+". Falta la votación de la comisión.":e.icsara===0?"Los servicios públicos están haciendo su primera revisión. El SEA aún no envía preguntas al dueño.":e.adenda<e.icsara?"El SEA envió su ronda "+e.icsara+" de preguntas el "+e.f_icsara+". El dueño todavía no entrega su respuesta (Adenda).":"El dueño respondió la ronda "+e.icsara+" de preguntas el "+e.f_adenda+". Los servicios públicos están revisando esa respuesta.";
-    const pr=el("p","desc");pr.append(el("b",null,"Según el expediente: "),document.createTextNode(d1));s.append(pr);
-    const lim=a.tipo==="EIA"?[120,180]:[60,90];const dl=parseInt(p.dias_legales,10);const sus=/suspend/i.test(p.actividad||"");
-    s.append(el("p","desc",(isNaN(dl)?"":"Reloj legal: lleva "+dl+" de "+lim[0]+" días hábiles (ampliable a "+lim[1]+"). ")+(sus?"Hoy el reloj está detenido, a la espera del dueño.":"Hoy el reloj está corriendo.")+(e.ult?" Último documento: "+e.ult+" ("+e.ult_fecha+").":"")))}
-  const b=el("div","bar");b.style.gridTemplateColumns="minmax(0,1fr) auto";const w=el("div");const i=el("i");i.style.width=a.pct+"%";w.append(i);b.append(w,el("span","v",a.pct+"% de avance"));s.append(b);
-  s.append(el("p","desc",a.real?"El avance se calcula por los hitos que ya cumplió en su expediente: admisión, preguntas del SEA, respuestas del dueño e informe final.":"El avance se calcula por el tiempo transcurrido, porque aún no leemos su expediente."));
-  const que=(a.tipo==="EIA"?"Un EIA":"Una DIA"+(a.sec?" de "+a.sec.toLowerCase():""));
-  s.append(el("p","desc","Lleva "+nf(a.d)+" días desde que se presentó. "+que+" demora en promedio "+nf(a.T)+" días en total."));
-  {const pp=el("p","desc");pp.append(el("b",null,"Posible fecha de término de la evaluación: "+mesAno(a.fecha)+"."),document.createTextNode(" Rango razonable: entre "+mesAno(a.min<new Date()?new Date():a.min)+" y "+mesAno(a.max)+"."+(a.f>1?" Ya lleva más tiempo que el promedio, así que la fecha se calcula con lo que le falta por cumplir.":"")));s.append(pp)}
-  if(a.prob!=null){const h=ST.aprobacion,pp=el("p","desc");pp.append(el("b",null,"Probabilidad de aprobación: "+a.prob+"%."),document.createTextNode(" Es la proporción de "+(a.tipo==="EIA"?"los EIA":"las DIA")+" presentados entre "+h.desde+" y "+h.hasta+" que, habiendo llegado a esta misma etapa ("+["en admisión","admitido, antes de las preguntas del SEA","después de la primera ronda de preguntas","con informe final emitido"][a.probNiv]+"), terminaron aprobados. Sale de "+nf(a.probN)+" casos ya resueltos. Es una estadística del conjunto: no evalúa las debilidades ni la oposición que pueda tener este proyecto en particular."));s.append(pp)}
-  const cer=P.filter(x=>plazo(x).t==="Cerrado").length;const n=el("p","note",(e?"La etapa sale del expediente del SEIA (leído el "+fdate(String(p.etapa_at||"").slice(0,10))+"); la fecha es una estimación por promedios. ":"La etapa y la fecha son estimaciones por tiempo transcurrido, no el estado real del expediente. ")+"El plazo legal es de "+(a.tipo==="EIA"?"120 días hábiles, ampliable en 60":"60 días hábiles, ampliable en 30")+", pero el reloj se detiene cada vez que el dueño debe responder preguntas, por eso el tiempo real es mucho mayor. Promedios del SEA: DIA 399 días y EIA 1.124 días en 2025; por sector, DIA calificadas en 2026. De los proyectos que llegan a votación se aprueba cerca del 97%, pero "+Math.round(100*cer/Math.max(P.length,1))+"% de los ingresados en el último año terminó desistido o no admitido. ");
-  const l1=el("a",null,"Plazos de tramitación del SEA");l1.href="https://www.sea.gob.cl/documentacion/reportes/informacion-de-plazos-de-tramitacion-en-el-seia";l1.target="_blank";l1.rel="noopener";n.append(l1);s.append(n);return s}
-function vFicha(app,id){
-  const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"),Object.assign(el("a","back","Volver a la lista"),{href:"#inicio"}));return}
-  const b=el("a","back","← Volver a la lista");b.href="#inicio";app.append(b);
-  const pl=plazo(p);const h=header(p.nombre);const t=el("div","tags");t.style.marginTop="10px";t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag "+pl.c,pl.t),el("span","tag",p.tipo==="EIA"?"Estudio de Impacto Ambiental":"Declaración de Impacto Ambiental"));h.append(t);app.append(h);
-  const k=el("section","kpis");k.append(kpi("US$ "+money(p.inversion_mmusd)+" M","inversión declarada"),kpi(fdate(p.fecha_presentacion),"fecha de presentación"),kpi(p.dias_legales||"0","días legales transcurridos"),kpi(p.actividad||"","tramitación"));app.append(k);
-  {const av=avancePanel(p);if(av)app.append(av)}
-  app.append(favBtn(p));
-  {const op=oposicionPanel(p);if(op)app.append(op)}
-  {const hp=historialPanel(p.titular);if(hp)app.append(hp)}
-  if(p.estudio_leido_at&&(p.mo_construccion_max||p.mo_operacion_max||p.vida_util||p.superficie)){const e=el("section","panel");e.append(el("h2",null,"Cifras declaradas en el estudio"));const n=v=>v==null?"s/i":Number(v).toLocaleString("es-CL");
-    const kk=el("div","kpis");
-    if(p.mo_construccion_max!=null||p.mo_construccion_prom!=null)kk.append(kpi(n(p.mo_construccion_max),"trabajadores en el peak de construcción (promedio "+n(p.mo_construccion_prom)+")"));
-    if(p.mo_operacion_max!=null||p.mo_operacion_prom!=null)kk.append(kpi(n(p.mo_operacion_max),"trabajadores máximos en operación (promedio "+n(p.mo_operacion_prom)+")"));
-    if(p.mo_cierre_max!=null||p.mo_cierre_prom!=null)kk.append(kpi(n(p.mo_cierre_max),"trabajadores máximos en cierre (promedio "+n(p.mo_cierre_prom)+")"));
-    e.append(kk);const dl2=el("dl","dl");dl2.style.marginTop="12px";
-    if(p.vida_util)dl2.append(el("dt",null,"Vida útil"),el("dd",null,p.vida_util));
-    if(p.superficie)dl2.append(el("dt",null,"Superficie"),el("dd",null,p.superficie));
-    e.append(dl2,el("p","note","Datos tal como los declaró el titular en el EIA o DIA presentado al SEIA."));app.append(e)}
-  const g=el("div","grid2");
-  const a=el("section","panel");a.append(el("h2",null,"Quién está detrás"));const dl=el("dl","dl");
-  [["Titular (dueño)",p.titular],["Consultora ambiental",p.consultora||"Sin información en la ficha"],["Región",regionCorta(p.region)],["Comunas",p.comuna],["Tipología",(p.tipologia||"")+" "+(p.tipologia_desc||"")],["Razón de ingreso",p.razon_ingreso]].forEach(([x,y])=>{dl.append(el("dt",null,x),el("dd",null,y||""))});
-  a.append(dl);const ls=el("a",null,"Ver expediente completo en el SEIA");ls.href="https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id;ls.target="_blank";ls.rel="noopener";a.append(ls);
-
-  const pf=perfil();const ops=opps(p);
-  const me=el("section","panel hl");me.append(el("h2",null,pf&&pf.nombre?"Para "+pf.nombre:"Para tu empresa"));
-  if(!pf||!pf.rubros.length){me.append(el("p","note","Indica el rubro y el tamaño de tu empresa para ver aquí qué oportunidades tendría en este proyecto y cuánto podría generar."));const a2=el("a","btn","Configurar mi empresa");a2.href="#empresa";a2.style.textDecoration="none";me.append(a2)}
-  else{const ul=el("ul","opps");let tot=0;pf.rubros.forEach(id=>{const r=RUBROS.find(x=>x.id===id);if(!r)return;const li=el("li");const ok=vigente(p)&&ops.some(x=>x.id===id);
-      if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
-      else li.append(el("b",null,r.n+": no calza"),el("span",null,vigente(p)?"No detectamos espacio para este rubro en este proyecto.":"El proyecto está cerrado ("+p.estado+")."));ul.append(li)});
-    me.append(ul);if(tot>0)me.append(kpi("US$ "+money(tot)+" M",pf.ventas?"lo que podría generar para tu empresa (por año, con tope por tamaño)":"valor estimado de tus rubros en este proyecto"));
-    if(vigente(p)&&pf.rubros.some(id=>ops.some(x=>x.id===id))){const cb=el("a","btn","Costear este proyecto");cb.href="#c-"+p.id;cb.style.textDecoration="none";me.append(cb)}
-    const ed=el("a",null,"Cambiar rubro o tamaño");ed.href="#empresa";me.append(ed)}
-  app.append(me);
-  const o=el("section","panel");o.append(el("h2",null,"Todas las oportunidades por rubro"));
-  if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
-  else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
-  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."));ul.append(li)});o.append(ul)}
-  o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
-  g.append(o,a);app.append(g);
-  {const ar=actRealPanel(p);if(ar)app.append(ar);const ap=actPanel(p);if(ap)app.append(ap)}
-  if(p.cronologia||(p.insumos&&Object.keys(p.insumos).length)){const x=el("section","panel");x.append(el("h2",null,"Insumos y plazos según el estudio"));
-    const TN={transporte:"Transporte y viajes",agua:"Agua",combustible:"Combustible",energia:"Energía"};
-    if(p.cronologia){const c=p.cronologia.length>650?p.cronologia.slice(0,650).replace(/\s\S*$/,"")+"…":p.cronologia;x.append(el("p",null,"Plazos y fases"),el("p","desc",c));x.children[x.children.length-2].style.cssText="font-weight:600;margin:0"}
-    Object.keys(TN).forEach(k=>{const v=(p.insumos||{})[k];if(!v||!v.length)return;const h=el("p",null,TN[k]);h.style.cssText="font-weight:600;margin:0";x.append(h);const ul=el("ul","opps");v.forEach(o=>{const li=el("li");li.append(el("span",null,o.t+" (pág. "+o.p+")"));ul.append(li)});x.append(ul)});
-    x.append(el("p","note","Son extractos textuales del estudio presentado al SEIA, elegidos automáticamente por palabras clave. Pueden faltar datos o venir frases incompletas: revisa el documento antes de usar una cifra."));
-    if(p.pdf_resumen&&p.pdf_resumen!=="-"){const a=el("a",null,"Abrir el capítulo del estudio (PDF)");a.href="https://seia.sea.gob.cl"+p.pdf_resumen;a.target="_blank";a.rel="noopener";x.append(a)}
-    app.append(x)}
-  {const ns=N.filter(x=>x.proyecto_id===p.id);if(ns.length){const s2=el("section","panel");s2.append(el("h2",null,"Plazos y noticias del proyecto"));ns.forEach(x=>{const pp=el("p","meta");pp.append(document.createTextNode(fdate(x.fecha)+": "+x.nota+" "));const a=el("a",null,"Fuente: "+x.fuente);a.href=x.fuente_url;a.target="_blank";a.rel="noopener";pp.append(a);s2.append(pp)});app.append(s2)}}
-  {const c=el("section","panel");c.append(el("h2",null,"Quién construye y cómo llegar a ellos"));
-    const conf=PE.filter(x=>x.proyecto_id===p.id);
-    if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);const a3=el("a",null,"Ver fuente");a3.href=x.fuente_url;a3.target="_blank";a3.rel="noopener";li.append(a3);ul.append(li)});c.append(ul)}
-    else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
-    const sec=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.tipo!=="proveedor"&&e.sectores.includes(sec));
-    const h1=el("p",null,"1. Al dueño del proyecto: "+(p.titular||""));h1.style.cssText="font-weight:600;margin:0";c.append(h1,el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
-    if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
-    const h2b=el("p",null,"2. A las empresas que suelen construir este tipo de proyecto");h2b.style.cssText="font-weight:600;margin:0";c.append(h2b);
-    if(cons.length){c.append(el("p","note","No significa que tengan este contrato: son empresas que construyen proyectos de este sector en Chile. Envía la presentación de tu empresa por su canal de proveedores."));const ul=el("ul","emp");cons.forEach(e=>ul.append(empLi(e)));c.append(ul)}
-    else c.append(el("p","note","Aún no tenemos empresas verificadas para este sector."));
-    c.append(el("p","note","Solo mostramos canales corporativos públicos (portales de proveedores, formularios y correos genéricos). No guardamos datos de personas."));app.append(c);
-    if(p.titular){const dd=ddPanel(p.titular,[tkey(p.titular)]);const otros=P.filter(x=>x.titular&&ekey(x.titular)===ekey(p.titular)).length;const gg=grupoDe(p.titular);const a=el("a","btn",otros>1?"Ver los "+otros+" proyectos de "+(gg?gg.grupo:"esta empresa"):"Ver la página de esta empresa");a.href="#t-"+encodeURIComponent(ekey(p.titular));dd.append(a);app.append(dd)}
-    {const ops=opps(p);const pf=perfil();const mios=pf?pf.rubros||[]:[];const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id)&&E.some(e=>(e.rubros||[]).includes(r.id))).sort((a,b)=>mios.includes(b.id)-mios.includes(a.id));
-     if(rs.length){const k=el("section","panel");k.append(el("h2",null,"Quién podría competir o subcontratar en este proyecto"),el("p","note","Empresas que ya prestan estos servicios a grandes faenas en Chile, según prensa del sector. No significa que tengan un contrato en este proyecto. Si son de tu mismo rubro son tu posible competencia; si son más grandes que tú, también pueden ser a quien ofrecerle un subcontrato."));
-      rs.forEach(r=>{const h=el("p",null,r.n+(mios.includes(r.id)?" (tu rubro)":""));h.style.cssText="font-weight:600;margin:0";k.append(h);const ul=el("ul","emp");E.filter(e=>(e.rubros||[]).includes(r.id)).forEach(e=>ul.append(empLi(e)));k.append(ul)});
-      k.append(el("p","note","La lista parte con pocas empresas por rubro y crece a medida que confirmamos más con una fuente pública."));app.append(k)}}}
-  const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
-  if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}app.append(d);
-  if(p.obras&&p.obras.length){const s=el("section","panel");s.append(el("h2",null,"Partes, obras y acciones que incluye"));const ul=el("ul");ul.style.margin="0";ul.style.paddingLeft="18px";p.obras.forEach(x=>ul.append(el("li",null,x)));s.append(ul);app.append(s)}
-  const cs=C.filter(c=>c.proyecto_id===p.id&&!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));
-  if(cs.length){const s=el("section","panel");s.append(el("h2",null,"Historial de cambios"));cs.forEach(c=>s.append(el("p","meta",new Date(c.detectado_at).toLocaleDateString("es-CL")+": "+(c.tipo==="nuevo"?"ingresó al SEIA":c.antes+" → "+c.despues))));app.append(s)}
-}
 const tkey=s=>norm(s).replace(/[.,]/g,"").replace(/\s+/g," ").trim();
 const DD=[
  ["Situación tributaria (SII)","Si tiene inicio de actividades, su giro y si registra observaciones tributarias. Se consulta con el RUT de la empresa.","https://www.chileatiende.gob.cl/fichas/3130-situacion-tributaria-de-terceros"],
@@ -396,7 +613,7 @@ const DD=[
  ["Conducta laboral (Dirección del Trabajo)","La Dirección del Trabajo publica las empresas condenadas por prácticas antisindicales. Úsalo sobre todo para revisar constructoras y contratistas.","https://www.dt.gob.cl"]];
 function ddPanel(t,keys){const s=el("section","panel");s.append(el("h2",null,"Revisar a la empresa antes de ofertar"),el("p","note","Antes de comprometer equipos o dar crédito, revisa a "+t+" en estas fuentes oficiales y públicas. Cada consulta se hace en el sitio del organismo con el nombre o el RUT de la empresa. Esta página no guarda ni muestra esos resultados."));
   const ul=el("ul","emp");DD.forEach(([n,q,u])=>{const li=el("li");li.append(el("b",null,n),el("span",null,q));const a=el("a",null,"Abrir la consulta");a.href=u;a.target="_blank";a.rel="noopener";const sp=el("span");sp.append(a);li.append(sp);ul.append(li)});s.append(ul);
-  const rev=SR.filter(r=>(keys||[]).includes(r.titular_key));if(rev.length){const fs=SA.filter(x=>keys.includes(x.titular_key));const f=rev.map(r=>r.revisado_at).sort()[0];
+  const rev=SR.filter(r=>(keys||[]).includes(r.titular_key));if(rev.length){const fs=SA.filter(x=>keys.includes(x.titular_key));const f=String(rev.map(r=>r.revisado_at).sort()[0]).slice(0,10);
     const h=el("p",null,"Sanciones ambientales: ya lo revisamos por ti");h.style.cssText="font-weight:600;margin:14px 0 0";s.append(h);
     if(!fs.length)s.append(el("p","note","El "+fdate(f)+" buscamos a esta empresa en el registro de la Superintendencia del Medio Ambiente y no encontramos procesos sancionatorios a su nombre. Si opera con otra razón social, puede tenerlos bajo ese nombre."));
     else{s.append(el("p","note","El "+fdate(f)+" encontramos "+fs.length+(fs.length===1?" proceso sancionatorio":" procesos sancionatorios")+" a su nombre, o a un nombre muy parecido, en la Superintendencia del Medio Ambiente. Un proceso no siempre termina en multa: mira el estado de cada uno y confirma que sea la misma empresa."));
@@ -407,29 +624,11 @@ const grupoDe=t=>{const n=tkey(t);return G.find(g=>g.re.test(n))||null};
 const ekey=t=>{const g=grupoDe(t);return g?"g:"+tkey(g.grupo):tkey(t)};
 function titulares(){const m={};P.forEach(p=>{if(!p.titular)return;const g=grupoDe(p.titular);const k=ekey(p.titular);const t=m[k]=m[k]||{k,nombre:g?g.grupo:p.titular,g,ps:[],soc:[]};t.ps.push(p);if(!t.soc.some(x=>tkey(x)===tkey(p.titular)))t.soc.push(p.titular)});
   return Object.values(m).map(t=>{const v=t.ps.filter(vigente);t.nv=v.length;t.inv=v.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);t.regs=[...new Set(v.map(p=>regionCorta(p.region)))];t.peak=v.reduce((a,p)=>a+(peak(p)||0),0);return t}).sort((a,b)=>b.inv-a.inv||b.ps.length-a.ps.length)}
-function vEvaluacion(app){
-  app.append(header("Proyectos en evaluación","Cuánto lleva avanzado cada estudio, cuándo podría terminar su evaluación y qué probabilidad tiene de ser aprobado."));
-  const f=el("section","filters");f.innerHTML='<label for="vt">Tipo<select id="vt"><option value="">EIA y DIA</option><option value="EIA" selected>Solo EIA</option><option value="DIA">Solo DIA</option></select></label><label for="vr">Región<select id="vr"></select></label><label for="vo">Ordenar por<select id="vo"><option value="inv">Mayor inversión</option><option value="pct">Más avanzado</option><option value="fin">Termina antes</option><option value="prob">Mayor probabilidad</option></select></label><label for="vq">Buscar<input id="vq" type="search" placeholder="Proyecto o titular"></label>';app.append(f);
-  const base=P.map(p=>({p,a:avance(p)})).filter(x=>x.a&&(x.a.est==="eval"||x.a.est==="adm"));
-  fillSel($("#vr"),[...new Set(base.map(x=>x.p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
-  const cnt=el("p","count"),tw=el("div","tw");app.append(cnt,tw);
-  const draw=()=>{const t=$("#vt").value,r=$("#vr").value,o=$("#vo").value,q=norm($("#vq").value.trim());
-    const rows=base.filter(x=>(!t||x.a.tipo===t)&&(!r||x.p.region===r)&&(!q||norm(x.p.nombre+" "+x.p.titular).includes(q)));
-    rows.sort((x,y)=>o==="pct"?y.a.pct-x.a.pct:o==="fin"?x.a.fecha-y.a.fecha:o==="prob"?(y.a.prob||0)-(x.a.prob||0):(+y.p.inversion_mmusd||0)-(+x.p.inversion_mmusd||0));
-    tw.textContent="";cnt.textContent=rows.length?rows.length+" proyectos en evaluación, US$ "+money(rows.reduce((s,x)=>s+(+x.p.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";if(!rows.length)return;
-    const tb=el("table","cost");const hr=el("tr");["Proyecto","US$ millones","Avance","Etapa","Posible término","Prob. de aprobación"].forEach(h=>hr.append(el("th",null,h)));const th=el("thead");th.append(hr);tb.append(th);const bd=el("tbody");tb.append(bd);
-    rows.forEach(({p,a})=>{const tr=el("tr");const c1=el("td");const l=el("a",null,p.nombre);l.href="#p-"+p.id;c1.append(l,el("br"),el("small",null,(p.titular||"")+" · "+regionCorta(p.region)+" · "+a.tipo));
-      const e=p.etapa;const et=a.est==="adm"?"En admisión":!a.real?"En evaluación (expediente sin leer)":e.ice?"Informe final emitido":!e.icsara?"Primera revisión":e.adenda>=e.icsara?"Respondió la ronda "+e.icsara+" de preguntas":"Debe responder la ronda "+e.icsara+" de preguntas";
-      tr.append(c1,el("td",null,money(p.inversion_mmusd)),el("td",null,a.pct+"%"),el("td",null,et+(/suspend/i.test(p.actividad||"")?" (reloj detenido)":"")),el("td",null,mesAno(a.fecha)),el("td",null,a.prob!=null?a.prob+"%":"Sin dato"));bd.append(tr)});tw.append(tb)};
-  ["vt","vr","vo","vq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
-  app.append(csvBtn("proyectos_en_evaluacion",()=>base.map(({p,a})=>({Proyecto:p.nombre,Titular:p.titular,Tipo:a.tipo,Region:regionCorta(p.region),Comuna:p.comuna,"Inversion MMUSD":p.inversion_mmusd,"Avance %":a.pct,"Termino estimado":mesAno(a.fecha),"Prob. aprobacion %":a.prob,"Observaciones ciudadanas":p.oposicion?p.oposicion.obs:"",Expediente:"https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id}))));
-  const h=ST.aprobacion;app.append(el("p","note","El avance sale de los hitos del expediente de cada proyecto en el SEIA (admisión, rondas de preguntas, respuestas, informe final). La fecha de término es una estimación con los promedios del SEA (DIA 399 días, EIA 1.124 días en 2025) y puede moverse si el dueño pide más plazo para responder. "+(h?"La probabilidad es histórica: qué parte de los proyectos presentados entre "+h.desde+" y "+h.hasta+" que llegaron a la misma etapa terminó aprobada, según el buscador del SEIA (consultado el "+fdate(h.consultado)+"). No evalúa cada proyecto en particular.":"")));
-}
 const OBRA={"en construcción":"ok","por iniciar":"adm","en operación":"eval","detenido":"bad","sin confirmar":""};
 function vConstruccion(app){
   app.append(header("Proyectos en construcción","Proyectos grandes con aprobación ambiental desde 2023. Mostramos primero los que tienen construcción confirmada por una fuente pública, con las empresas que los construyen y cómo contactarlas."));
   const conf=CO.filter(c=>c.estado_obra!=="sin confirmar");const k=el("section","kpis");k.append(kpi(CO.length,"proyectos aprobados grandes"),kpi(CO.filter(c=>c.estado_obra==="en construcción").length,"con construcción confirmada"),kpi(new Set(CE.map(x=>x.empresa_id)).size,"empresas constructoras identificadas"),kpi("US$ "+money(conf.reduce((s,c)=>s+(+c.inversion_mmusd||0),0)/1000)+" mil M","inversión con estado confirmado"));app.append(k);
-  const f=el("section","filters");f.innerHTML='<label for="ce">Estado de la obra<select id="ce"><option value="conf">Con estado confirmado</option><option value="">Todos</option><option>en construcción</option><option>por iniciar</option><option>en operación</option><option>detenido</option><option>sin confirmar</option></select></label><label for="ct">Tipo<select id="ct"><option value="">EIA y DIA</option><option>EIA</option><option>DIA</option></select></label><label for="cr">Región<select id="cr"></select></label><label for="cq">Buscar<input id="cq" type="search" placeholder="Proyecto, dueño o constructora"></label>';app.append(f);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="ce">Estado de la obra<select id="ce"><option value="conf">Con estado confirmado</option><option value="">Todos</option><option>en construcción</option><option>por iniciar</option><option>en operación</option><option>detenido</option><option>sin confirmar</option></select></label><label for="ct">Tipo<select id="ct"><option value="">EIA y DIA</option><option>EIA</option><option>DIA</option></select></label><label for="cr">Región<select id="cr"></select></label><label for="cq">Buscar<input id="cq" type="search" placeholder="Proyecto, dueño o constructora"></label>';app.append(f);
   fillSel($("#cr"),[...new Set(CO.map(c=>c.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
   const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
   const emps=c=>CE.filter(x=>x.proyecto_id===c.id).map(x=>({x,e:E.find(e=>e.id===x.empresa_id)})).filter(v=>v.e);
@@ -479,7 +678,7 @@ function cochilcoPanel(){const c=ST.cochilco;if(!c)return null;const s=el("secti
   const n=el("p","note","Publicado en "+c.publicado+". Solo proyectos de US$ "+c.umbral+" millones o más. El informe no trae la lista proyecto por proyecto: viene en un anexo en Excel que no pudimos leer. ");const a=el("a",null,"Informe de Cochilco");a.href=c.url;a.target="_blank";a.rel="noopener";n.append(a);s.append(n);return s}
 let _leaf=null;const leaflet=()=>_leaf||(_leaf=new Promise((ok,no)=>{const l=el("link");l.rel="stylesheet";l.href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css";document.head.append(l);const sc=el("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js";sc.onload=()=>ok(window.L);sc.onerror=()=>{_leaf=null;no(new Error("mapa"))};document.head.append(sc)}));
 function vMapa(app){app.append(header("Mapa de proyectos","Dónde está cada proyecto, según el punto que su dueño declaró en el SEIA. El tamaño del círculo crece con la inversión."));
-  const f=el("section","filters");f.innerHTML='<label for="mq">Mostrar<select id="mq"><option value="eval">En evaluación</option><option value="obra">Aprobados grandes y sus obras</option><option value="todo">Todos</option></select></label><label for="mi">Inversión mínima<select id="mi"><option value="0">Cualquiera</option><option value="50">US$ 50 millones</option><option value="200">US$ 200 millones</option><option value="1000">US$ 1.000 millones</option></select></label>';app.append(f);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="mq">Mostrar<select id="mq"><option value="eval">En evaluación</option><option value="obra">Aprobados grandes y sus obras</option><option value="todo">Todos</option></select></label><label for="mi">Inversión mínima<select id="mi"><option value="0">Cualquiera</option><option value="50">US$ 50 millones</option><option value="200">US$ 200 millones</option><option value="1000">US$ 1.000 millones</option></select></label>';app.append(f);
   const cnt=el("p","count"),box=el("div");box.id="mapa";app.append(cnt,box);
   const pts=()=>{const q=$("#mq").value,mi=+$("#mi").value;const a=q==="obra"?[]:P.filter(p=>p.lat&&vigente(p)&&plazo(p).t!=="Corto plazo").map(p=>({lat:+p.lat,lon:+p.lon,n:p.nombre,t:p.titular,inv:+p.inversion_mmusd||0,h:"#p-"+p.id,e:p.estado,c:"#2563eb"}));
     const b=q==="eval"?[]:CO.filter(c=>c.lat).map(c=>({lat:+c.lat,lon:+c.lon,n:c.nombre,t:c.titular,inv:+c.inversion_mmusd||0,h:"#construccion",e:c.estado_obra==="sin confirmar"?"Aprobado, obra sin confirmar":"Obra "+c.estado_obra,c:c.estado_obra==="en construcción"?"#16a34a":c.estado_obra==="sin confirmar"?"#6b7280":"#d97706"}));return a.concat(b).filter(x=>x.inv>=mi)};
@@ -490,7 +689,7 @@ function vMapa(app){app.append(header("Mapa de proyectos","Dónde está cada pro
   app.append(el("p","note","Azul: en evaluación. Verde: obra en construcción. Naranjo: obra por iniciar, detenida o ya en operación. Gris: aprobado sin confirmación de obra. El punto es uno solo por proyecto, aunque la obra se extienda por muchos kilómetros. Solo aparecen los proyectos cuya ubicación ya leímos del SEIA."))}
 function vEmpresas(app){
   app.append(header("Empresas","Los dueños de los proyectos (mandantes): cuántos proyectos tienen vigentes, cuánto invierten y dónde. Sirve para decidir a qué empresas conviene acercarse primero."));
-  const f=el("section","filters");f.innerHTML='<label for="eq">Buscar empresa<input id="eq" type="search" placeholder="Nombre de la empresa"></label><label for="es">Mostrar<select id="es"><option value="v">Con proyectos vigentes</option><option value="">Todas</option></select></label>';app.append(f);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="eq">Buscar empresa<input id="eq" type="search" placeholder="Nombre de la empresa"></label><label for="es">Mostrar<select id="es"><option value="v">Con proyectos vigentes</option><option value="">Todas</option></select></label>';app.append(f);
   const cnt=el("p","meta");const slot=el("div");app.append(cnt,slot);const all=titulares();
   const draw=()=>{const q=norm($("#eq").value),sv=$("#es").value;const rows=all.filter(t=>(!sv||t.nv>0)&&(!q||norm(t.nombre+" "+t.soc.join(" ")).includes(q)));slot.textContent="";const list=el("section","list");slot.append(list);
     cnt.textContent=rows.length?rows.length+" empresas, ordenadas por inversión vigente":"No encontramos empresas con ese nombre.";
@@ -500,7 +699,7 @@ function vEmpresas(app){
   $("#eq").addEventListener("input",draw);$("#es").addEventListener("input",draw);draw();
   app.append(el("p","note","Las filiales se muestran unidas en un grupo solo cuando pudimos confirmar que pertenecen al mismo dueño. El resto aparece por separado. Los montos son los declarados en el SEIA."));
 }
-function vTitular(app,k){const t=titulares().find(x=>x.k===k);const b=el("a","back","← Volver a Empresas");b.href="#empresas";app.append(b);
+function vTitular(app,k){const t=titulares().find(x=>x.k===k);const b=el("a","back","Volver a Empresas");b.href="#empresas";app.append(b);
   if(!t){app.append(header("Empresa no encontrada"));return}
   app.append(header(t.nombre,"Dueño de "+t.ps.length+(t.ps.length===1?" proyecto presentado":" proyectos presentados")+" al SEIA en el último año. "+t.nv+(t.nv===1?" sigue vigente":" siguen vigentes")+", por US$ "+money(t.inv)+" millones."));
   if(t.g){const gs=el("section","panel");gs.append(el("h2",null,"Sociedades de este grupo"),el("p","desc",t.soc.join(" · ")));const nt=el("p","note",(t.g.nota||"")+" ");if(t.g.fuente_url){const a=el("a",null,"Fuente");a.href=t.g.fuente_url;a.target="_blank";a.rel="noopener";nt.append(a)}gs.append(nt);app.append(gs)}
@@ -537,13 +736,13 @@ const PLANT={transporte:["Conductores","Camiones o equipos (arriendo o cuota)","
 const plantilla=id=>PLANT[["carga","sobredim","peligrosas","combustible","residuos","aridos"].includes(id)?"transporte":id==="personal"?"personal":id==="campamento"?"campamento":"general"];
 function vCosteo(app,id){
   const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado"));return}
-  const b=el("a","back","← Volver a la ficha");b.href="#p-"+p.id;app.append(b);
+  const b=el("a","back","Volver a la ficha");b.href="#p-"+p.id;app.append(b);
   app.append(header("Costeo: "+p.nombre,"Calcula cuánto te costaría prestar el servicio y a qué precio ofertar. Tú pones tus costos reales; la página hace las sumas y compara con el tamaño estimado del negocio. Se guarda solo en este navegador."));
   const pf=perfil();const ops=opps(p);const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id));if(!rs.length){app.append(el("div","soon","Este proyecto no tiene oportunidades detectadas para costear."));return}
   const K="radar_costeo_"+p.id;let all={};try{all=JSON.parse(localStorage.getItem(K)||"{}")}catch(e){}
   const top=el("section","panel");top.innerHTML='<div class="filters"><label for="cr">Rubro a costear<select id="cr"></select></label><label for="cd">Valor del dólar en pesos<input id="cd" type="number" min="1" step="1" inputmode="numeric" placeholder="Ej: el dólar observado de hoy"></label><label for="cg">Gastos generales (%)<input id="cg" type="number" min="0" max="100" step="0.5"></label><label for="cu">Utilidad (%)<input id="cu" type="number" min="0" max="100" step="0.5"></label></div>';app.append(top);
   const sel=$("#cr");rs.forEach(r=>sel.append(new Option(r.n,r.id)));const mine=pf&&rs.find(r=>pf.rubros.includes(r.id));if(mine)sel.value=mine.id;
-  const pn=el("section","panel");pn.append(el("h2",null,"Tus costos directos"));const tw=el("div","tw");const tb=el("table","cost");tw.append(tb);pn.append(tw);
+  const pn=el("section","panel");pn.append(el("h2",null,"Tus costos directos"));const tw=el("div","tw");const tb=el("table","tbl cost");tw.append(tb);pn.append(tw);
   const add=el("button","btn2","Agregar otro costo");add.type="button";pn.append(add);app.append(pn);
   const res=el("section","panel hl");app.append(res);
   const pr=el("button","btn2","Imprimir o guardar como PDF");pr.type="button";pr.onclick=()=>window.print();app.append(pr);
@@ -552,7 +751,7 @@ function vCosteo(app,id){
   const save=()=>{st.dolar=$("#cd").value;st.gg=$("#cg").value;st.ut=$("#cu").value;all[sel.value]=st;all._dolar=st.dolar;try{localStorage.setItem(K,JSON.stringify(all))}catch(e){}};
   const calc=()=>{save();const dir=st.filas.reduce((a,f)=>a+(+f.q||0)*(+f.u||0)*(+f.m||0),0);const gg=dir*(+st.gg||0)/100;const ut=(dir+gg)*(+st.ut||0)/100;const precio=dir+gg+ut;const r=RUBROS.find(x=>x.id===sel.value);const x=estim(p,r,pf);const usd=+st.dolar>0?precio/+st.dolar/1e6:null;
     tb.querySelectorAll("tr[data-i]").forEach(tr=>{const f=st.filas[+tr.dataset.i];tr.querySelector(".n").textContent=clp((+f.q||0)*(+f.u||0)*(+f.m||0))});
-    res.textContent="";res.append(el("h2",null,"Resultado"));const k=el("div","kpis");k.append(kpi(clp(dir),"costo directo"),kpi(clp(gg),"gastos generales"),kpi(clp(ut),"utilidad"),kpi(clp(precio),"precio de oferta (sin IVA)"));res.append(k);
+    res.textContent="";res.append(el("h2",null,"Resultado"));const k=el("div","kpis");k.append(kpi(clp(dir),"costo directo"),kpi(clp(gg),"gastos generales"),kpi(clp(ut),"utilidad"),kpi(clp(precio),"precio de oferta (sin IVA)"));res.append(k);if(dir)res.append(priceStack(dir,gg,ut));
     if(!dir){res.append(el("p","note","Completa cantidad, costo mensual por unidad y meses en cada fila. El subtotal de cada fila es cantidad por costo mensual por meses."));return}
     if(usd==null){res.append(el("p","note","Escribe el valor del dólar para comparar tu precio con el tamaño estimado del negocio en este proyecto."));return}
     const pct=x.paquete>0?usd/x.paquete*100:0;res.append(el("p",null,"Tu oferta equivale a US$ "+money(usd)+" millones. El paquete estimado de "+r.n.toLowerCase()+" en este proyecto es de US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+"), es decir, tu oferta cubriría cerca del "+(pct<1?pct.toFixed(1).replace(".",","):Math.round(pct))+"% de ese paquete."));
@@ -564,12 +763,285 @@ function vCosteo(app,id){
       tr.append(el("td","n",""));const td=el("td");const x=el("button","btn2","Quitar");x.type="button";x.setAttribute("aria-label","Quitar fila "+(i+1));x.onclick=()=>{st.filas.splice(i,1);draw()};td.append(x);tr.append(td);tb.append(tr)});calc()};
   add.onclick=()=>{st.filas.push({c:"",q:"",u:"",m:""});draw()};sel.addEventListener("input",load);["cd","cg","cu"].forEach(i=>$("#"+i).addEventListener("input",calc));load();
 }
-function route(){const h=(location.hash||"#inicio").slice(1);const app=$("#app");app.textContent="";window.scrollTo(0,0);
-  const nav=h.startsWith("p-")||h.startsWith("c-")?"inicio":h.startsWith("t-")?"empresas":h;document.querySelectorAll("nav a").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
-  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h==="oportunidades")vOpps(app);else if(h==="mercado")vMercado(app);else if(h==="evaluacion")vEvaluacion(app);else if(h==="mapa")vMapa(app);else if(h==="favoritos")vFavoritos(app);else if(h==="construccion")vConstruccion(app);else if(h==="novedades")vNovedades(app);else if(h==="empresa")vEmpresa(app);else if(h==="empresas")vEmpresas(app);else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else vInicio(app)}
 async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
-(async()=>{try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}try{const [co,ce,st]=await Promise.all([get("radar_construccion?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_construccion_empresas?select=*"),get("radar_estadistica?select=*")]);CO=co;CE=ce;st.forEach(x=>ST[x.clave]=x.valor)}catch(e){CO=[];CE=[];ST={}}try{TH=await get("radar_titular_historial?select=*")}catch(e){TH=[]}window.addEventListener("hashchange",route);route()}
- catch(e){const app=$("#app");app.textContent="";app.append(header("No se pudieron cargar los proyectos","Revisa tu conexión y vuelve a cargar la página. Detalle: "+e.message))}})();
+
+/* ================= Interfaz ================= */
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+let ANIM=false; // solo se anima al entrar a una vista, no en cada tecla de un filtro
+const IC={home:"M3 11l9-7 9 7M5 10v10h14V10",list:"M4 6h16M4 12h16M4 18h10",bell:"M6 9a6 6 0 1112 0c0 5 2 6 2 6H4s2-1 2-6M10 19a2 2 0 004 0",chart:"M4 20V10M10 20V4M16 20v-7M22 20H2",flow:"M4 5h5v5H4zM15 14h5v5h-5zM9 7.5h3.5a3 3 0 013 3V14",build:"M3 21h18M6 21V8l6-4 6 4v13M10 21v-5h4v5",office:"M4 21V5a1 1 0 011-1h8a1 1 0 011 1v16M14 9h5a1 1 0 011 1v11M8 8h2M8 12h2M8 16h2",target:"M12 21a9 9 0 100-18 9 9 0 000 18zM12 16a4 4 0 100-8 4 4 0 000 8z",case:"M4 8h16v11H4zM9 8V5h6v3M4 13h16",more:"M5 12h.01M12 12h.01M19 12h.01",arrow:"M5 12h14M13 6l6 6-6 6",check:"M5 12.5l4.5 4.5L19 7.5",cal:"M5 6h14v14H5zM5 10h14M9 3v4M15 3v4",map:"M9 4l-6 2v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14",star:"M12 4l2.5 5 5.5.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.5-.8z",calc:"M6 3h12v18H6zM9 7h6M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01"};
+function icon(n){const NS="http://www.w3.org/2000/svg";const s=document.createElementNS(NS,"svg");s.setAttribute("class","ic");s.setAttribute("viewBox","0 0 24 24");s.setAttribute("aria-hidden","true");const p=document.createElementNS(NS,"path");p.setAttribute("d",IC[n]);s.append(p);return s}
+const ext=(t,href)=>{const a=el("a",null,t);a.href=href;a.target="_blank";a.rel="noopener";return a};
+const btnA=(t,href,cls)=>{const a=el("a",cls||"btn",t);a.href=href;return a};
+const corto=(s,n)=>s.length>n?s.slice(0,n-1).replace(/\s\S*$/,"")+"…":s;
+function countUp(node,txt){const m=txt.match(/\d[\d.]*(?:,\d+)?/);if(RM||!m)return;const raw=m[0],dec=(raw.split(",")[1]||"").length,end=parseFloat(raw.replace(/\./g,"").replace(",","."));if(!isFinite(end)||!end)return;
+  const pre=txt.slice(0,m.index),post=txt.slice(m.index+raw.length),t0=performance.now();
+  const step=t=>{const k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);node.textContent=k<1?pre+(end*e).toLocaleString("es-CL",{minimumFractionDigits:dec,maximumFractionDigits:dec})+post:txt;if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
+function kpi(v,l){const k=el("div","kpi");const b=el("b",null,v);k.append(b,el("span",null,l));if(ANIM&&/^(US\$ |\$ )?\d[\d.,]*( mil M| M|%)?$/.test(String(v)))countUp(b,String(v));return k}
+function track(pct,cls){const t=el("div","track"+(cls?" "+cls:""));const i=el("i");i.style.setProperty("--w",Math.max(0,Math.min(100,pct))+"%");t.append(i);return t}
+function ring(pct,color){const r=el("div","ring");r.style.setProperty("--p",pct);if(color)r.style.setProperty("--rc",color);r.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26"/><circle cx="32" cy="32" r="26"/></svg>';r.append(el("span",null,pct+"%"));return r}
+function gauge(lead,title,sub){const g=el("div","gauge");const d=el("div");d.append(el("b",null,title),el("span",null,sub));g.append(lead,d);return g}
+
+/* Tarjeta de proyecto */
+function card(p,extra){const pl=plazo(p);const a=el("a","card c-"+pl.c);a.href="#p-"+p.id;
+  const l=el("div");const t=el("div","tags");t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag",p.tipo));
+  const m=el("p","meta sp");if(p.titular)m.append(el("span",null,p.titular));m.append(el("span",null,regionCorta(p.region)+(p.comuna?", "+p.comuna:"")));l.append(t,el("h3",null,p.nombre),m);
+  const inv=el("div","inv","US$ "+money(p.inversion_mmusd));inv.append(el("small",null,"millones"));
+  const f=el("div","foot");const av=avance(p);
+  if(av&&(av.est==="eval"||av.est==="adm")){const mi=el("div","mini");mi.append(track(av.pct),el("span","num",av.pct+"% de avance"));f.append(mi,el("span",null,"Término estimado: "+mesAno(av.fecha)));if(av.prob!=null)f.append(el("span",null,"Prob. de aprobación "+av.prob+"%"));if(/suspend/i.test(p.actividad||""))f.append(el("span","tag adm","Reloj detenido"))}
+  f.append(el("span",null,"Presentado "+fdate(p.fecha_presentacion)));if(peak(p))f.append(el("span",null,nf(peak(p))+" trabajadores en el peak"));
+  a.append(l,inv,f);if(extra)a.append(extra);return a}
+function pager(list,rows,render){let n=0;const more=el("button","btn2 more","Ver más");more.type="button";
+  const step=anim=>{rows.slice(n,n+40).forEach((r,i)=>{const c=render(r);if(anim&&i<12){c.classList.add("enter");c.style.setProperty("--i",i)}list.append(c)});n+=40;more.hidden=n>=rows.length;if(!more.hidden)more.textContent="Ver más ("+(rows.length-n)+" restantes)"};
+  more.onclick=()=>step(true);step(ANIM);return more}
+function bars(title,entries,fmt){const s=el("section","panel");s.append(el("h2",null,title));const b=el("div","bars");const max=Math.max(...entries.map(e=>e[1]),1);
+  entries.forEach(([k,v])=>{const r=el("div","bar-r");const lab=el("span",null,k);lab.title=k;r.append(lab,track(100*v/max),el("span","v",fmt(v)));b.append(r)});s.append(b);return s}
+function priceStack(dir,gg,ut){const w=el("div");w.style.cssText="display:flex;flex-direction:column;gap:8px";const st=el("div","stack");st.setAttribute("role","img");const tot=dir+gg+ut||1;const lg=el("div","legend");
+  [["Costo directo",dir,"var(--pri)"],["Gastos generales",gg,"var(--cu)"],["Utilidad",ut,"var(--ok)"]].forEach(([n,v,c])=>{const i=el("i");i.style.cssText="flex-grow:"+v+";flex-basis:0;background:"+c;st.append(i);const s=el("span");const d=el("i");d.style.background=c;s.append(d,document.createTextNode(n+": "+Math.round(100*v/tot)+"%"));lg.append(s)});
+  st.setAttribute("aria-label","Composición del precio de oferta");w.append(st,lg);return w}
+
+/* ---------- Flujograma de las fases del SEIA ---------- */
+const FASES=[
+ {t:"Admisión",d:"El SEA revisa que el estudio venga completo. Si le falta algo esencial no lo admite, y el dueño tiene que presentarlo de nuevo.",p:"todavía es temprano. Sirve para conocer el proyecto y a su dueño."},
+ {t:"Primera revisión",d:"Los servicios públicos (salud, aguas, vialidad, municipios y otros) leen el estudio y mandan sus observaciones al SEA.",p:"buen momento para leer el estudio y ver qué servicios va a necesitar la obra."},
+ {t:"Preguntas y respuestas",d:"El SEA junta las observaciones en un documento de preguntas (ICSARA) y el dueño responde con una Adenda. Puede haber más de una ronda, y el reloj legal se detiene mientras el dueño prepara cada respuesta.",p:"es la etapa más larga. Aprovéchala para inscribirte en los registros de proveedores del dueño."},
+ {t:"Informe final y votación",d:"El SEA emite el informe final (ICE) y la comisión de evaluación vota si aprueba o rechaza el proyecto.",p:"la gran mayoría de los proyectos que llegan hasta aquí se aprueba. Ten lista la presentación de tu empresa."},
+ {t:"Aprobación ambiental",d:"Con la resolución favorable (RCA) el dueño puede pedir los permisos sectoriales, decidir la inversión y licitar la construcción.",p:"aquí empiezan las licitaciones y los contratos."}];
+function faseDe(p,a){if(a.est==="aprobado")return 4;if(a.est==="adm")return 0;const e=p.etapa;return e?(e.ice?3:e.icsara>0?2:1):a.paso-1}
+function seiaTrack(o){const w=el("div");w.style.cssText="display:flex;flex-direction:column;gap:14px";const ol=el("ol","seia");ol.setAttribute("aria-label","Fases de la evaluación ambiental");const info=el("div","phinfo");info.setAttribute("aria-live","polite");
+  let sel=o.sel!==undefined?o.sel:o.now;
+  const paint=sw=>{btns.forEach((b,i)=>b.setAttribute("aria-pressed",String(sel===i)));info.textContent="";
+    if(sel==null)info.append(el("b",null,"Elige una fase"),el("span",null,"Toca una fase para ver solo los proyectos que están ahí y qué pasa en ella."));
+    else{const f=FASES[sel];info.append(el("b",null,(sel+1)+". "+f.t),el("span",null,f.d));const tip=el("span","meta");tip.append(el("b",null,"Como proveedor: "),document.createTextNode(f.p));info.append(tip)}
+    if(sw&&!RM){info.classList.remove("swap");void info.offsetWidth;info.classList.add("swap")}};
+  const btns=FASES.map((f,i)=>{const li=el("li");const b=el("button","ph"+(o.now!=null&&i<o.now?" past":"")+(o.now===i?" now":"")+(i===4?" end":""));b.type="button";
+    const d=el("span","dot",i===4?"":String(i+1));if(i===4)d.append(icon("check"));const t=el("span","txt");t.append(el("b",null,f.t));
+    if(o.counts)t.append(el("small",null,o.counts[i]+(o.counts[i]===1?" proyecto":" proyectos")));else if(o.now===i)t.append(el("small",null,o.label||"Está aquí"));else if(o.now!=null&&i<o.now)t.append(el("small",null,"Ya pasó"));
+    b.append(d,t);b.onclick=()=>{sel=o.toggle&&sel===i?null:i;if(o.onPick)o.onPick(sel);paint(true)};li.append(b);ol.append(li);return b});
+  ol.style.setProperty("--prog",o.now!=null?o.now/4:0);paint(false);w.append(ol,info);w.setCounts=c=>btns.forEach((b,i)=>{b.querySelector("small").textContent=c[i]+(c[i]===1?" proyecto":" proyectos")});return w}
+
+function avancePanel(p){const a=avance(p);if(!a)return null;const s=el("section","panel");s.append(el("h2",null,"Avance, fecha de término y probabilidad de aprobación"));
+  if(a.est==="cerrado"){s.append(el("p","desc","Este proyecto salió de la evaluación ("+p.estado+"). No tiene fecha de aprobación; el dueño puede volver a presentarlo más adelante."));return s}
+  const e=a.est==="eval"&&p.etapa?p.etapa:null;if(e)a.paso=e.ice?4:e.icsara>0?3:2;
+  s.append(seiaTrack({now:faseDe(p,a),label:a.est==="aprobado"?"Aprobado":a.est==="adm"||e?"Está aquí":"Probablemente está aquí"}));
+  if(a.est==="aprobado"){s.append(el("p","desc","Ya tiene aprobación ambiental (resolución favorable). Lo que sigue es del dueño: permisos sectoriales, decisión de inversión y licitaciones de construcción."));return s}
+  const g=el("div","gauges");g.append(gauge(ring(a.pct),"Avance del trámite",a.real?"Por los hitos ya cumplidos en su expediente":"Estimado por el tiempo transcurrido"));
+  {const c=el("div","cal");c.append(icon("cal"));g.append(gauge(c,"Posible término: "+mesAno(a.fecha),"Rango razonable: entre "+mesAno(a.min<new Date()?new Date():a.min)+" y "+mesAno(a.max)))}
+  if(a.prob!=null)g.append(gauge(ring(a.prob,"var(--ok)"),"Probabilidad de aprobación","Histórica. No evalúa este proyecto en particular"));s.append(g);
+  if(e){const d1=e.ice?"El informe final se emitió el "+e.f_ice+". Falta la votación de la comisión.":e.icsara===0?"Los servicios públicos están haciendo su primera revisión. El SEA aún no envía preguntas al dueño.":e.adenda<e.icsara?"El SEA envió su ronda "+e.icsara+" de preguntas el "+e.f_icsara+". El dueño todavía no entrega su respuesta (Adenda).":"El dueño respondió la ronda "+e.icsara+" de preguntas el "+e.f_adenda+". Los servicios públicos están revisando esa respuesta.";
+    const pr=el("p","desc");pr.append(el("b",null,"Según el expediente: "),document.createTextNode(d1));s.append(pr);
+    const lim=a.tipo==="EIA"?[120,180]:[60,90];const dl=parseInt(p.dias_legales,10);const sus=/suspend/i.test(p.actividad||"");
+    s.append(el("p","desc",(isNaN(dl)?"":"Reloj legal: lleva "+dl+" de "+lim[0]+" días hábiles (ampliable a "+lim[1]+"). ")+(sus?"Hoy el reloj está detenido, a la espera del dueño.":"Hoy el reloj está corriendo.")+(e.ult?" Último documento: "+e.ult+" ("+e.ult_fecha+").":"")))}
+  const det=el("details");det.append(el("summary",null,"Cómo calculamos estas cifras"));const dd=el("div");dd.style.cssText="display:flex;flex-direction:column;gap:10px;padding-top:6px";det.append(dd);
+  dd.append(el("p","desc",a.real?"El avance se calcula por los hitos que ya cumplió en su expediente: admisión, preguntas del SEA, respuestas del dueño e informe final.":"El avance se calcula por el tiempo transcurrido, porque aún no leemos su expediente."));
+  const que=(a.tipo==="EIA"?"Un EIA":"Una DIA"+(a.sec?" de "+a.sec.toLowerCase():""));
+  dd.append(el("p","desc","Lleva "+nf(a.d)+" días desde que se presentó. "+que+" demora en promedio "+nf(a.T)+" días en total."+(a.f>1?" Ya lleva más tiempo que el promedio, así que la fecha se calcula con lo que le falta por cumplir.":"")));
+  if(a.prob!=null){const h=ST.aprobacion;dd.append(el("p","desc","La probabilidad de aprobación ("+a.prob+"%) es la proporción de "+(a.tipo==="EIA"?"los EIA":"las DIA")+" presentados entre "+h.desde+" y "+h.hasta+" que, habiendo llegado a esta misma etapa ("+["en admisión","admitido, antes de las preguntas del SEA","después de la primera ronda de preguntas","con informe final emitido"][a.probNiv]+"), terminaron aprobados. Sale de "+nf(a.probN)+" casos ya resueltos. Es una estadística del conjunto: no evalúa las debilidades ni la oposición que pueda tener este proyecto en particular."))}
+  const cer=P.filter(x=>plazo(x).t==="Cerrado").length;const n=el("p","note",(e?"La etapa sale del expediente del SEIA (leído el "+fdate(String(p.etapa_at||"").slice(0,10))+"); la fecha es una estimación por promedios. ":"La etapa y la fecha son estimaciones por tiempo transcurrido, no el estado real del expediente. ")+"El plazo legal es de "+(a.tipo==="EIA"?"120 días hábiles, ampliable en 60":"60 días hábiles, ampliable en 30")+", pero el reloj se detiene cada vez que el dueño debe responder preguntas, por eso el tiempo real es mucho mayor. Promedios del SEA: DIA 399 días y EIA 1.124 días en 2025; por sector, DIA calificadas en 2026. De los proyectos que llegan a votación se aprueba cerca del 97%, pero "+Math.round(100*cer/Math.max(P.length,1))+"% de los ingresados en el último año terminó desistido o no admitido. ");
+  n.append(ext("Plazos de tramitación del SEA","https://www.sea.gob.cl/documentacion/reportes/informacion-de-plazos-de-tramitacion-en-el-seia"));dd.append(n);s.append(det);return s}
+
+/* ---------- Flujograma de la ruta: del expediente al contrato ---------- */
+function ruta(){const pf=perfil();const vig=P.filter(vigente);const ev=P.filter(p=>plazo(p).t==="Mediano plazo");const novs=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL)).length;
+  const mios=pf&&pf.rubros.length?vig.filter(p=>calzaPerfil(p,pf)):null;const top=mios&&mios[0];const tit=titulares().length;
+  const S=[
+   {t:"Monitor",s:nf(P.length)+" proyectos",h:"Todo lo que entra al SEIA, cada día",d:"Leemos a diario el Sistema de Evaluación de Impacto Ambiental y guardamos cada proyecto nuevo y cada cambio de estado. Aquí partes: mira qué se está presentando, dónde y por cuánto.",f:[[nf(P.length),"proyectos en los últimos 12 meses"],["US$ "+money(vig.reduce((s,p)=>s+(+p.inversion_mmusd||0),0)/1000)+" mil M","inversión vigente"],[nf(novs),"novedades detectadas"]],a:[["Ver los proyectos","#proyectos"],["Ver las novedades","#novedades"]]},
+   {t:"Evaluación",s:ev.length+" en trámite",h:"¿Se va a aprobar? ¿Cuándo?",d:"Cada estudio pasa por admisión, revisión, preguntas y votación. Te mostramos cuánto lleva avanzado, la fecha posible de término y la probabilidad histórica de aprobación.",f:[[nf(ev.length),"proyectos en evaluación"],[nf(P.filter(p=>plazo(p).t==="Corto plazo").length),"aprobados en el último año"]],a:[["Ver el avance de cada estudio","#evaluacion"]]},
+   {t:"Quién construye",s:CO.filter(c=>c.estado_obra==="en construcción").length+" obras confirmadas",h:"Las obras que ya partieron y sus constructoras",d:"El SEIA no dice quién construye. Lo buscamos en comunicados de las empresas y en prensa del sector, siempre con la fuente, y dejamos el canal comercial de cada constructora.",f:[[nf(CO.length),"proyectos grandes aprobados desde 2023"],[nf(CO.filter(c=>c.estado_obra!=="sin confirmar").length),"con estado de obra confirmado"],[nf(new Set(CE.map(x=>x.empresa_id)).size),"constructoras identificadas"]],a:[["Ver proyectos en construcción","#construccion"]]},
+   {t:"Subcontratistas",s:nf(E.length)+" empresas del rubro",h:"A quién acercarse y a quién revisar antes",d:"Agrupamos los proyectos por dueño, revisamos sus sanciones ambientales y listamos las empresas que suelen construir o subcontratar en cada rubro. Solo canales corporativos públicos, nunca datos de personas.",f:[[nf(tit),"dueños de proyectos"],[nf(E.length),"constructoras, proveedores y registros"],[nf(SA.length),"procesos sancionatorios encontrados"]],a:[["Ver las empresas","#empresas"]]},
+   {t:"Oportunidades",s:mios?mios.length+" para tu empresa":RUBROS.length+" rubros",h:"Dónde calza tu rubro y cuánto vale",d:"Cruzamos cada proyecto con el rubro de tu empresa: transporte, campamento, movimiento de tierra, montaje y más. El valor es un orden de magnitud para priorizar, no una cotización.",f:mios?[[nf(mios.length),"proyectos vigentes donde calza tu empresa"],[nf(mios.filter(p=>plazo(p).t==="Corto plazo").length),"de ellos ya aprobados"]]:[[RUBROS.length,"rubros de proveedores"],[nf(vig.length),"proyectos vigentes"]],a:mios?[["Ver mis oportunidades","#empresa"],["Explorar por rubro","#oportunidades"]]:[["Explorar por rubro","#oportunidades"],["Configurar mi empresa","#empresa"]]},
+   {t:"Costeo",s:"Tu precio de oferta",h:"Cuánto te cuesta y a qué precio ofertar",d:"Desde cada ficha puedes costear el servicio con tus costos reales, tus gastos generales y tu utilidad, y comparar tu oferta con el tamaño estimado del negocio. Se guarda solo en tu navegador.",f:[],a:top?[["Costear "+corto(top.nombre,38),"#c-"+top.id],["Elegir otro proyecto","#empresa"]]:[["Elegir un proyecto para costear","#oportunidades"]]}];
+  const X=[8.3,25,41.7,58.3,75,91.7];let sel=0;try{sel=Math.min(5,+sessionStorage.getItem("radar_paso")||0)}catch(e){}
+  const w=el("div","ruta");const map=el("div","ruta-map");map.setAttribute("role","tablist");map.setAttribute("aria-label","Pasos de la ruta");
+  map.innerHTML='<svg viewBox="0 0 1000 196" preserveAspectRatio="none" aria-hidden="true"><path class="base" d="M83,74 C166,74 167,122 250,122 C333,122 334,74 417,74 C500,74 500,122 583,122 C666,122 667,74 750,74 C833,74 834,122 917,122"/><path class="done" pathLength="100" d="M83,74 C166,74 167,122 250,122 C333,122 334,74 417,74 C500,74 500,122 583,122 C666,122 667,74 750,74 C833,74 834,122 917,122"/></svg>';
+  const det=el("div","ruta-detail");det.id="ruta-detalle";det.setAttribute("role","tabpanel");det.setAttribute("aria-live","polite");
+  const paint=sw=>{btns.forEach((b,i)=>{b.setAttribute("aria-selected",String(i===sel));b.tabIndex=i===sel?0:-1;b.classList.toggle("past",i<sel)});map.style.setProperty("--prog",sel*20);
+    const s=S[sel];det.textContent="";const a=el("div");a.append(el("h2",null,(sel+1)+". "+s.h),el("p",null,s.d));const r=el("div","row");s.a.forEach(([t,h],i)=>r.append(btnA(t,h,i?"btn2":"btn")));
+    if(sel<5){const nx=el("button","btn2","Siguiente paso");nx.type="button";nx.append(icon("arrow"));nx.onclick=()=>{sel++;paint(true);btns[sel].focus({preventScroll:true})};r.append(nx)}a.append(r);det.append(a);
+    if(s.f.length){const fs=el("div","facts");s.f.forEach(([v,l])=>{const f=el("div","fact");const b=el("b",null,String(v));f.append(b,el("span",null,l));fs.append(f);if(sw||ANIM)countUp(b,String(v))});det.append(fs)}
+    if(sw&&!RM){det.classList.remove("swap");void det.offsetWidth;det.classList.add("swap")}try{sessionStorage.setItem("radar_paso",sel)}catch(e){}};
+  const btns=S.map((s,i)=>{const b=el("button","st "+(i%2?"dn":"up"));b.type="button";b.setAttribute("role","tab");b.setAttribute("aria-controls","ruta-detalle");b.style.setProperty("--x",X[i]+"%");b.style.setProperty("--y",(i%2?122:74)/1.96+"%");b.style.setProperty("--i",i);
+    const lb=el("span","lb");lb.append(el("b",null,s.t),el("small",null,s.s));b.append(el("span","dot",String(i+1)),lb);b.onclick=()=>{sel=i;paint(true)};
+    b.onkeydown=ev=>{const d=ev.key==="ArrowRight"||ev.key==="ArrowDown"?1:ev.key==="ArrowLeft"||ev.key==="ArrowUp"?-1:0;if(!d)return;ev.preventDefault();sel=(sel+d+6)%6;paint(true);btns[sel].focus()};map.append(b);return b});
+  paint(false);w.append(map,det);return w}
+
+/* ---------- Vistas ---------- */
+function vInicio(app){
+  const hero=el("section","hero");hero.append(el("h1",null,"Del expediente ambiental al contrato"),el("p","lead","Seis pasos para llegar antes que el resto a los grandes proyectos de Chile. Elige un paso para ver qué hay hoy y entrar."),ruta());app.append(hero);
+  const vig=P.filter(vigente);const k=el("section","kpis");k.setAttribute("aria-label","Cifras de hoy");
+  k.append(kpi(nf(P.length),"proyectos presentados en 12 meses"),kpi(nf(P.filter(p=>plazo(p).t==="Mediano plazo").length),"en evaluación"),kpi(nf(P.filter(p=>plazo(p).t==="Corto plazo").length),"aprobados"),kpi("US$ "+money(vig.reduce((s,p)=>s+(+p.inversion_mmusd||0),0)/1000)+" mil M","inversión vigente"));app.append(k);
+  const pf=perfil();const me=el("section","panel hl");
+  if(!pf||!pf.rubros.length){me.append(el("h2",null,"Haz que el radar trabaje para tu empresa"),el("p","note","Dinos tu rubro, tu tamaño y las regiones donde trabajas. Con eso cada proyecto te muestra si calza contigo y cuánto podría generar. Toma un minuto y se guarda solo en este navegador."),btnA("Configurar mi empresa","#empresa"))}
+  else{const rs=vig.filter(p=>calzaPerfil(p,pf));me.append(el("h2",null,"Para "+(pf.nombre||"tu empresa")),el("p","note",rs.length?"Hay "+rs.length+(rs.length===1?" proyecto vigente que calza":" proyectos vigentes que calzan")+" con tus rubros y regiones. Estos son los tres más grandes.":"Hoy no hay proyectos vigentes que calcen con tus rubros y regiones. Prueba agregando un rubro o quitando regiones."));
+    const l=el("div","list");rs.slice(0,3).forEach((p,i)=>{const c=card(p);c.classList.add("enter");c.style.setProperty("--i",i);l.append(c)});const r=el("div","row");r.append(btnA(rs.length?"Ver los "+rs.length+" proyectos":"Cambiar rubros o regiones","#empresa"),btnA("Explorar por rubro","#oportunidades","btn2"));me.append(l,r)}
+  app.append(me);
+  const rows=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));const byId=Object.fromEntries(P.map(p=>[p.id,p]));const ult=rows.filter(c=>byId[c.proyecto_id]).slice(0,3);
+  if(ult.length){const s=el("section");s.style.cssText="display:flex;flex-direction:column;gap:12px";const hd=el("div","row");hd.style.justifyContent="space-between";hd.append(el("h2",null,"Lo último que detectó el radar"),btnA("Ver todas las novedades","#novedades","btn2"));s.append(hd);const l=el("div","list");ult.forEach(c=>l.append(card(byId[c.proyecto_id],novTxt(c,true))));s.append(l);app.append(s)}
+}
+function novTxt(c,fecha){const w=el("p","why");const d=new Date(c.detectado_at).toLocaleDateString("es-CL");if(fecha)w.append(el("b",null,d+": "));w.append(document.createTextNode(c.tipo==="nuevo"?"Proyecto nuevo en el SEIA.":c.tipo==="estado"?"Cambió de estado: de "+c.antes+" a "+c.despues+".":"Cambió de actividad: de "+c.antes+" a "+c.despues+"."));return w}
+function vNovedades(app){
+  app.append(header("Novedades","Proyectos nuevos y cambios de estado detectados en cada revisión diaria del SEIA."));
+  const rows=C.filter(c=>!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));
+  if(!rows.length){const s=el("div","soon");s.append(el("b",null,"Todavía no hay novedades"),el("span",null,"La base se cargó el 21 de noviembre de 2026. Desde la próxima revisión diaria aparecerán aquí los proyectos nuevos y los cambios de estado."),btnA("Ver los proyectos","#proyectos","btn2"));app.append(s);return}
+  const byId=Object.fromEntries(P.map(p=>[p.id,p]));const pf=perfil();let solo=false;const out=el("div");out.style.cssText="display:flex;flex-direction:column;gap:20px";
+  if(pf&&pf.rubros.length){const f=el("section","filters filterbar");f.innerHTML='<label for="nm">Mostrar<select id="nm"><option value="mias">Solo lo que calza con mi empresa</option><option value="">Todas las novedades</option></select></label>';app.append(f);solo=true;$("#nm").addEventListener("input",()=>{solo=$("#nm").value==="mias";pinta()})}
+  const pinta=()=>{out.textContent="";const dias={};rows.forEach(c=>{const p=byId[c.proyecto_id];if(!p||(solo&&!calzaPerfil(p,pf)))return;const d=c.detectado_at.slice(0,10);(dias[d]=dias[d]||[]).push([c,p])});
+    const ks=Object.keys(dias);if(!ks.length){const s=el("div","soon");s.append(el("b",null,"Nada nuevo para tu empresa"),el("span",null,"No hay novedades que calcen con los rubros y regiones de tu empresa. Cambia a \"Todas las novedades\" para ver el resto."));out.append(s);return}
+    ks.forEach(d=>{const s=el("section","day");s.append(el("h2",null,new Date(d+"T12:00:00").toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"})));dias[d].forEach(([c,p])=>s.append(card(p,novTxt(c))));out.append(s)})};
+  pinta();app.append(out);
+}
+function vFicha(app,id){
+  const p=P.find(x=>String(x.id)===String(id));if(!p){app.append(header("Proyecto no encontrado","Puede que el enlace esté incompleto o que el proyecto ya no esté en la base."),btnA("Ver todos los proyectos","#proyectos"));return}
+  const b=el("a","back");b.href="#proyectos";b.append(icon("arrow"),document.createTextNode("Volver a los proyectos"));app.append(b);
+  const pl=plazo(p);const h=header(p.nombre);h.className="fhead";const t=el("div","tags");t.append(el("span","tag rubro",sector(p)),el("span","tag "+pl.c,p.estado),el("span","tag "+pl.c,pl.t),el("span","tag",p.tipo==="EIA"?"Estudio de Impacto Ambiental":"Declaración de Impacto Ambiental"));h.prepend(t);
+  {const m=el("p","meta sp");if(p.titular)m.append(el("span",null,p.titular));m.append(el("span",null,regionCorta(p.region)+(p.comuna?", "+p.comuna:"")));h.append(m)}h.append(favBtn(p));app.append(h);
+  const k=el("section","kpis");k.append(kpi("US$ "+money(p.inversion_mmusd)+" M","inversión declarada"),kpi(fdate(p.fecha_presentacion),"fecha de presentación"),kpi(p.dias_legales||"0","días legales transcurridos"),kpi(p.actividad||"Sin dato","tramitación"));app.append(k);
+  const nav=el("nav","secnav");nav.setAttribute("aria-label","Partes de la ficha");app.append(nav);
+  const secs=[];const sec=(id,t)=>{const d=el("div","sec");d.id=id;d.dataset.t=t;app.append(d);secs.push(d);return d};
+  let S=sec("s-eval","Evaluación");{const av=avancePanel(p);if(av)S.append(av)}
+  {const op=oposicionPanel(p);if(op)S.append(op)}
+
+  S=sec("s-negocio","Tu negocio");const pf=perfil();const ops=opps(p);
+  const me=el("section","panel hl");me.append(el("h2",null,pf&&pf.nombre?"Para "+pf.nombre:"Para tu empresa"));
+  if(!pf||!pf.rubros.length){me.append(el("p","note","Indica el rubro y el tamaño de tu empresa para ver aquí qué oportunidades tendría en este proyecto y cuánto podría generar."),btnA("Configurar mi empresa","#empresa"))}
+  else{const ul=el("ul","opps");let tot=0;pf.rubros.forEach(id=>{const r=RUBROS.find(x=>x.id===id);if(!r)return;const li=el("li");const ok=vigente(p)&&ops.some(x=>x.id===id);
+      if(ok){const x=estim(p,r,pf);tot+=x.val;li.append(el("b",null,r.n+": sí calza"),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". El paquete de este rubro se estima en US$ "+money(x.paquete)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."+(x.tope!=null?(x.limita?" Por el tamaño de tu empresa, lo razonable es apuntar a contratos de hasta US$ "+money(x.tope)+" millones al año: una parte del paquete, como subcontrato o por tramos.":" Por tamaño, tu empresa podría abordar el paquete completo."):"")))}
+      else{li.className="no";li.append(el("b",null,r.n+": no calza"),el("span",null,vigente(p)?"No detectamos espacio para este rubro en este proyecto.":"El proyecto está cerrado ("+p.estado+")."))}ul.append(li)});
+    me.append(ul);if(tot>0){const kk=el("div","kpis");kk.append(kpi("US$ "+money(tot)+" M",pf.ventas?"lo que podría generar para tu empresa (por año, con tope por tamaño)":"valor estimado de tus rubros en este proyecto"));me.append(kk)}
+    const r=el("div","row");if(vigente(p)&&pf.rubros.some(id=>ops.some(x=>x.id===id))){const cb=btnA("Costear este proyecto","#c-"+p.id);cb.prepend(icon("calc"));r.append(cb)}r.append(btnA("Cambiar rubro o tamaño","#empresa","btn2"));me.append(r)}
+  S.append(me);
+  const g=el("div","grid2");
+  const o=el("section","panel");o.append(el("h2",null,"Todas las oportunidades por rubro"));
+  if(!vigente(p))o.append(el("p","note","Este proyecto está cerrado ("+p.estado+"), por lo que hoy no genera oportunidades."));
+  else if(!ops.length)o.append(el("p","note","No detectamos oportunidades relevantes con las reglas actuales. Revisa la descripción."));
+  else{const ul=el("ul","opps");ops.forEach(r=>{const li=el("li");li.append(el("b",null,r.n),el("span",null,porque(r,p)[0].toUpperCase()+porque(r,p).slice(1)+". Referencia: US$ "+money((+p.inversion_mmusd||0)*r.pct/100)+" millones ("+String(r.pct).replace(".",",")+"% de la inversión, "+refCorta(r)+")."));ul.append(li)});o.append(ul)}
+  o.append(el("p","note","Detección automática según el tipo de obras y la descripción del proyecto. Viajes de camión, agua y combustible todavía no están extraídos del estudio."));
+  const a=el("section","panel");a.append(el("h2",null,"Quién está detrás"));const dl=el("dl","dl");
+  [["Titular (dueño)",p.titular],["Consultora ambiental",p.consultora||"Sin información en la ficha"],["Región",regionCorta(p.region)],["Comunas",p.comuna],["Tipología",(p.tipologia||"")+" "+(p.tipologia_desc||"")],["Razón de ingreso",p.razon_ingreso]].forEach(([x,y])=>{dl.append(el("dt",null,x),el("dd",null,y||""))});
+  a.append(dl,ext("Ver expediente completo en el SEIA","https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id));
+  g.append(o,a);S.append(g);
+
+  S=sec("s-estudio","El estudio");
+  if(p.estudio_leido_at&&(p.mo_construccion_max||p.mo_operacion_max||p.vida_util||p.superficie)){const e=el("section","panel");e.append(el("h2",null,"Cifras declaradas en el estudio"));const n=v=>v==null?"s/i":Number(v).toLocaleString("es-CL");
+    const kk=el("div","kpis");
+    if(p.mo_construccion_max!=null||p.mo_construccion_prom!=null)kk.append(kpi(n(p.mo_construccion_max),"trabajadores en el peak de construcción (promedio "+n(p.mo_construccion_prom)+")"));
+    if(p.mo_operacion_max!=null||p.mo_operacion_prom!=null)kk.append(kpi(n(p.mo_operacion_max),"trabajadores máximos en operación (promedio "+n(p.mo_operacion_prom)+")"));
+    if(p.mo_cierre_max!=null||p.mo_cierre_prom!=null)kk.append(kpi(n(p.mo_cierre_max),"trabajadores máximos en cierre (promedio "+n(p.mo_cierre_prom)+")"));
+    if(kk.children.length)e.append(kk);const dl2=el("dl","dl");
+    if(p.vida_util)dl2.append(el("dt",null,"Vida útil"),el("dd",null,p.vida_util));
+    if(p.superficie)dl2.append(el("dt",null,"Superficie"),el("dd",null,p.superficie));
+    e.append(dl2,el("p","note","Datos tal como los declaró el titular en el EIA o DIA presentado al SEIA."));S.append(e)}
+  {const ar=actRealPanel(p);if(ar)S.append(ar);const ap=actPanel(p);if(ap)S.append(ap)}
+  if(p.cronologia||(p.insumos&&Object.keys(p.insumos).length)){const x=el("section","panel");x.append(el("h2",null,"Insumos y plazos según el estudio"));
+    const TN={transporte:"Transporte y viajes",agua:"Agua",combustible:"Combustible",energia:"Energía"};
+    if(p.cronologia){const c=p.cronologia.length>650?p.cronologia.slice(0,650).replace(/\s\S*$/,"")+"…":p.cronologia;x.append(el("p","sub","Plazos y fases"),el("p","desc",c))}
+    Object.keys(TN).forEach(k=>{const v=(p.insumos||{})[k];if(!v||!v.length)return;x.append(el("p","sub",TN[k]));const ul=el("ul","opps");v.forEach(o=>{const li=el("li");li.append(el("span",null,o.t+" (pág. "+o.p+")"));ul.append(li)});x.append(ul)});
+    x.append(el("p","note","Son extractos textuales del estudio presentado al SEIA, elegidos automáticamente por palabras clave. Pueden faltar datos o venir frases incompletas: revisa el documento antes de usar una cifra."));
+    if(p.pdf_resumen&&p.pdf_resumen!=="-")x.append(ext("Abrir el capítulo del estudio (PDF)","https://seia.sea.gob.cl"+p.pdf_resumen));
+    S.append(x)}
+  {const ns=N.filter(x=>x.proyecto_id===p.id);if(ns.length){const s2=el("section","panel");s2.append(el("h2",null,"Plazos y noticias del proyecto"));ns.forEach(x=>{const pp=el("p","desc");pp.append(el("b",null,fdate(x.fecha)+": "),document.createTextNode(x.nota+" "),ext("Fuente: "+x.fuente,x.fuente_url));s2.append(pp)});S.append(s2)}}
+
+  S=sec("s-quien","Quién construye");
+  {const c=el("section","panel");c.append(el("h2",null,"Quién construye y cómo llegar a ellos"));
+    const conf=PE.filter(x=>x.proyecto_id===p.id);
+    if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);li.append(ext("Ver fuente",x.fuente_url));ul.append(li)});c.append(ul)}
+    else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
+    const sc=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sc))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.tipo!=="proveedor"&&e.sectores.includes(sc));
+    c.append(el("p","sub","1. Al dueño del proyecto: "+(p.titular||"")),el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
+    if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+    c.append(el("p","sub","2. A las empresas que suelen construir este tipo de proyecto"));
+    if(cons.length){c.append(el("p","note","No significa que tengan este contrato: son empresas que construyen proyectos de este sector en Chile. Envía la presentación de tu empresa por su canal de proveedores."));const ul=el("ul","emp");cons.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+    else c.append(el("p","note","Aún no tenemos empresas verificadas para este sector."));
+    c.append(el("p","note","Solo mostramos canales corporativos públicos (portales de proveedores, formularios y correos genéricos). No guardamos datos de personas."));S.append(c);
+    if(p.titular){const dd=ddPanel(p.titular,[tkey(p.titular)]);const otros=P.filter(x=>x.titular&&ekey(x.titular)===ekey(p.titular)).length;const gg=grupoDe(p.titular);dd.append(btnA(otros>1?"Ver los "+otros+" proyectos de "+(gg?gg.grupo:"esta empresa"):"Ver la página de esta empresa","#t-"+encodeURIComponent(ekey(p.titular)),"btn2"));S.append(dd);const hp=historialPanel(p.titular);if(hp)S.append(hp)}
+    {const mios=pf?pf.rubros||[]:[];const rs=RUBROS.filter(r=>ops.some(o=>o.id===r.id)&&E.some(e=>(e.rubros||[]).includes(r.id))).sort((a,b)=>mios.includes(b.id)-mios.includes(a.id));
+     if(rs.length){const k=el("section","panel");k.append(el("h2",null,"Quién podría competir o subcontratar en este proyecto"),el("p","note","Empresas que ya prestan estos servicios a grandes faenas en Chile, según prensa del sector. No significa que tengan un contrato en este proyecto. Si son de tu mismo rubro son tu posible competencia; si son más grandes que tú, también pueden ser a quien ofrecerle un subcontrato."));
+      rs.forEach(r=>{k.append(el("p","sub",r.n+(mios.includes(r.id)?" (tu rubro)":"")));const ul=el("ul","emp");E.filter(e=>(e.rubros||[]).includes(r.id)).forEach(e=>ul.append(empLi(e)));k.append(ul)});
+      k.append(el("p","note","La lista parte con pocas empresas por rubro y crece a medida que confirmamos más con una fuente pública."));S.append(k)}}}
+
+  S=sec("s-detalle","Descripción");
+  const d=el("section","panel");d.append(el("h2",null,"Descripción del proyecto"));d.append(el("p","desc",p.descripcion||"La ficha de este proyecto todavía no se ha leído desde el SEIA."));
+  if(p.objetivo){d.append(el("h2",null,"Objetivo"),el("p","desc",p.objetivo))}S.append(d);
+  if(p.obras&&p.obras.length){const s=el("section","panel");s.append(el("h2",null,"Partes, obras y acciones que incluye"));const ul=el("ul");ul.style.cssText="margin:0;padding-left:18px";p.obras.forEach(x=>ul.append(el("li",null,x)));s.append(ul);S.append(s)}
+  const cs=C.filter(c=>c.proyecto_id===p.id&&!(c.tipo==="nuevo"&&c.detectado_at<BASE_INICIAL));
+  if(cs.length){const s=el("section","panel");s.append(el("h2",null,"Historial de cambios"));cs.forEach(c=>s.append(el("p","meta",new Date(c.detectado_at).toLocaleDateString("es-CL")+": "+(c.tipo==="nuevo"?"ingresó al SEIA":"de "+c.antes+" a "+c.despues))));S.append(s)}
+
+  // índice de la ficha: salta a cada parte y marca la que se está leyendo
+  const live=secs.filter(s=>s.children.length);secs.filter(s=>!s.children.length).forEach(s=>s.remove());
+  const links=live.map(s=>{const l=el("a",null,s.dataset.t);l.href="#"+s.id;l.onclick=ev=>{ev.preventDefault();s.scrollIntoView({behavior:RM?"auto":"smooth",block:"start"})};nav.append(l);return l});
+  if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach((l,i)=>l.classList.toggle("on",live[i]===e.target))}})},{rootMargin:"-130px 0px -60% 0px"});live.forEach(s=>io.observe(s));CLEAN.push(()=>io.disconnect())}
+}
+function vEvaluacion(app){
+  app.append(header("Proyectos en evaluación","Cuánto lleva avanzado cada estudio, cuándo podría terminar su evaluación y qué probabilidad tiene de ser aprobado."));
+  const base=P.map(p=>({p,a:avance(p)})).filter(x=>x.a&&(x.a.est==="eval"||x.a.est==="adm"));base.forEach(x=>x.f=faseDe(x.p,x.a));
+  let fase=null;const flow=el("section","panel");flow.append(el("h2",null,"El camino de un proyecto en el SEIA"));
+  const apr=P.filter(p=>plazo(p).t==="Corto plazo").length;const tr=seiaTrack({now:null,sel:null,toggle:true,counts:[0,0,0,0,apr],onPick:s=>{fase=s;draw()}});flow.append(tr);app.append(flow);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="vt">Tipo<select id="vt"><option value="">EIA y DIA</option><option value="EIA" selected>Solo EIA</option><option value="DIA">Solo DIA</option></select></label><label for="vr">Región<select id="vr"></select></label><label for="vo">Ordenar por<select id="vo"><option value="inv">Mayor inversión</option><option value="pct">Más avanzado</option><option value="fin">Termina antes</option><option value="prob">Mayor probabilidad</option></select></label><label for="vq">Buscar<input id="vq" type="search" placeholder="Proyecto o titular"></label>';app.append(f);
+  fillSel($("#vr"),[...new Set(base.map(x=>x.p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
+  const cnt=el("p","count"),tw=el("div","tw");cnt.setAttribute("role","status");app.append(cnt,tw);
+  const draw=()=>{tw.className="tw";const t=$("#vt").value,r=$("#vr").value,o=$("#vo").value,q=norm($("#vq").value.trim());
+    const pre=base.filter(x=>(!t||x.a.tipo===t)&&(!r||x.p.region===r)&&(!q||norm(x.p.nombre+" "+x.p.titular).includes(q)));
+    tr.setCounts([0,1,2,3].map(i=>pre.filter(x=>x.f===i).length).concat(apr));
+    const rows=pre.filter(x=>fase==null||fase===4||x.f===fase);
+    rows.sort((x,y)=>o==="pct"?y.a.pct-x.a.pct:o==="fin"?x.a.fecha-y.a.fecha:o==="prob"?(y.a.prob||0)-(x.a.prob||0):(+y.p.inversion_mmusd||0)-(+x.p.inversion_mmusd||0));
+    tw.textContent="";
+    if(fase===4){cnt.textContent="";const s=el("div","soon");s.append(el("b",null,apr+" proyectos aprobados en el último año"),el("span",null,"Los proyectos aprobados ya salieron de la evaluación. Están en la lista de proyectos y, los más grandes, en la vista En construcción."),btnA("Ver proyectos en construcción","#construccion","btn2"));tw.append(s);return}
+    cnt.textContent=rows.length?rows.length+" proyectos en evaluación"+(fase!=null?" en la fase "+FASES[fase].t.toLowerCase():"")+", US$ "+money(rows.reduce((s,x)=>s+(+x.p.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";if(!rows.length)return;
+    const tb=el("table","tbl resp hov");const hr=el("tr");[["Proyecto"],["US$ millones","n"],["Avance"],["Etapa"],["Posible término"],["Prob. de aprobación","n"]].forEach(([h,c])=>hr.append(el("th",c||null,h)));const th=el("thead");th.append(hr);tb.append(th);const bd=el("tbody");tb.append(bd);
+    rows.forEach(({p,a},i)=>{const row=el("tr");if(ANIM&&i<12){row.classList.add("enter");row.style.setProperty("--i",i)}const c1=el("td");const l=el("a",null,p.nombre);l.href="#p-"+p.id;c1.append(l,el("br"),el("small",null,[p.titular,regionCorta(p.region),a.tipo].filter(Boolean).join(", ")));
+      const e=p.etapa;const et=a.est==="adm"?"En admisión":!a.real?"En evaluación (expediente sin leer)":e.ice?"Informe final emitido":!e.icsara?"Primera revisión":e.adenda>=e.icsara?"Respondió la ronda "+e.icsara+" de preguntas":"Debe responder la ronda "+e.icsara+" de preguntas";
+      const td=(v,lab,c)=>{const x=el("td",c||null);x.dataset.l=lab;if(v instanceof Node)x.append(v);else x.textContent=v;return x};
+      const mi=el("div","mini");mi.append(track(a.pct),el("span","num",a.pct+"%"));const pr=el("span",a.prob!=null?"tag "+(a.prob>=80?"ok":a.prob>=60?"eval":"adm"):null,a.prob!=null?a.prob+"%":"Sin dato");
+      row.append(c1,td(money(p.inversion_mmusd),"US$ millones","n num"),td(mi,"Avance"),td(et+(/suspend/i.test(p.actividad||"")?" (reloj detenido)":""),"Etapa"),td(mesAno(a.fecha),"Posible término"),td(pr,"Prob. de aprobación","n"));bd.append(row)});tw.className="tw boxed";tw.append(tb)};
+  ["vt","vr","vo","vq"].forEach(id=>$("#"+id).addEventListener("input",draw));draw();
+  app.append(csvBtn("proyectos_en_evaluacion",()=>base.map(({p,a})=>({Proyecto:p.nombre,Titular:p.titular,Tipo:a.tipo,Region:regionCorta(p.region),Comuna:p.comuna,"Inversion MMUSD":p.inversion_mmusd,"Avance %":a.pct,"Termino estimado":mesAno(a.fecha),"Prob. aprobacion %":a.prob,"Observaciones ciudadanas":p.oposicion?p.oposicion.obs:"",Expediente:"https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id}))));
+  const h=ST.aprobacion;app.append(el("p","note","El avance sale de los hitos del expediente de cada proyecto en el SEIA (admisión, rondas de preguntas, respuestas, informe final). La fecha de término es una estimación con los promedios del SEA (DIA 399 días, EIA 1.124 días en 2025) y puede moverse si el dueño pide más plazo para responder. "+(h?"La probabilidad es histórica: qué parte de los proyectos presentados entre "+h.desde+" y "+h.hasta+" que llegaron a la misma etapa terminó aprobada, según el buscador del SEIA (consultado el "+fdate(h.consultado)+"). No evalúa cada proyecto en particular.":"")));
+}
+
+/* ---------- Navegación, buscador, tema y arranque ---------- */
+const NAV=[["Descubrir",[["inicio","Inicio","home"],["proyectos","Proyectos","list"],["mapa","Mapa","map"],["novedades","Novedades","bell"],["mercado","Mercado","chart"]]],["Seguir",[["evaluacion","En evaluación","flow"],["construccion","En construcción","build"],["favoritos","Favoritos","star"]]],["Conocer",[["empresas","Empresas","office"]]],["Ganar contratos",[["oportunidades","Oportunidades por rubro","target"],["empresa","Mi empresa","case"]]]];
+const TABS=[["inicio","Inicio","home"],["proyectos","Proyectos","list"],["evaluacion","Evaluación","flow"],["oportunidades","Oportunidades","target"]];
+const VISTAS={inicio:vInicio,proyectos:vProyectos,oportunidades:vOpps,mercado:vMercado,evaluacion:vEvaluacion,construccion:vConstruccion,novedades:vNovedades,empresa:vEmpresa,empresas:vEmpresas,mapa:vMapa,favoritos:vFavoritos};
+const CLEAN=[];const side=$("#side"),scrim=$("#scrim"),menuBtn=$("#menu"),mq=matchMedia("(max-width:1020px)");let lastTrigger=null;
+function drawer(open,trigger){side.classList.toggle("open",open);scrim.classList.toggle("open",open);menuBtn.setAttribute("aria-expanded",String(open));side.inert=mq.matches&&!open;
+  if(open){lastTrigger=trigger||menuBtn;const a=side.querySelector("nav a[aria-current=page]")||side.querySelector("a");a&&a.focus()}else if(lastTrigger&&mq.matches){lastTrigger.focus({preventScroll:true});lastTrigger=null}}
+function shell(){const nav=$("#nav");NAV.forEach(([g,items])=>{const d=el("div","grp");d.append(el("span",null,g));items.forEach(([id,t,ic])=>{const a=el("a");a.href="#"+id;a.dataset.nav=id;a.append(icon(ic),document.createTextNode(t));d.append(a)});nav.append(d)});
+  const tabs=$("#tabs");TABS.forEach(([id,t,ic])=>{const a=el("a");a.href="#"+id;a.dataset.nav=id;a.append(icon(ic),document.createTextNode(t));tabs.append(a)});const mas=el("button");mas.type="button";mas.append(icon("more"),document.createTextNode("Más"));mas.setAttribute("aria-controls","side");mas.onclick=()=>drawer(true,mas);tabs.append(mas);
+  menuBtn.onclick=()=>drawer(!side.classList.contains("open"),menuBtn);scrim.onclick=()=>drawer(false);side.addEventListener("click",e=>{if(e.target.closest("a"))drawer(false)});mq.addEventListener("change",()=>drawer(false));side.inert=mq.matches;
+  document.addEventListener("submit",()=>setTimeout(chip,0));addEventListener("scroll",()=>$("#bar").classList.toggle("scrolled",scrollY>4),{passive:true});
+  // tema claro u oscuro
+  const tb=$("#tema");const dark=()=>document.documentElement.dataset.theme?document.documentElement.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;const lab=()=>tb.querySelector("span").textContent=dark()?"Cambiar a modo claro":"Cambiar a modo oscuro";
+  tb.onclick=()=>{const t=dark()?"light":"dark";document.documentElement.dataset.theme=t;try{localStorage.setItem("radar_tema",t)}catch(e){}lab()};lab();
+  // buscador
+  const q=$("#q"),res=$("#qres");let items=[],cur=-1;
+  const close=()=>{res.hidden=true;q.setAttribute("aria-expanded","false");q.removeAttribute("aria-activedescendant");cur=-1};
+  const mark=()=>{[...res.children].forEach((li,i)=>li.setAttribute("aria-selected",String(i===cur)));if(cur>=0){q.setAttribute("aria-activedescendant","qr"+cur);res.children[cur].scrollIntoView({block:"nearest"})}};
+  const go=i=>{const it=items[i];if(!it)return;q.value="";close();q.blur();location.hash=it.h};
+  q.addEventListener("input",()=>{const s=norm(q.value.trim());res.textContent="";items=[];if(s.length<2){close();return}
+    titulares().filter(t=>norm(t.nombre+" "+t.soc.join(" ")).includes(s)).slice(0,3).forEach(t=>items.push({h:"#t-"+encodeURIComponent(t.k),b:t.nombre,s:"Empresa, "+t.ps.length+(t.ps.length===1?" proyecto":" proyectos"),e:t.inv?"US$ "+money(t.inv)+" M":""}));
+    P.filter(p=>norm(p.nombre+" "+(p.titular||"")).includes(s)).slice(0,7).forEach(p=>items.push({h:"#p-"+p.id,b:p.nombre,s:(p.titular||"")+", "+regionCorta(p.region),e:"US$ "+money(p.inversion_mmusd)+" M"}));
+    if(!items.length){res.append(el("li","none","No encontramos proyectos ni empresas con ese nombre. Prueba con otra palabra."))}
+    items.forEach((it,i)=>{const li=el("li");li.id="qr"+i;li.setAttribute("role","option");li.append(el("b",null,it.b),el("small",null,it.s),el("em",null,it.e));li.onmousedown=e=>{e.preventDefault();go(i)};res.append(li)});
+    cur=items.length?0:-1;res.hidden=false;q.setAttribute("aria-expanded","true");mark()});
+  q.addEventListener("keydown",e=>{if(e.key==="ArrowDown"||e.key==="ArrowUp"){if(!items.length)return;e.preventDefault();cur=(cur+(e.key==="ArrowDown"?1:-1)+items.length)%items.length;mark()}else if(e.key==="Enter"){e.preventDefault();go(Math.max(cur,0))}else if(e.key==="Escape"){close()}});
+  q.addEventListener("blur",()=>setTimeout(close,120));
+  addEventListener("keydown",e=>{if(e.key==="Escape"&&side.classList.contains("open"))drawer(false);if(e.key==="/"&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)&&!e.metaKey&&!e.ctrlKey){e.preventDefault();q.focus()}});
+}
+function render(first){const h=(location.hash||"#inicio").slice(1);const app=$("#app");CLEAN.splice(0).forEach(f=>f());app.textContent="";ANIM=true;
+  const nav=h.startsWith("p-")||h.startsWith("c-")?"proyectos":h.startsWith("t-")?"empresas":VISTAS[h]?h:"inicio";document.querySelectorAll("[data-nav]").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
+  if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else(VISTAS[h]||vInicio)(app);
+  ANIM=false;chip();
+  const h1=app.querySelector("h1");document.title=(h1?h1.textContent+" | ":"")+"Radar de Proyectos";scrollTo(0,0);if(!first)app.focus({preventScroll:true})}
+function chip(){const pf=perfil(),mc=$("#mechip"),on=!!(pf&&pf.rubros.length);mc.classList.toggle("on",on);mc.querySelector("span").textContent=on?(pf.nombre||"Mi empresa"):"Configurar mi empresa";mc.setAttribute("aria-label",on?"Mi empresa: "+(pf.nombre||"configurada"):"Configurar mi empresa")}
+function route(){if(document.startViewTransition&&!RM){const t=document.startViewTransition(()=>render());t.ready.catch(()=>{});t.finished.catch(()=>{})}else render()}
+async function boot(){const app=$("#app");
+  try{[P,C]=await Promise.all([get("radar_proyectos?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_cambios?select=*&order=detectado_at.desc&limit=500")]);
+    try{[E,PE,N]=await Promise.all([get("radar_empresas?select=*&order=nombre"),get("radar_proyecto_empresas?select=*"),get("radar_notas?select=*&order=fecha.desc")])}catch(e){E=[];PE=[];N=[]}
+    try{G=(await get("radar_grupos?select=*")).map(g=>({...g,re:new RegExp(g.patron)}))}catch(e){G=[]}
+    try{[SA,SR]=await Promise.all([get("radar_sanciones?select=*&order=expediente.desc"),get("radar_sanciones_revisado?select=*")])}catch(e){SA=[];SR=[]}
+    try{const [co,ce,st]=await Promise.all([get("radar_construccion?select=*&order=inversion_mmusd.desc.nullslast"),get("radar_construccion_empresas?select=*"),get("radar_estadistica?select=*")]);CO=co;CE=ce;st.forEach(x=>ST[x.clave]=x.valor)}catch(e){CO=[];CE=[];ST={}}
+    try{TH=await get("radar_titular_historial?select=*")}catch(e){TH=[]}
+    $("#stamp").textContent="Última lectura del SEIA: "+lastUpd();addEventListener("hashchange",route);render(true)}
+  catch(e){app.textContent="";const s=el("div","soon");s.setAttribute("role","alert");const b=el("button","btn","Volver a intentar");b.type="button";b.onclick=()=>{app.textContent="";app.append(el("p","count","Cargando proyectos…"));boot()};s.append(el("b",null,"No se pudieron cargar los proyectos"),el("span",null,"Revisa tu conexión a internet y vuelve a intentar. Detalle: "+e.message),b);app.append(s)}}
+shell();boot();
 </script>
 </body>
 </html>
