@@ -1,3 +1,3 @@
 # Radar de Proyectos
 
-Página pública (landing). El código fuente se mantiene en `landing/` del repositorio radar-seia.
+Sitio web de Radar de Proyectos. Todos los derechos reservados: ver el archivo LICENSE. Este código no es de uso libre.
