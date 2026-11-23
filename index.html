@@ -11,24 +11,24 @@
 <style>
 /* Layout: bandas a todo el ancho, columna de 1120px. Portada oscura con un radar dibujado con proyectos reales; el cobre marca acciones y cifras; las etiquetas de datos van en monoespaciada, como en un plano. */
 :root{
-  --bg:#f2f4f8;--panel:#ffffff;--fg:#0d1830;--muted:#55607a;--line:#dce2ec;--soft:#e9eef5;
-  --ink:#0b1736;--ink2:#14244d;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#22335f;
-  --accent:#2748d8;--accent-hi:#8ea6ff;--accent-fg:#ffffff;--accent-soft:#e3e9fc;
-  --ok:#0b7f62;--ok-soft:#d9f1e9;--warn:#8a6500;--warn-soft:#f6ebc8;--bad:#b3362b;--bad-soft:#f8dfdb;
+  --bg:#f5f6fa;--panel:#ffffff;--fg:#1b2238;--muted:#626b84;--line:#e2e5ee;--soft:#eceef5;
+  --ink:#1c2444;--ink2:#283260;--ink-fg:#f1f3fb;--ink-muted:#b3bddb;--ink-line:#36416f;
+  --accent:#4c5fd5;--accent-hi:#aab6ff;--accent-fg:#ffffff;--accent-soft:#e9ecfb;
+  --ok:#1f8a6d;--ok-soft:#def2ea;--warn:#8a6a10;--warn-soft:#f7eed2;--bad:#b5473d;--bad-soft:#f9e3df;
   --display:Geologica,"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:Geologica,"Instrument Sans",system-ui,sans-serif;
   --shadow:0 1px 2px rgba(13,24,48,.06),0 12px 32px -12px rgba(13,24,48,.22);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#080e1f;--panel:#101930;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
-  --ink:#060b19;--ink2:#101930;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#1c2848;
-  --accent:#93a9ff;--accent-hi:#a9bbff;--accent-fg:#07102a;--accent-soft:#1b2752;
-  --ok:#5fd0ae;--ok-soft:#10332b;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
+  --bg:#0d1222;--panel:#151b30;--fg:#e8ecf7;--muted:#9aa6c2;--line:#262f4d;--soft:#1c2440;
+  --ink:#0b1020;--ink2:#161d36;--ink-fg:#eef2fb;--ink-muted:#b3bddb;--ink-line:#222b49;
+  --accent:#9fb0ff;--accent-hi:#b6c2ff;--accent-fg:#0a1230;--accent-soft:#1f2850;
+  --ok:#6fd3b4;--ok-soft:#14332c;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.6);color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#080e1f;--panel:#101930;--fg:#e8ecf7;--muted:#9aa6c2;--line:#233052;--soft:#18233f;
-  --ink:#060b19;--ink2:#101930;--ink-fg:#eef2fb;--ink-muted:#9dabc9;--ink-line:#1c2848;
-  --accent:#93a9ff;--accent-hi:#a9bbff;--accent-fg:#07102a;--accent-soft:#1b2752;
-  --ok:#5fd0ae;--ok-soft:#10332b;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
+  --bg:#0d1222;--panel:#151b30;--fg:#e8ecf7;--muted:#9aa6c2;--line:#262f4d;--soft:#1c2440;
+  --ink:#0b1020;--ink2:#161d36;--ink-fg:#eef2fb;--ink-muted:#b3bddb;--ink-line:#222b49;
+  --accent:#9fb0ff;--accent-hi:#b6c2ff;--accent-fg:#0a1230;--accent-soft:#1f2850;
+  --ok:#6fd3b4;--ok-soft:#14332c;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 12px 32px -12px rgba(0,0,0,.6);color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
@@ -231,6 +231,15 @@ footer details p{color:var(--ink-muted)}
 .stepbar{height:4px;border-radius:4px;background:var(--ink-line);margin:22px 0 0;overflow:hidden}
 .stepbar i{display:block;height:100%;width:calc(100%*var(--k,1)/6);background:var(--accent-hi);border-radius:4px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
 @media (prefers-reduced-motion:reduce){.steps li,.stepbar i{transition:none}.steps li.on{transform:none}}
+.hero{position:relative;isolation:isolate}
+.aura{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aura i{position:absolute;width:42%;aspect-ratio:1;border-radius:50%;filter:blur(90px);opacity:.38;will-change:transform}
+.aura i:nth-child(1){background:#5b6ee6;left:-10%;top:-30%;animation:d1 24s ease-in-out infinite alternate}
+.aura i:nth-child(2){background:#2f9c86;right:-8%;top:10%;animation:d2 28s ease-in-out infinite alternate}
+.aura i:nth-child(3){background:#c9814d;left:30%;bottom:-60%;opacity:.22;animation:d3 32s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(24%,22%) scale(1.15)}}@keyframes d2{to{transform:translate(-22%,-18%) scale(.9)}}@keyframes d3{to{transform:translate(-26%,-24%) scale(1.2)}}
+.rv{opacity:0;transform:translateY(18px)}.rv.in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i,0)*70ms)}
+@media (prefers-reduced-motion:reduce){.aura i{animation:none}}
 </style>
 <!--/HEAD-->
 </head>
@@ -250,7 +259,7 @@ footer details p{color:var(--ink-muted)}
 </defs></svg>
 
 <div class="top"><div class="in">
-  <a class="brand" href="#inicio"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#8ea6ff" stroke-width="2"/><circle cx="13" cy="13" r="5.500" stroke="#8ea6ff" stroke-width="2" opacity=".55"/><path d="M13 13l8-8" stroke="#8ea6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#8ea6ff"/></svg>Radar de Proyectos</a>
+  <a class="brand" href="#inicio"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#aab6ff" stroke-width="2"/><circle cx="13" cy="13" r="5.500" stroke="#aab6ff" stroke-width="2" opacity=".55"/><path d="M13 13l8-8" stroke="#aab6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#aab6ff"/></svg>Radar de Proyectos</a>
   <nav class="nav" aria-label="Secciones">
     <a href="#radar">Proyectos</a><a href="#como">Cómo funciona</a><a href="#ejemplo">Ejemplo</a><a href="#medidor">Medidor</a><a href="#planes">Planes</a>
     <a class="btn sm" href="#informe">Informe gratis</a>
@@ -504,7 +513,7 @@ footer details p{color:var(--ink-muted)}
 </div></section>
 
 <footer><div class="in">
-  <div class="brand"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#8ea6ff" stroke-width="2"/><path d="M13 13l8-8" stroke="#8ea6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#8ea6ff"/></svg>Radar de Proyectos</div>
+  <div class="brand"><svg viewBox="0 0 26 26" fill="none" aria-hidden="true"><circle cx="13" cy="13" r="11" stroke="#aab6ff" stroke-width="2"/><path d="M13 13l8-8" stroke="#aab6ff" stroke-width="2" stroke-linecap="round"/><circle cx="13" cy="13" r="2" fill="#aab6ff"/></svg>Radar de Proyectos</div>
   <p>Las estimaciones de oportunidades, plazos, costos y relaciones entre empresas son referenciales y no constituyen asesoría financiera, legal ni una oferta comercial.</p>
   <details><summary>Política de privacidad</summary><p>Guardamos solo los datos que usted entrega en esta página (correo, nombre, empresa, rubro, región y respuestas del medidor) y los usamos para enviarle el informe mensual, su resultado y responder sus consultas. No los vendemos ni los compartimos con terceros. Puede pedir acceso, corrección o eliminación de sus datos en cualquier momento escribiéndonos por el formulario de contacto, conforme a la legislación chilena de protección de datos personales.</p></details>
   <details><summary>Términos de uso</summary><p>El contenido de este sitio se basa en fuentes públicas y se entrega con fines informativos. Radar de Proyectos no garantiza que un proyecto se construya, ni los plazos, montos u oportunidades estimadas. Cada usuario es responsable de sus decisiones comerciales. No certificamos ni acreditamos normas.</p></details>
@@ -557,16 +566,16 @@ $("tabla").innerHTML = PROY.slice(0, 8).map(p =>
   const SECT = {"Tarapacá":[-90,-30],"Antofagasta":[-30,150],"Atacama":[150,225],"Coquimbo":[225,270]};
   const hoy = new Date(2026, 10, 21);
   const pol = (ang, rad) => { const a = ang * Math.PI / 180; return [C + rad * Math.cos(a), C + rad * Math.sin(a)]; };
-  let h = `<defs><radialGradient id="rg"><stop offset="0" stop-color="#8ea6ff" stop-opacity=".16"/><stop offset="1" stop-color="#8ea6ff" stop-opacity="0"/></radialGradient>
-    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ea6ff" stop-opacity="0"/><stop offset="1" stop-color="#8ea6ff" stop-opacity=".38"/></linearGradient></defs>
+  let h = `<defs><radialGradient id="rg"><stop offset="0" stop-color="#aab6ff" stop-opacity=".16"/><stop offset="1" stop-color="#aab6ff" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aab6ff" stop-opacity="0"/><stop offset="1" stop-color="#aab6ff" stop-opacity=".38"/></linearGradient></defs>
     <circle cx="${C}" cy="${C}" r="${R}" fill="url(#rg)"/>`;
-  [.25,.5,.75,1].forEach(k => h += `<circle cx="${C}" cy="${C}" r="${R*k}" fill="none" stroke="#9dabc9" stroke-opacity="${k===1?.5:.22}" stroke-width="1"/>`);
+  [.25,.5,.75,1].forEach(k => h += `<circle cx="${C}" cy="${C}" r="${R*k}" fill="none" stroke="#b3bddb" stroke-opacity="${k===1?.5:.22}" stroke-width="1"/>`);
   Object.entries(SECT).forEach(([reg,[a,b]]) => {
-    const [x,y] = pol(a, R); h += `<line x1="${C}" y1="${C}" x2="${x}" y2="${y}" stroke="#9dabc9" stroke-opacity=".22"/>`;
+    const [x,y] = pol(a, R); h += `<line x1="${C}" y1="${C}" x2="${x}" y2="${y}" stroke="#b3bddb" stroke-opacity=".22"/>`;
     const [lx,ly] = pol((a+b)/2, R + 18);
-    h += `<text x="${lx}" y="${ly}" fill="#9dabc9" font-family="Geologica,sans-serif" font-size="11" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">${reg.toUpperCase()}</text>`;
+    h += `<text x="${lx}" y="${ly}" fill="#b3bddb" font-family="Geologica,sans-serif" font-size="11" text-anchor="middle" dominant-baseline="middle" letter-spacing="1">${reg.toUpperCase()}</text>`;
   });
-  h += `<g class="barrido"><path d="M${C} ${C}L${C} ${C-R}A${R} ${R} 0 0 1 ${pol(-35,R).join(" ")}Z" fill="url(#sw)"/><line x1="${C}" y1="${C}" x2="${pol(-35,R)[0]}" y2="${pol(-35,R)[1]}" stroke="#8ea6ff" stroke-width="1.500"/></g>`;
+  h += `<g class="barrido"><path d="M${C} ${C}L${C} ${C-R}A${R} ${R} 0 0 1 ${pol(-35,R).join(" ")}Z" fill="url(#sw)"/><line x1="${C}" y1="${C}" x2="${pol(-35,R)[0]}" y2="${pol(-35,R)[1]}" stroke="#aab6ff" stroke-width="1.500"/></g>`;
   const cuenta = {}, etiquetas = [];
   PROY.forEach((p, k) => {
     const [a,b] = SECT[p.r]; const tot = PROY.filter(x => x.r === p.r).length; const j = cuenta[p.r] = (cuenta[p.r] || 0) + 1;
@@ -575,13 +584,13 @@ $("tabla").innerHTML = PROY.slice(0, 8).map(p =>
     const rad = 46 + Math.min(1, meses / 12) * (R - 70) * (0.75 + 0.25 * ((k * 37) % 10) / 10);
     const [x,yy] = pol(ang, rad); const r = 3 + Math.sqrt(p.i) / 6;
     const ok = p.e === "Aprobado";
-    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fd0ae" : "#f0a468"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#0b1736" stroke-width="1"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
+    h += `<circle cx="${x.toFixed(1)}" cy="${yy.toFixed(1)}" r="${r.toFixed(1)}" fill="${ok ? "#5fd0ae" : "#f0a468"}" fill-opacity="${k < 4 ? .95 : .7}" stroke="#1c2444" stroke-width="1"><title>${esc(p.n)} · ${mm(p.i)} · ${p.e}</title></circle>`;
     if (k < 3) etiquetas.push({x:x + r + 8, y:yy + 4, k, i:p.i});
   });
   etiquetas.sort((a,b) => a.y - b.y).forEach((e, j, arr) => { if (j && e.y - arr[j-1].y < 17) e.y = arr[j-1].y + 17; });
-  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef2fb" font-family="Inter,sans-serif" font-size="12" font-weight="600">${["El Abra","Escondida","Albemarle"][e.k]} <tspan fill="#9dabc9" font-weight="400">${mm(e.i)}</tspan></text>`; });
+  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef2fb" font-family="Inter,sans-serif" font-size="12" font-weight="600">${["El Abra","Escondida","Albemarle"][e.k]} <tspan fill="#b3bddb" font-weight="400">${mm(e.i)}</tspan></text>`; });
   h += `<circle cx="${C}" cy="${C}" r="4" fill="#eef2fb"/>
-    <g font-family="Geologica,sans-serif" font-size="11" fill="#9dabc9"><circle cx="18" cy="500" r="5" fill="#8ea6ff"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fd0ae"/><text x="162" y="504">Aprobado</text></g>`;
+    <g font-family="Geologica,sans-serif" font-size="11" fill="#b3bddb"><circle cx="18" cy="500" r="5" fill="#aab6ff"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fd0ae"/><text x="162" y="504">Aprobado</text></g>`;
   svg.innerHTML = h;
 })();
 
@@ -687,6 +696,17 @@ function sel(n){li.forEach(function(x,k){x.classList.toggle("on",k===n);x.classL
 li.forEach(function(x,k){x.tabIndex=0;x.addEventListener("click",function(){clearInterval(t);sel(k)});x.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();clearInterval(t);sel(k)}else if(e.key==="ArrowRight"&&li[k+1]){clearInterval(t);sel(k+1);li[k+1].focus()}else if(e.key==="ArrowLeft"&&li[k-1]){clearInterval(t);sel(k-1);li[k-1].focus()}})});
 sel(0);if(rm||!("IntersectionObserver" in window))return;
 var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.disconnect();var n=0;t=setInterval(function(){n++;if(n>=li.length){clearInterval(t);return}sel(n)},900)},{threshold:.6});io.observe(ol)})();
+</script>
+<script>
+/* Movimiento de la página: fondo vivo en la portada, cifras que cuentan y secciones que aparecen al bajar. */
+(function(){var rm=matchMedia("(prefers-reduced-motion: reduce)").matches;var h=document.querySelector(".hero");
+if(h){var a=document.createElement("div");a.className="aura";a.setAttribute("aria-hidden","true");a.innerHTML="<i></i><i></i><i></i>";h.prepend(a)}
+if(rm||!("IntersectionObserver" in window))return;
+function count(b){var txt=b.textContent,m=txt.match(/\d[\d.]*/);if(!m)return;var end=parseInt(m[0].replace(/\./g,""),10);if(!end)return;var pre=txt.slice(0,m.index),post=txt.slice(m.index+m[0].length),t0=performance.now();
+(function step(t){var k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);b.textContent=k<1?pre+Math.round(end*e).toLocaleString("es-CL")+post:txt;if(k<1)requestAnimationFrame(step)})(t0)}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);if(e.target.matches(".stat b"))count(e.target);else e.target.classList.add("in")})},{rootMargin:"0px 0px -8% 0px"});
+document.querySelectorAll(".stat b").forEach(function(b){io.observe(b)});
+var vh=innerHeight*.9;document.querySelectorAll(".band .in").forEach(function(c){[].forEach.call(c.children,function(n,i){var kids=n.matches(".head")||n.children.length<3||n.matches("form,table,.win,details,ol.steps")?[n]:[].slice.call(n.children);kids.forEach(function(x,j){if(x.getBoundingClientRect().top>vh){x.classList.add("rv");x.style.setProperty("--i",Math.min(j,5));io.observe(x)}})})})})();
 </script>
 </body>
 </html>
