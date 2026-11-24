@@ -30,7 +30,7 @@
   --accent:#d88d57;--accent-hi:#f3bb89;--accent-fg:#1a0f07;--accent-soft:#2a1c12;
   --ok:#7fd4ae;--ok-soft:#14332c;--warn:#e3c463;--warn-soft:#352c12;--bad:#f09488;--bad-soft:#3b1d1a;
   --metal:linear-gradient(100deg,#b9642f,#eaa873 28%,#ffdcb4 46%,#d88d57 64%,#a55a2a);
-  --display:Jost,"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:Jost,"Instrument Sans",system-ui,sans-serif;
+  --display:Jost,"Instrument Sans",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:"Instrument Sans",system-ui,sans-serif;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 24px 48px -20px rgba(0,0,0,.7);color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
@@ -378,6 +378,14 @@ h1 em,.vs h3 em{background:var(--metal);-webkit-background-clip:text;background-
 .brand .lema{display:flex;justify-content:space-between;font:500 .3em var(--display);line-height:.8;height:.8em;color:#e2ad84;align-self:stretch;margin:0}
 .brand .lema i{font-style:normal;display:block}.brand .lema i.sp{width:.5em}
 @media(max-width:560px){.brand .lema{display:none}.brand .col{justify-content:center}}
+/* cifras y títulos: Jost llega solo hasta 600, así que nada más grueso (evita la negrita falsa) */
+.stat b{font-weight:400;font-size:clamp(30px,3.3vw,44px);white-space:nowrap;letter-spacing:-.01em}
+.stat b small{font:500 .42em var(--body);letter-spacing:.08em;color:var(--accent-hi);vertical-align:.5em}
+.money,.gauge b,.sdet b,.vbig,.vring{font-weight:400;letter-spacing:-.01em}
+.vs h3{font-weight:400}
+.plan .price,.xkpi b,.vcard .m{font-weight:500}
+.out b{font:600 18px var(--body)}
+.tl li b,.steps b,.plist .v,.veredicto b,summary{font-weight:500}
 .hero{background:radial-gradient(1000px 560px at 78% 30%,#1a2a48,#0a1424 60%,#070d18)}
 .band.alt{background:var(--panel)}
 </style>
@@ -432,7 +440,7 @@ h1 em,.vs h3 em{background:var(--metal);-webkit-background-clip:text;background-
   <div class="stat"><b id="st-n">374</b><span>proyectos presentados al SEIA en los últimos 12 meses</span></div>
   <div class="stat"><b id="st-cal">236</b><span>siguen en calificación: aún no tienen constructora</span></div>
   <div class="stat"><b id="st-norte">90</b><span>están entre Arica y Coquimbo</span></div>
-  <div class="stat"><b id="st-inv">US$ 31.700 MM</b><span>suman los 25 más grandes del norte</span></div>
+  <div class="stat"><b id="st-inv"><small>US$</small> 31.700 <small>MM</small></b><span>suman los 25 más grandes del norte</span></div>
 </div><div class="in src" id="st-src">Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental). Corte al 21/11/2026.</div></section>
 
 <section class="band" id="video"><div class="in">
@@ -976,8 +984,8 @@ var io=new IntersectionObserver(function(es){if(!es[0].isIntersecting)return;io.
 (function(){var rm=matchMedia("(prefers-reduced-motion: reduce)").matches;var h=document.querySelector(".hero");
 if(h){var a=document.createElement("div");a.className="aura";a.setAttribute("aria-hidden","true");a.innerHTML="<i></i><i></i><i></i>";h.prepend(a)}
 if(rm||!("IntersectionObserver" in window))return;
-function count(b){var txt=b.textContent,m=txt.match(/\d[\d.]*/);if(!m)return;var end=parseInt(m[0].replace(/\./g,""),10);if(!end)return;var pre=txt.slice(0,m.index),post=txt.slice(m.index+m[0].length),t0=performance.now();
-(function step(t){var k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);b.textContent=k<1?pre+Math.round(end*e).toLocaleString("es-CL")+post:txt;if(k<1)requestAnimationFrame(step)})(t0)}
+function count(b){var txt=b.innerHTML,m=txt.match(/\d[\d.]*/);if(!m)return;var end=parseInt(m[0].replace(/\./g,""),10);if(!end)return;var pre=txt.slice(0,m.index),post=txt.slice(m.index+m[0].length),t0=performance.now();
+(function step(t){var k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);b.innerHTML=k<1?pre+Math.round(end*e).toLocaleString("es-CL")+post:txt;if(k<1)requestAnimationFrame(step)})(t0)}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;io.unobserve(e.target);if(e.target.matches(".stat b"))count(e.target);else e.target.classList.add("in")})},{rootMargin:"0px 0px -8% 0px"});
 document.querySelectorAll(".stat b").forEach(function(b){io.observe(b)});
 var vh=innerHeight*.9;document.querySelectorAll(".band .in").forEach(function(c){[].forEach.call(c.children,function(n,i){var kids=n.matches(".head")||n.children.length<3||n.matches("form,table,.win,details,ol.steps")?[n]:[].slice.call(n.children);kids.forEach(function(x,j){if(x.getBoundingClientRect().top>vh){x.classList.add("rv");x.style.setProperty("--i",Math.min(j,5));io.observe(x)}})})})})();
@@ -1113,7 +1121,7 @@ est(0);
   const inv25=Math.round(norte.slice(0,25).reduce((a,p)=>a+p.i,0)/100)*100;
   const ult=d.reduce((a,p)=>p.actualizado_at>a?p.actualizado_at:a,"");
   const dia=ult?new Date(ult).toLocaleDateString("es-CL",{timeZone:"America/Santiago"}):"";
-  const pon=()=>{$("st-n").textContent=TOT.toLocaleString("es-CL");$("st-cal").textContent=EST[0].n.toLocaleString("es-CL");$("st-norte").textContent=norte.length;$("st-inv").textContent="US$ "+inv25.toLocaleString("es-CL")+" MM"};
+  const pon=()=>{$("st-n").textContent=TOT.toLocaleString("es-CL");$("st-cal").textContent=EST[0].n.toLocaleString("es-CL");$("st-norte").textContent=norte.length;$("st-inv").innerHTML="<small>US$</small> "+inv25.toLocaleString("es-CL")+" <small>MM</small>"};
   pon(); setTimeout(pon,1200);
   try{const top=norte.filter(p=>p.f&&p.i>0&&/^(En |Aprobado)/.test(p.e)).slice(0,25);if(top.length>=10){PROY=top;radar(new Date());$("radar-info").textContent="Cada punto es un proyecto real del norte"+(dia?", al "+dia:"")+". Toque uno para ver cuál es."}}catch(e){}
   if(window.vidDatos)vidDatos(TOT);
