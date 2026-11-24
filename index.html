@@ -314,6 +314,64 @@ footer details p{color:var(--ink-muted)}
 @media (max-width:520px){.xkpi{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.sdet{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.hbar i,.stack button,.regla .prep,.regla .lic{transition:none}}
 .check a{color:inherit}
+/* Mapa del explorador */
+.xgrid.m{grid-template-columns:210px minmax(0,1fr) minmax(0,1.25fr)}
+.xmapa{align-items:stretch}.xmapa svg{width:100%;height:520px;display:block}
+.xmapa path{fill:var(--soft);stroke:var(--muted);stroke-opacity:.55;stroke-width:1;vector-effect:non-scaling-stroke}
+.xmapa circle{stroke:var(--panel);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;fill-opacity:.8}
+.xmapa circle.sel{stroke:var(--fg);stroke-width:2.5;fill-opacity:1}
+.xmapa circle:focus-visible{outline:none;stroke:var(--fg);stroke-width:2.5}
+.xmapa .ley{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}.xmapa .ley i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+#x-minfo{font-size:13.5px;color:var(--muted);min-height:4.8em}#x-minfo b{color:var(--fg);display:block}
+/* Recorrido animado */
+.vid{position:relative;background:#141b3a;color:#f1f3fb;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);border:1px solid #36416f}
+.vstage{position:relative;aspect-ratio:16/8;min-height:470px}
+.vs{position:absolute;inset:0;padding:clamp(20px,4vw,48px);display:flex;flex-direction:column;justify-content:center;gap:22px;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.vs.on{opacity:1;visibility:visible}
+.vs h3{font-size:clamp(22px,3.2vw,36px);font-weight:700;line-height:1.12;max-width:22ch}
+.vs h3 em{font-style:normal;color:#aab6ff}
+.vs .cap{font:500 12px var(--mono);color:#aab6ff;letter-spacing:.08em;text-transform:uppercase}
+.vs p{color:#b3bddb;font-size:clamp(15px,1.6vw,18px);max-width:52ch}
+.vs .a{opacity:0}
+.vs.on .a{animation:vin .6s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--d,0)*1s)}
+.vid.pausa .vs.on .a,.vid.pausa .vs.on .vfill{animation-play-state:paused}
+@keyframes vin{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.vline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:relative;margin-top:6px}
+.vline::before{content:"";position:absolute;left:6px;right:6px;top:6px;height:2px;background:#36416f}
+.vline .vfill{position:absolute;left:6px;top:6px;height:2px;background:#aab6ff;width:0}
+.vs.on .vline .vfill{animation:vw 4s .4s linear both}@keyframes vw{to{width:calc(100% - 12px)}}
+.vline div{position:relative;padding-top:22px;font-size:clamp(12px,1.4vw,15px);color:#b3bddb;padding-right:8px}
+.vline div::before{content:"";position:absolute;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#141b3a;border:2px solid #aab6ff}
+.vline div b{display:block;color:#f1f3fb;font-weight:600}
+.vline .mk{display:inline-block;margin-top:8px;font:600 12px var(--mono);padding:3px 8px;border-radius:6px}
+.vline .mk.si{background:#5fd0ae;color:#0b1020}.vline .mk.no{background:#f0a468;color:#0b1020}
+.vcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.vcard{background:#1e2750;border:1px solid #36416f;border-radius:10px;padding:14px;font-size:14px;color:#b3bddb;min-width:0}
+.vcard b{display:block;color:#f1f3fb;font-size:15px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.vcard .m{font:700 18px var(--display);color:#aab6ff;margin-top:6px;display:block}
+.vcard .al{font:600 11px var(--mono);color:#5fd0ae;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px}
+.vbig{font:800 clamp(44px,7vw,84px)/1 var(--display);color:#aab6ff}
+.vrow{display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+.vq{background:#1e2750;border-left:3px solid #aab6ff;border-radius:6px;padding:14px 16px;font-style:italic;color:#dfe4f6;max-width:34ch;font-size:15px}
+.vchips{display:flex;flex-wrap:wrap;gap:8px;max-width:440px}.vchips span{background:#aab6ff;color:#0b1020;font-weight:600;font-size:14px;padding:6px 12px;border-radius:999px}
+.vbars{display:grid;gap:8px;margin-top:8px}.vbars div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px;align-items:center;font-size:13px}
+.vbars i{display:block;height:10px;border-radius:5px;background:#aab6ff;transform-origin:left;transform:scaleX(0)}
+.vs.on .vbars i{animation:vsx .9s 1.2s cubic-bezier(.2,.7,.2,1) both}@keyframes vsx{to{transform:scaleX(1)}}
+.vring{font:800 40px var(--display);color:#5fd0ae}.vring small{font:500 14px var(--body);color:#b3bddb}
+.vs .cta{display:flex;gap:12px;flex-wrap:wrap}.vs .btn.ghost{color:#f1f3fb}
+.vbar{display:flex;align-items:stretch;gap:8px;padding:12px 14px;background:#0f1530;border-top:1px solid #36416f}
+.vbar button{font:600 13px var(--body);color:#b3bddb;background:none;border:0;cursor:pointer;padding:8px 6px;border-radius:6px;min-height:44px}
+.vbar button:focus-visible{outline:2px solid #aab6ff;outline-offset:1px}
+.vbar .pp{flex:none;width:44px;background:#aab6ff;color:#0b1020;border-radius:50%;display:grid;place-items:center}
+.vbar .pp svg{width:18px;height:18px}
+.vcaps{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;min-width:0}
+.vcaps button{text-align:left;display:flex;flex-direction:column;gap:6px;justify-content:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.vcaps button[aria-current="true"]{color:#f1f3fb}
+.vcaps button u{display:block;height:3px;border-radius:2px;background:#36416f;overflow:hidden;text-decoration:none}
+.vcaps button u i{display:block;height:100%;width:0;background:#aab6ff}
+@media (max-width:900px){.xgrid.m{grid-template-columns:minmax(0,1fr)}.xmapa svg{height:440px}}
+@media (max-width:640px){.vstage{aspect-ratio:auto;min-height:620px}.vcards{grid-template-columns:minmax(0,1fr)}.vcard b{-webkit-line-clamp:1}.vcaps button span{display:none}.vline{grid-template-columns:minmax(0,1fr);gap:10px}.vline::before,.vline .vfill{display:none}.vline div{padding:0 0 0 24px}.vline div::before{top:3px}}
+@media (prefers-reduced-motion:reduce){.vs,.vs.on .a,.vs.on .vline .vfill,.vs.on .vbars i{animation:none;transition:none}.vs .a{opacity:1}.vline .vfill{width:calc(100% - 12px)}.vbars i{transform:none}}
 </style>
 <!--/HEAD-->
 </head>
@@ -368,6 +426,52 @@ footer details p{color:var(--ink-muted)}
   <div class="stat"><b id="st-inv">US$ 31.700 MM</b><span>suman los 25 más grandes del norte</span></div>
 </div><div class="in src" id="st-src">Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental). Corte al 21/11/2026.</div></section>
 
+<section class="band" id="video"><div class="in">
+  <div class="head"><div class="eyebrow">En 40 segundos</div>
+    <h2>Vea cómo funciona Radar de Proyectos</h2>
+    <p class="lead">Un recorrido animado. Puede pausarlo o saltar a la parte que le interese.</p></div>
+  <div class="vid" id="vid" role="group" aria-label="Recorrido animado de Radar de Proyectos">
+    <div class="vstage" aria-live="off">
+      <div class="vs" data-t="8"><span class="cap a">El problema</span>
+        <h3 class="a" style="--d:.2">Cuando usted se entera, <em>el negocio ya está repartido</em></h3>
+        <div class="vline a" style="--d:.5"><span class="vfill"></span>
+          <div><b>Entra al SEIA</b>Se publica el estudio<br><span class="mk si a" style="--d:5.2">Con Radar: aquí</span></div>
+          <div><b>Evaluación</b>Uno a dos años</div>
+          <div><b>Aprobación</b>Se elige constructora</div>
+          <div><b>Licitación</b>Contratos casi cerrados<br><span class="mk no a" style="--d:3.8">La mayoría: aquí</span></div>
+        </div></div>
+      <div class="vs" data-t="8"><span class="cap a">El radar</span>
+        <div class="vrow"><span class="vbig a" style="--d:.2" id="v-n">374</span><h3 class="a" style="--d:.4">proyectos seguidos desde que entran a evaluación</h3></div>
+        <p class="a" style="--d:.8">Revisamos el SEIA todos los días. Estos son hoy los tres más grandes del norte:</p>
+        <div class="vcards" id="v-top"></div></div>
+      <div class="vs" data-t="8"><span class="cap a">El negocio</span>
+        <h3 class="a" style="--d:.2">Traducimos el estudio ambiental a <em>negocios para su rubro</em></h3>
+        <div class="vrow">
+          <div class="vq a" style="--d:.8">«Se estima un flujo diario de camiones por la ruta de acceso para el traslado de insumos y equipos…»<br><small style="font-style:normal;color:#b3bddb">Frase de ejemplo de un estudio</small></div>
+          <div class="vchips"><span class="a" style="--d:2">Transporte de carga</span><span class="a" style="--d:2.4">Escoltas y permisos</span><span class="a" style="--d:2.8">Combustible</span><span class="a" style="--d:3.2">Mantenimiento de flota</span><span class="a" style="--d:3.6">Campamento y alimentación</span><span class="a" style="--d:4">Agua y residuos</span></div>
+        </div></div>
+      <div class="vs" data-t="8"><span class="cap a">La decisión</span>
+        <h3 class="a" style="--d:.2">Le decimos <em>si le conviene</em> y <em>si su empresa está lista</em></h3>
+        <div class="vcards" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+          <div class="vcard a" style="--d:.8"><span class="al">Costeo preliminar</span><b>¿Deja margen con sus propios costos?</b>
+            <div class="vbars"><div>Costo del servicio<i style="width:78%"></i></div><div>Margen esperado<i style="width:22%;background:#5fd0ae"></i></div><div>Capital necesario<i style="width:46%;background:#f0a468"></i></div></div></div>
+          <div class="vcard a" style="--d:1.4"><span class="al">Medidor de preparación</span><b>¿Qué le falta para ser proveedor?</b>
+            <div class="vring" style="margin-top:8px">62 <small>de 100 · le faltan ISO 45001 y registro de proveedores</small></div></div>
+        </div>
+        <p class="a" style="--d:2.2;font-size:13px">Cifras de ejemplo, solo para mostrar el formato.</p></div>
+      <div class="vs" data-t="12"><span class="cap a">Empezar</span>
+        <h3 class="a" style="--d:.2">Empiece hoy, <em>gratis</em></h3>
+        <p class="a" style="--d:.5">Sin tarjeta ni contrato. Elija por dónde partir:</p>
+        <div class="cta a" style="--d:.9"><a class="btn" href="#informe">Recibir el informe mensual</a><a class="btn ghost" href="#medidor">Medir mi empresa</a><a class="btn ghost" href="app/">Ver la plataforma en prueba</a></div></div>
+    </div>
+    <div class="vbar">
+      <button type="button" class="pp" id="v-pp" aria-label="Reproducir"></button>
+      <div class="vcaps" id="v-caps"></div>
+    </div>
+  </div>
+</div></section>
+
+
 <section class="band"><div class="in">
   <div class="head"><div class="eyebrow">El problema</div>
     <h2>Cuando usted se entera, los contratos ya tienen dueño</h2>
@@ -393,12 +497,18 @@ footer details p{color:var(--ink-muted)}
 <section class="band alt" id="radar"><div class="in">
   <div class="head"><div class="eyebrow">En el radar ahora</div>
     <h2>Explore los proyectos más grandes que entraron este año</h2>
-    <p class="lead">Datos reales del SEIA. Filtre por zona y rubro, o toque una región del gráfico para ver sus proyectos.</p></div>
+    <p class="lead">Datos reales del SEIA. Filtre por zona y rubro, toque una región del gráfico o un punto del mapa.</p></div>
   <div class="ctrl">
     <div class="seg" id="x-zona" role="group" aria-label="Zona"><button type="button" data-z="norte" aria-pressed="true">Norte</button><button type="button" data-z="todo" aria-pressed="false">Todo Chile</button></div>
     <div class="chips" id="x-rubro" role="group" aria-label="Rubro"></div>
   </div>
-  <div class="xgrid">
+  <div class="xgrid" id="x-grid">
+    <div class="box xmapa" id="x-mapabox" hidden>
+      <h3 style="font-size:16px">Dónde están</h3>
+      <svg id="x-mapa" role="img" aria-label="Mapa de Chile con los proyectos del filtro elegido" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="ley"><span><i style="background:var(--accent)"></i>En evaluación</span><span><i style="background:var(--ok)"></i>Aprobado</span><span><i style="background:#7a8198"></i>Otro</span></div>
+      <p id="x-minfo" aria-live="polite">Cada punto es un proyecto; el tamaño indica la inversión. Toque uno para ver cuál es.</p>
+    </div>
     <div class="box">
       <div class="xkpi" aria-live="polite"><div><b id="x-n">0</b><span>proyectos</span></div><div><b id="x-inv">0</b><span>inversión declarada</span></div><div><b id="x-eia">0</b><span>son EIA (los más complejos)</span></div></div>
       <h3 style="font-size:16px">Inversión por región</h3>
@@ -495,12 +605,16 @@ footer details p{color:var(--ink-muted)}
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-sobre"/></svg></div><span class="tag">Disponible</span></div><h3>Informe mensual</h3><p>Los proyectos nuevos del mes y qué significan para los proveedores, en su correo.</p></div>
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-medidor"/></svg></div><span class="tag">Disponible</span></div><h3>Medidor de preparación</h3><p>Sepa en tres minutos qué le falta para ser proveedor de un gran proyecto.</p></div>
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-radar"/></svg></div><span class="tag soon">En prueba interna</span></div><h3>Monitor de proyectos</h3><p>Entérese el mismo día en que un proyecto entra a evaluación o cambia de estado.</p></div>
-    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-doc"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Ficha por proyecto</h3><p>Dueño, constructora probable, cronograma y contactos de abastecimiento en una hoja.</p></div>
+    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-doc"/></svg></div><span class="tag soon">En prueba interna</span></div><h3>Ficha por proyecto</h3><p>Dueño, constructora probable, cronograma y contactos de abastecimiento en una hoja.</p></div>
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-camion"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Mapa de oportunidades</h3><p>Los volúmenes del estudio ambiental convertidos en negocios para su rubro.</p></div>
-    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-calc"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Costeo preliminar</h3><p>Cotización base, margen esperado y capital necesario con sus propios costos.</p></div>
-    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-red"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Proveedores y socios</h3><p>Empresas por zona y rubro, con revisión de riesgo antes de asociarse.</p></div>
+    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-calc"/></svg></div><span class="tag soon">En prueba interna</span></div><h3>Costeo preliminar</h3><p>Cotización base, margen esperado y capital necesario con sus propios costos.</p></div>
+    <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-red"/></svg></div><span class="tag soon">En prueba interna</span></div><h3>Proveedores y socios</h3><p>Empresas por zona y rubro, con revisión de riesgo antes de asociarse.</p></div>
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-casco"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Quién trabaja con quién</h3><p>Estimación de los subcontratistas habituales de cada constructora.</p></div>
     <div class="item mod"><div class="modtop"><div class="ico"><svg><use href="#i-escudo"/></svg></div><span class="tag soon">En desarrollo</span></div><h3>Asesoría de brechas</h3><p>Acompañamiento para normas ISO, registros de proveedores y cumplimiento laboral.</p></div>
+  </div>
+  <div class="box" style="margin-top:24px;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between">
+    <div style="min-width:0;flex:1 1 320px"><h3>La plataforma ya funciona en versión de prueba</h3><p style="color:var(--muted);font-size:15px">Con datos reales del SEIA. Puede entrar y recorrerla sin registrarse; todavía la estamos ajustando.</p></div>
+    <a class="btn" href="app/">Ver la plataforma</a>
   </div>
 </div></section>
 
@@ -675,7 +789,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",
 
 // Los 25 proyectos más grandes del norte presentados al SEIA entre 21/11/2025 y 21/11/2026.
 // nombre corto | titular | región | inversión MMUS$ | fecha | estado
-const PROY = `Continuidad Operacional El Abra y Planta Concentradora|SCM El Abra|Antofagasta|7500|26/03/2026|En calificación
+let PROY = `Continuidad Operacional El Abra y Planta Concentradora|SCM El Abra|Antofagasta|7500|26/03/2026|En calificación
 Nueva Planta Concentradora Minera Escondida|Minera Escondida Limitada|Antofagasta|5150|18/03/2026|En calificación
 Proyecto TED: Extracción Directa de Litio|Albemarle Limitada|Antofagasta|3100|01/04/2026|En calificación
 Continuidad y Desarrollo Minero en el Salar de Atacama|Nova Andino Litio SpA|Antofagasta|3000|10/07/2026|En calificación
@@ -704,10 +818,11 @@ Línea de Transmisión Alfa Solar - Kimal|Pleiades S.A.|Antofagasta|160|12/11/20
 const mm = (n) => "US$ " + Math.round(n).toLocaleString("es-CL") + " MM";
 
 // Radar: un sector por región, de norte a sur en el sentido del reloj. Distancia al centro = antigüedad del ingreso.
-(function radar(){
+function radar(hoy){
   const C = 260, R = 220, svg = $("radar-svg");
-  const SECT = {"Tarapacá":[-90,-30],"Antofagasta":[-30,150],"Atacama":[150,225],"Coquimbo":[225,270]};
-  const hoy = new Date(2026, 10, 21);
+  const hay = (r) => PROY.some(p => p.r === r);
+  const SECT = hay("Arica y Parinacota") ? {"Arica y Parinacota":[-90,-62],"Tarapacá":[-62,-25],"Antofagasta":[-25,150],"Atacama":[150,225],"Coquimbo":[225,270]} : {"Tarapacá":[-90,-30],"Antofagasta":[-30,150],"Atacama":[150,225],"Coquimbo":[225,270]};
+  const corto = (p) => { const m = (p.n + " " + p.t).match(/El Abra|Escondida|Albemarle|Codelco|Collahuasi|Spence|Lobo Marte|Cerro Colorado|NorQuim/); return m ? m[0] : p.t.replace(/^(Sociedad Contractual Minera|Compañía Minera|Minera|SCM)\s+/i,"").split(/\s+/).slice(0,2).join(" "); };
   const pol = (ang, rad) => { const a = ang * Math.PI / 180; return [C + rad * Math.cos(a), C + rad * Math.sin(a)]; };
   let h = `<defs><radialGradient id="rg"><stop offset="0" stop-color="#aab6ff" stop-opacity=".16"/><stop offset="1" stop-color="#aab6ff" stop-opacity="0"/></radialGradient>
     <linearGradient id="sw" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aab6ff" stop-opacity="0"/><stop offset="1" stop-color="#aab6ff" stop-opacity=".38"/></linearGradient></defs>
@@ -731,11 +846,12 @@ const mm = (n) => "US$ " + Math.round(n).toLocaleString("es-CL") + " MM";
     if (k < 3) etiquetas.push({x:x + r + 8, y:yy + 4, k, i:p.i});
   });
   etiquetas.sort((a,b) => a.y - b.y).forEach((e, j, arr) => { if (j && e.y - arr[j-1].y < 17) e.y = arr[j-1].y + 17; });
-  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef2fb" font-family="Inter,sans-serif" font-size="12" font-weight="600">${["El Abra","Escondida","Albemarle"][e.k]} <tspan fill="#b3bddb" font-weight="400">${mm(e.i)}</tspan></text>`; });
+  etiquetas.forEach(e => { h += `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" fill="#eef2fb" font-family="Inter,sans-serif" font-size="12" font-weight="600">${esc(corto(PROY[e.k]))} <tspan fill="#b3bddb" font-weight="400">${mm(e.i)}</tspan></text>`; });
   h += `<circle cx="${C}" cy="${C}" r="4" fill="#eef2fb"/>
-    <g font-family="Geologica,sans-serif" font-size="11" fill="#b3bddb"><circle cx="18" cy="500" r="5" fill="#aab6ff"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fd0ae"/><text x="162" y="504">Aprobado</text></g>`;
+    <g font-family="Geologica,sans-serif" font-size="11" fill="#b3bddb"><circle cx="18" cy="500" r="5" fill="#f0a468"/><text x="30" y="504">En evaluación</text><circle cx="150" cy="500" r="5" fill="#5fd0ae"/><text x="162" y="504">Aprobado</text></g>`;
   svg.innerHTML = h;
-})();
+}
+radar(new Date(2026, 10, 21));
 
 const PREGUNTAS = [
   {id:"sicep", t:"¿Está inscrito y vigente en un registro de proveedores mineros (por ejemplo SICEP)?", p:15, o:["Sí, vigente","En trámite","No"], b:"Inscribirse en un registro de proveedores mineros", d:"suele tomar de 1 a 2 meses"},
@@ -921,8 +1037,23 @@ function pinta(){
   $("x-titulo").textContent=(st.u==="Todos"?"Proyectos":st.u)+(st.r?" en "+st.r:st.z==="norte"?" en el norte":" en todo Chile");
   const L=F.slice().sort((a,b)=>b.i-a.i);
   $("x-lista").innerHTML=L.slice(0,st.n).map(p=>`<li><div style="min-width:0"><b>${esc(p.n)}</b><small>${esc(p.t)} · ${esc(p.r)} · ${p.u} · ${p.k} · presentado el ${p.f}</small></div><div class="v">${mm(p.i)}<small><span class="tag ${p.e==="Aprobado"?"":"soon"}">${p.e}</span></small></div></li>`).join("");
+  mapa(F);
   $("x-mas").hidden=L.length<=st.n; $("x-mas").textContent=L.length-st.n>12?"Ver 12 más":"Ver los "+L.length;
 }
+const CHILE="M46 10.5L47 10.5L47.5 10.5L48.5 10L50 9L50.5 8L51 7L51 6L50.5 5L50.5 4L51 3.5L52 3.5L52.5 2.5L53 2L53.5 3L54.5 4.5L55 6.5L56.5 7.5L56.5 8L56 8.5L56.5 9L56.5 10L56.5 10.5L57 11.5L57 12.5L57 13.5L57.5 15L57.5 16L57.5 16.5L58 17.5L58.5 18L59.5 18.5L60 19.5L60.5 20L61 20.5L61.5 21L62 21.5L61.5 21.5L61 22.5L60 24L60 24.5L61 25.5L61 26L61 26.5L60.5 27.5L59.5 27.5L59.5 28L59.5 28.5L59.5 29.5L60 30L60 30.5L59.5 31L59.5 31.5L60 32L61.5 33L61.5 33.5L61 34L61 34.5L61 35.5L61 36L62 36.5L63 38.5L64 40L64 41.5L64 43L64.5 44.5L65 45.5L65 47L65.5 47.5L66 49L66 50L66 50.5L66.5 52L66.5 53.5L66.5 54.5L66.5 55L67 55.5L67.5 56L68 56L69 56L71 55.5L72 55L73.5 57L73 59.5L72 63.5L71 66.5L71 67.5L69 68L66.5 69.5L65 70L63.5 71L63 71.5L62.5 72L62 72.5L62 73L61.5 73.5L61 74.5L61 75.5L61.5 76L62 76.5L62 77L62 77.5L62.5 78L62 78.5L61.5 78.5L61 79.5L60.5 81L60.5 82L61 83.5L61.5 84.5L62 87.5L62 88.5L61.5 90L61 90.5L60.5 91L60.5 91.5L61 92L61.5 93.5L62.5 95L63 96L63 96.5L63 97.5L62.5 97.5L61 98L60.5 98.5L60 98L59.5 98L58.5 98.5L58.5 99.5L58 101L57.5 101.5L57 102.5L56.5 104.5L56 105.5L56 106L55.5 106.5L54.5 107.5L54 108.5L54 109L53.5 109L53 110L52 111L52 112.5L51.5 113.5L51.5 115L50.5 117.5L50.5 118L50 118.5L49 119.5L49 120L49.5 122.5L50 124.5L50 125.5L49.5 127L49.5 128L50 128L50.5 128L50.5 129L50 129L50 130L49.5 130.5L48.5 131L48 130.5L48 131L48 131.5L47.5 132L47 134L46.5 135.5L46.5 136L46.5 136.5L46.5 137L46.5 137.5L46 138L45.5 138.5L45.5 138L45 138.5L45 139L44.5 140L44.5 141.5L44.5 142.5L45 143.5L45.5 145.5L46 146L46.5 146L47 146L47 146.5L47 147.5L46.5 147.5L46 148L46.5 149L46.5 149.5L47 150L47.5 151.5L48 151.5L47.5 153.5L48 155L49 155.5L49 156L49 156.5L48.5 157.5L48.5 158.5L48.5 159L49 159.5L49.5 160L50 159.5L50.5 160L51 160.5L51 161L50.5 161.5L50 163L50 164.5L50 166.5L50.5 168L50.5 169L50 169.5L49.5 169.5L49 170L48.5 170.5L48.5 171.5L48 172L47.5 173L47 173.5L47 174.5L46.5 175.5L46.5 176L46 178.5L45.5 179L45 179L44.5 179.5L45 180L45.5 180.5L45.5 181L45.5 181.5L46 182L46 183L46 184.5L46 186L46 186.5L46 187.5L45.5 188.5L44.5 188.5L44 189L43.5 190L43 190.5L43 191L42.5 191L42 191L41 192L40.5 192L40.5 193L40.5 193.5L40 194L39.5 194.5L39.5 195.5L39.5 196L40 197.5L40 198L39.5 199.5L39.5 200L39.5 201L40 201.5L39.5 202.5L39.5 203.5L39.5 204.5L40 206L41 207.5L41 209L41 210L41.5 211.5L42 212L42 212.5L42 213L42 214L41.5 214.5L40.5 214.5L39.5 215L38.5 215.5L38 216L37.5 216.5L37.5 217L37.5 219L37.5 220L37 221L37 222L36.5 222L36.5 222.5L36.5 223L36 223L35.5 223L35 223.5L35.5 224L35.5 225.5L36 226L35.5 226.5L35.5 227L35 228L34.5 228L34.5 229L34.5 229.5L35 230L35.5 230.5L35 231L34.5 231L34.5 231.5L34 232L34 233L33.5 234L33.5 235L34 236L34 237L33.5 240L33.5 241L34 242.5L33.5 243L33.5 243.5L34 244.5L34.5 246.5L35 247.5L35 248L34 248.5L33.5 248.5L33 248.5L32.5 248.5L32.5 249L32 249.5L32 250L32 250.5L32.5 251.5L32 252L31.5 253L31.5 253.5L32 255L31.5 257L32 257.5L32.5 258L33.5 258.5L34.5 258.5L35 259.5L34.5 260L33.5 260.5L33.5 261.5L34 262.5L35 263L35 263.5L35 264L34.5 264.5L35 265.5L35.5 266.5L35 267L34.5 267.5L34.5 268L34.5 268.5L34 269.5L34 270.5L34.5 271L38.5 271L39.5 271.5L40 272L39.5 272.5L39 273.5L39 274.5L38 275L37.5 274.5L36.5 274.5L35.5 274.5L34.5 274.5L33 275L32.5 274.5L32 275L32.5 276L34.5 276.5L36 277L36.5 277.5L37.5 278.5L38 279.5L38 280.5L37 281.5L37 282L35.5 282.5L35 283L34.5 284L35 285.5L35.5 286L36 286.5L35.5 287.5L34.5 288L34 288.5L34 289L34.5 290L35 290L35 291.5L35.5 293L35.5 293.5L35 294L34 295L33.5 295.5L33 296.5L33 297L33 298L33.5 298.5L33.5 299L33 299L32.5 299.5L32 300.5L30.5 301.5L30 302L30 302.5L29.5 304L29 305L28.5 306L28.5 306.5L29.5 307L30 308L30.5 309.5L30 310.5L28.5 311L28 312L28 313.5L28 314.5L28 315L27.5 315.5L27 316L25.5 316.5L24.5 317L24 318L23.5 319L23.5 320L21 320L20.5 321L20 321.5L20 323L20.5 324L20.5 325L20.5 326L20.5 327.5L20.5 328.5L21.5 329.5L22 330.5L22.5 331.5L22.5 332.5L23 333L23 333.5L23.5 334.5L24 334.5L25 334L25.5 333.5L26 333.5L27.5 333.5L28.5 333L29 333L29.5 333.5L30 334L30.5 335L30.5 336L30.5 337.5L30 337.5L29.5 338L30 338.5L30.5 339L30.5 340L30 341.5L29.5 342.5L30 343L30.5 344L31.5 344.5L32.5 345L33 346L33 346.5L33.5 347L35 347L37.5 347L41.5 347L45 347L49.5 347L51.5 348L53.5 348.5L55.5 348.5L58 349L59.5 349.5L61 349.5L62 350L62 350.5L57.5 349.5L56.5 349L55.5 349L53.5 349.5L53 351L52.5 351.5L51 352L50 352L46 353.5L44.5 353.5L43.5 354L42.5 354.5L42.5 356L42.5 356.5L41.5 359.5L41 360.5L41 361.5L41.5 362.5L41 365L40.5 365.5L38.5 366L37.5 365.5L35.5 365L34 364L32 363.5L31.5 363.5L29.5 361.5L29.5 361L29.5 360.5L30.5 359.5L31 359.5L32 359.5L33.5 359.5L34 360L34 361L34 361.5L33.5 362L34.5 362L35 359.5L37.5 358L38.5 357.5L39.5 356L39.5 355.5L39 355L38 354.5L33.5 357L31.5 357.5L30.5 358.5L29 359.5L29 360L28.5 360.5L28.5 361.5L27 361L24.5 360L24 359.5L24.5 359L25.5 358L25.5 356.5L25.5 355.5L26 355L27 354.5L27.5 354.5L27.5 355L29 355L32 353.5L33 353.5L34.5 354L36 353.5L36.5 353.5L37 353L35.5 352.5L34.5 352.5L31 352L30 352.5L29 353.5L29 353L28.5 352.5L27.5 352.5L27 352.5L26.5 353L26.5 353.5L26 354L25 355L24.5 356L24.5 357L24 357.5L23.5 357.5L22 357.5L21 356.5L20.5 356L19.5 355.5L22 354.5L22.5 354L23.5 353L24 352.5L23.5 352L23 352L23 352.5L22.5 353L21.5 353L20 354L19 353.5L17 354L16.5 353.5L16 353L16.5 352L16 351L15.5 351L15 351L15 350L14.5 349L14 348.5L14 348L15 348L15.5 348.5L16 348.5L18 349.5L18.5 349L19 349L19 348.5L19 348L19.5 348L20 348.5L21 348.5L22 348.5L22.5 348.5L23.5 348.5L25 347.5L26 346.5L26.5 346.5L27 346.5L27 347L27 347.5L27.5 348L28 348.5L28 349L28 349.5L27 350.5L27 351L27.5 350.5L28 350.5L28.5 350L28.5 349.5L28.5 349L28.5 348.5L28 347.5L27.5 347L27.5 346.5L28.5 346L28.5 345.5L29 344.5L28.5 344L26.5 342.5L23.5 341.5L23 341.5L23 342L23.5 342L26.5 343L27 344L27.5 344L28 344.5L28 345L25 345.5L23 347L21.5 347.5L20.5 347.5L20 346.5L19.5 345.5L18.5 345L18 345L17.5 345L17.5 344.5L16.5 345L15 344L16 343L17 343L17.5 340.5L17 339.5L15.5 339L14.5 339L13.5 339L13 338.5L12 338.5L11.5 338.5L10.5 338L9.5 337.5L8.5 336L7.5 335L7.5 334L9.5 334L11 333.5L11 333L10.5 332.5L10 331.5L10.5 331L11 330.5L12 331L13.5 332L13.5 332.5L15 335L15.5 335L17.5 336.5L18 336.5L18 335.5L18.5 334L19 333.5L19.5 333.5L19 332.5L19 332L18.5 332.5L17.5 335L16.5 335.5L15.5 334L15 333.5L15 333L15 332L17 332L16 331.5L14 331L13.5 330.5L13 330.5L12 329.5L11 329L13 327.5L13.5 326.5L16 327L16.5 327L16.5 326.5L16 326.5L15 326L13.5 325L14 324L14 323L14.5 323L15.5 322.5L17 323L17.5 323L17.5 322L16.5 322L15.5 321.5L15.5 320.5L16 320L16 319.5L16.5 318.5L16.5 318L16.5 317.5L17 317.5L17 317L16 317.5L16 318L16 319L15.5 319.5L15 320L15 321L14.5 322L14 321.5L13.5 321.5L13.5 321L13.5 320.5L13.5 317.5L13.5 315L13.5 313L14.5 312L15 312L15.5 312L16 312L16.5 312L15 311.5L14 311.5L13.5 312L12.5 311.5L12.5 310.5L11.5 309.5L11.5 308.5L11.5 307L13 307L14.5 307.5L17.5 307.5L20.5 309L21.5 309L21.5 308.5L20.5 308L20 307L19.5 307L19.5 306.5L19.5 306L18.5 303.5L18 304.5L17.5 305.5L17 306.5L15.5 306.5L14.5 306.5L13.5 306.5L13.5 306L13.5 305.5L13 305L11.5 304.5L11 304L11.5 303L12 302.5L12.5 303L13 303L14 303.5L14.5 304L15 303.5L15.5 303L15 302.5L14.5 302.5L13.5 302.5L12.5 301.5L13 300.5L14.5 299L15 299L14.5 298L15 296.5L14.5 296L14 295L12.5 294.5L12.5 295L12.5 295.5L12.5 296L12 296L10.5 295.5L10 295L8 294.5L8 294L8 293.5L8.5 292L8 292L7 293L5.5 293.5L4.5 293.5L4 294L3.5 294.5L4 294.5L4.5 294.5L5 295.5L5 296L4.5 296.5L4 296.5L3 295.5L2.5 295L2.5 294L3 293L4.5 292L5 291.5L6 290.5L7.5 289.5L9 288.5L8 288L7.5 287L7.5 285.5L10 285L11 285.5L12.5 285.5L13.5 285L14 285L15 284.5L15.5 284L15.5 283.5L15.5 283L15.5 282L15.5 281.5L16 281L17 281L18 281.5L17.5 282L17.5 282.5L16.5 285.5L16.5 286L16 286.5L16 287.5L15.5 288.5L13.5 289L13 289L13.5 289.5L14.5 289.5L15.5 289L16.5 288.5L17 287.5L17.5 285.5L18 285L18.5 285L19 285.5L19 286.5L19 287.5L18 291L17 292L17 292.5L17.5 292.5L18.5 292L18.5 291L19 290L19 289L19.5 288.5L19.5 287L19.5 286L19.5 285L19 284.5L18.5 284L18 283.5L18.5 282L20 282L21.5 281L22.5 280.5L23 280.5L25 281.5L25 281L24 280.5L22.5 279.5L21 279.5L21.5 278L21.5 277L22.5 276.5L24 276L26.5 274.5L27 273L27.5 271.5L26 271L24.5 270L23.5 269.5L22.5 268.5L22.5 267.5L23 266L24 265.5L24.5 263.5L24 261.5L24 260L25 259L25.5 258.5L25.5 257.5L26.5 257.5L26.5 257L26.5 256L26 255L26 253.5L26.5 252L27.5 252L27 251L26.5 250L26.5 249.5L27 249L27.5 249L28.5 249.5L29.5 251.5L29.5 251L29 249L28.5 247L27.5 247L26.5 247L26.5 246.5L26 246L26.5 245.5L26.5 245L27.5 244.5L29 244L30 243.5L30 242L29.5 243.5L28.5 244L28 244L27.5 243.5L26 242.5L25.5 242L25 242L24.5 242.5L23 244.5L22.5 245L20.5 245L19.5 244.5L18.5 244.5L18.5 244L19 243.5L19.5 243L19 242.5L18 242L17.5 241.5L17.5 240L16.5 238L16.5 236.5L17 235.5L18 231.5L18.5 229.5L19 228L19 226.5L20.5 225.5L21 225L22.5 221L22.5 219L20.5 213L20.5 212L20 210.5L20.5 208.5L21 207.5L20.5 206L19 204L19 203L19.5 202L19 200.5L19.5 199.5L19.5 199L21.5 199L22.5 199L23 198.5L23 197.5L23.5 196L23.5 195L23.5 194L24.5 193.5L25 192.5L25.5 191L26.5 187L27 186L28 184.5L27.5 183L28 182L28.5 181.5L29 180.5L29.5 179.5L31 178L31.5 176L32.5 173L32.5 171L33 170L33 168.5L33.5 167L34 166L34 165L35.5 163.5L36 162L35.5 161.5L35.5 160L35 158L36 157L36 156.5L37.5 153.5L37 152.5L37.5 151L37 149L36.5 145L36.5 142L35.5 138.5L35.5 137L35 134.5L35 133.5L35.5 130.5L37.5 128.5L38 126.5L38.5 123.5L38.5 121.5L38 120.5L37 119L36.5 116.5L37 115.5L38 115L38.5 113.5L39 112L39.5 111L39.5 107.5L40.5 105L40.5 104.5L41.5 103L41.5 102L41.5 100L42 99L42.5 96.5L42.5 95.5L43.5 93L43.5 91L44 90.5L44 89.5L44 87L43.5 85.5L43.5 85L44 82.5L44.5 82L45 81L45.5 79.5L45.5 78.5L44.5 75L44.5 73.5L44.5 70.5L45 68.5L45 66.5L45 66L45 65L46 63.5L46 62.5L45 62L44.5 60.5L44.5 59.5L44.5 58.5L44.5 57.5L45.5 57.5L46 56.5L46.5 55.5L47 52.5L47.5 49L47.5 46.5L48 45.5L48 43.5L48.5 42L48.5 40.5L48.5 39.5L47.5 34.5L47.5 32.5L48 29.5L48 25L48 24L47.5 23L47.5 22L47 19.5L46.5 15.5L46.5 13L46 11L46 10.5ZM60.5 353.5L60.5 356.5L60.5 359.5L60.5 362L60.5 365L60.5 367.5L60.5 370L60.5 373.5L60 375.5L59 375.5L58.5 376L56.5 376L53.5 375.5L52.5 375L51.5 374L51 374.5L50 375L49 375L48 375L47.5 375L47 374.5L45 375L43 374.5L41.5 374L39 374L37.5 373L34 373.5L33.5 373L33.5 372.5L33.5 372L34 371.5L34.5 371.5L35 371.5L36 372L36.5 372L37 371.5L38 371L39.5 371.5L40.5 371.5L41.5 371L41.5 370.5L42 370.5L42.5 370.5L43.5 370.5L43.5 371L43.5 372L44.5 372L46 372L46.5 372.5L47 372L45.5 370.5L45 370L44 369.5L43 369.5L42 368L42 367L42 366L44 365L43.5 364.5L44 363.5L45 363.5L45.5 366L46 367L45.5 367L44 367L45 368.5L46 369L47 370L47 370.5L48 371L49.5 371L50.5 370.5L51 370L51.5 370L52.5 370.5L54 371L54.5 371.5L54.5 372L55 372.5L55.5 372.5L56 372L56.5 371.5L57 371.5L57 371L56 370.5L49.5 368L48.5 367L48 366L48 364.5L48.5 364L49.5 363.5L51.5 363L54 362L54.5 362L54.5 361L54 360.5L53 360.5L52 360.5L51 360.5L50 360.5L48.5 361L47.5 361L46.5 361L46 360L45.5 359L45.5 358.5L45.5 358L46 357.5L46.5 357L47 357L47.5 357L48 356.5L48 356L47 355.5L47 355L46 354.5L46.5 354.5L47.5 354L48.5 354.5L49.5 355L50 355L51 354.5L52 353.5L52.5 352.5L53.5 352L54 352L56 353.5L56.5 353.5L59 353L59.5 353L60 353.5L60.5 353.5ZM12.5 318.5L12.5 320L12.5 321.5L12 323L12 323.5L12.5 323.5L12.5 324L12.5 325L12.5 325.5L12 326L11.5 327L10.5 327L10 327L10 326.5L9.5 326L9.5 325L9 324.5L9 324L9.5 323.5L9.5 323L10 322L10.5 321.5L10.5 321L8.5 322.5L8.5 323L8.5 324.5L8 325.5L7.5 325.5L7 325.5L5.5 325.5L4.5 324.5L3.5 325L3.5 324L4 323L5.5 323.5L5.5 322L5 321.5L4.5 321L4.5 320.5L4.5 320L5.5 319.5L6 319.5L6.5 320L7.5 319.5L7.5 319L6.5 318.5L6.5 318L8 317L8.5 316.5L8.5 316L8.5 315L9 314.5L10 314L10.5 314L11 314.5L12 314.5L12 315L12.5 318.5ZM51.5 376L58 377L60 376.5L62 376.5L62.5 377.5L60.5 378.5L61 379L62.5 379L63 379L63.5 379.5L63 380L63 380.5L64.5 381.5L65 382L65 383L65 383.5L64.5 383.5L63.5 383L63 382L62 382L60.5 381.5L60 381.5L59 381.5L58.5 381.5L58.5 381L58 380.5L58.5 379.5L58 379.5L57.5 379.5L57 379.5L56 379L56 378.5L55 378.5L54.5 379.5L54.5 380L55 380.5L56 381.5L55.5 382L54 381.5L53.5 381L53 380.5L52.5 380.5L52 380L52 379.5L52 379L50.5 379.5L50.5 379L50 378.5L49.5 378.5L49.5 378L50 377.5L50 376L51.5 376ZM25 362L25.5 362.5L25.5 363L26 362.5L27 362.5L29 363L29.5 364L30.5 364.5L31 365L30.5 365.5L30 366.5L30 367L29.5 367L29 367.5L28 367.5L27.5 368L26.5 368L26 368.5L25.5 368.5L25.5 368L25 368L25 367.5L25.5 367.5L26.5 366.5L26.5 365.5L25.5 365.5L25 365.5L24.5 365.5L24 366L24 367L23.5 367L23 367L22 366.5L22 366L22 365.5L22 365L22 364.5L22 364L21.5 364L20.5 364.5L20 363.5L19.5 362.5L17.5 362.5L19 361.5L21 361L21.5 361.5L24 362L23.5 361.5L24 361L24.5 361L25 361L25 361.5L25 362ZM18.5 260.5L17.5 260.5L17 260.5L16.5 260.5L15.5 260.5L14.5 260L13.5 259.5L13 259.5L13.5 259L14 258L14.5 256L15 253L15 252L15 251.5L15 251L15 250.5L15 249.5L15 249L16 248L16 247.5L16 247L16 246L16 245.5L16 245L18.5 246L20.5 246L20.5 247L20.5 247.5L21 248.5L21 249L21 250L20 250L20.5 251L20.5 251.5L20 252L19.5 252L19 252.5L18.5 252.5L18 253L18.5 253L19 254L20 254.5L20.5 255.5L21 256.5L20.5 257L20 257.5L19.5 258.5L18.5 258.5L18.5 260L18.5 260.5ZM18.5 271L18 271.5L17.5 271.5L16.5 272L16.5 272.5L16.5 273L17 273.5L17.5 274.5L18 275.5L18 276.5L18 277L18 277.5L18.5 278L18.5 278.5L18.5 279L18.5 279.5L18.5 280L18 280L18 280.5L17.5 280.5L16.5 280.5L15.5 280.5L15.5 279L15 278.5L14 277.5L13.5 276L13 275.5L12.5 274.5L11.5 273.5L12.5 273L12.5 271.5L13 271.5L14 271L14.5 271.5L15.5 271L15.5 270L15.5 269L16.5 268.5L17 268.5L17.5 269L18 269.5L19 269.5L19 270.5L18.5 271ZM13 356L13.5 356.5L14 356.5L16 356.5L17.5 357L18 357.5L19 357.5L20 358.5L20.5 358.5L21 358.5L22 359.5L23.5 360.5L22.5 360.5L21 360L20.5 360L20 360L19.5 359.5L18 358L17.5 358L16.5 358L15.5 358L14.5 358L14 358L13 357L12 356L11.5 355.5L10.5 354.5L11 354.5L11.5 354.5L12.5 355.5L13 355.5L13 356ZM41 375.5L41.5 376.5L42.5 376.5L43 376.5L44 376.5L45 376L46 376L47 377.5L47 378L46 378.5L45.5 379L44.5 378.5L45 378.5L44.5 378L44 378L43.5 378L43 378L42.5 378L41.5 377.5L41.5 377L41 377L40 376.5L39.5 376L39 376L38.5 376L38 376.5L37.5 376.5L37.5 376L37.5 375.5L38 375.5L39.5 375.5L40.5 375.5L41 375.5ZM73 378.5L73 379L72.5 379.5L71.5 380L71 380L70.5 379.5L70 379L69.5 379L69 379L68 379.5L67.5 379.5L65 379L64.5 378.5L64 377.5L63 377L64.5 376.5L66.5 376.5L70.5 376.5L72 377L73 377.5L73 378L73 378.5ZM11.5 313L10.5 313L9 313.5L8 312.5L8 311L7.5 310.5L7 310L7 309.5L6.5 308.5L6.5 307.5L6 307.5L6.5 306.5L8.5 306L9 305.5L9.5 305.5L9.5 307L10 308L10.5 308.5L10.5 309L11 310L11.5 310.5L11.5 311L11.5 311.5L11.5 313ZM38 367.5L39.5 368L41 368L41 368.5L41 369.5L41 370L40.5 370L40 370.5L38.5 370L37 369.5L36.5 369.5L35.5 369.5L35 369.5L34.5 370L33 370L33 369L32 368L31 367.5L31.5 366.5L32 366L33 366L35 366L36.5 366.5L38 367.5ZM12 340L12 340.5L11.5 341L10.5 340.5L10 341L9.5 341.5L8.5 341.5L8 341L7 342L6.5 342.5L6 343.5L5.5 342.5L6 341.5L6.5 341L7 340L8 340L9 340L10.5 339L11.5 339L11.5 339.5L12 340ZM7.5 315.5L7.5 316L6 317.5L5 318.5L4 319.5L3.5 319.5L3 319L3.5 318.5L4 318L4 317L3.5 317L3 316.5L3 316L3.5 315.5L4 315.5L6 315L6.5 315L7 314.5L7.5 315.5ZM24.5 275L22.5 275.5L21.5 275.5L21.5 274.5L21 274L21 273.5L21.5 273L22 272.5L22.5 272L22.5 271.5L22.5 271L22.5 270.5L23 270.5L24.5 271L26 271.5L26.5 272L26.5 272.5L26 273.5L25.5 274L24.5 275Z";
+let MP=[];
+function mapa(F){
+  const box=$("x-mapabox"),P=F.filter(p=>p.la&&p.lo);
+  if(!T.some(p=>p.la)){box.hidden=true;$("x-grid").classList.remove("m");return}
+  box.hidden=false;$("x-grid").classList.add("m");
+  const vb=st.z==="norte"?[20,-4,66,164]:[0,-6,86,402],s=$("x-mapa"),esc2=(s.clientHeight||520)/vb[3];
+  s.setAttribute("viewBox",vb.join(" "));
+  const col=e=>/^Aprobado/.test(e)?"var(--ok)":/^En (calif|admis)/.test(e)?"var(--accent)":"#7a8198";
+  MP=P.slice().sort((a,b)=>b.i-a.i);
+  s.innerHTML='<path d="'+CHILE+'"/>'+MP.map((p,k)=>`<circle cx="${((p.lo+76)*8.2).toFixed(1)}" cy="${((-17.3-p.la)*10).toFixed(1)}" r="${((3+Math.sqrt(p.i)/7)/esc2).toFixed(2)}" fill="${col(p.e)}" data-k="${k}" tabindex="0" role="button"><title>${esc(p.n)} · ${mm(p.i)}</title></circle>`).join("");
+  $("x-minfo").textContent=P.length?"Cada punto es un proyecto; el tamaño indica la inversión. Toque uno para ver cuál es.":"Ningún proyecto de este filtro tiene ubicación publicada.";
+}
+function mpunto(c){if(!c)return;const p=MP[+c.dataset.k];if(!p)return;$("x-mapa").querySelectorAll("circle.sel").forEach(x=>x.classList.remove("sel"));c.classList.add("sel");$("x-minfo").innerHTML="<b>"+esc(p.n)+"</b>"+esc(p.t)+" · "+esc(p.r)+" · "+mm(p.i)+" · "+esc(p.e)}
 let RUBROS=["Todos","Minería","Energía","Transmisión","Agua","Química","Transporte","Infraestructura"];
 function chips(){$("x-rubro").innerHTML=RUBROS.map(u=>`<button type="button" data-u="${u}" aria-pressed="${u===st.u}">${u}</button>`).join("")}
 chips();
@@ -930,6 +1061,9 @@ $("x-rubro").addEventListener("click",e=>{const b=e.target.closest("button");if(
 $("x-zona").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.z=b.dataset.z;st.r=null;st.n=6;[...$("x-zona").children].forEach(x=>x.setAttribute("aria-pressed",x===b));pinta()});
 $("x-barras").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.r=st.r===b.dataset.r?null:b.dataset.r;st.n=6;pinta()});
 $("x-mas").addEventListener("click",()=>{st.n+=12;pinta()});
+$("x-mapa").addEventListener("click",e=>mpunto(e.target.closest("circle")));
+$("x-mapa").addEventListener("mouseover",e=>mpunto(e.target.closest("circle")));
+$("x-mapa").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();mpunto(e.target.closest("circle"))}});
 pinta();
 
 // Estados de los proyectos (se actualizan con la base viva).
@@ -952,7 +1086,7 @@ est(0);
   if(typeof SUPA_URL==="undefined"||location.protocol==="file:")return;
   let d;
   try{
-    const r=await fetch(SUPA_URL+"/rest/v1/radar_proyectos?select=nombre,titular,region,inversion_mmusd,fecha_presentacion,estado,tipologia,tipo,actualizado_at&limit=2000",{headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY}});
+    const r=await fetch(SUPA_URL+"/rest/v1/radar_proyectos?select=nombre,titular,region,inversion_mmusd,fecha_presentacion,estado,tipologia,tipo,actualizado_at,lat,lon&limit=2000",{headers:{apikey:SUPA_KEY,Authorization:"Bearer "+SUPA_KEY}});
     if(!r.ok)return; d=await r.json();
   }catch(e){return}
   if(!Array.isArray(d)||d.length<50)return;
@@ -960,7 +1094,7 @@ est(0);
   const corta=r=>String(r||"Sin región").replace(/^Región Metropolitana.*/,"Metropolitana").replace(/^Región (del |de )/,"").replace(/^Libertador.*/,"O'Higgins").replace(/^Magallanes.*/,"Magallanes").replace(/^Aysén.*/,"Aysén");
   const baja=e=>{e=String(e||"Sin estado");return e.charAt(0)+e.slice(1).toLowerCase()};
   const fecha=f=>f?f.slice(8,10)+"/"+f.slice(5,7)+"/"+f.slice(0,4):"";
-  T=d.map(p=>({n:p.nombre||"",t:p.titular||"",r:corta(p.region),i:+p.inversion_mmusd||0,f:fecha(p.fecha_presentacion),e:baja(p.estado),u:RM[(p.tipologia||"").charAt(0)]||"Otros",k:p.tipo||""}));
+  T=d.map(p=>({n:p.nombre||"",t:p.titular||"",r:corta(p.region),i:+p.inversion_mmusd||0,f:fecha(p.fecha_presentacion),e:baja(p.estado),u:RM[(p.tipologia||"").charAt(0)]||"Otros",k:p.tipo||"",la:+p.lat||0,lo:+p.lon||0}));
   if(T.some(p=>p.u==="Otros")&&!RUBROS.includes("Otros"))RUBROS.push("Otros");
   TOT=T.length; chips(); pinta();
   const cuenta=re=>T.filter(p=>re.test(p.e)).length;
@@ -972,6 +1106,8 @@ est(0);
   const dia=ult?new Date(ult).toLocaleDateString("es-CL",{timeZone:"America/Santiago"}):"";
   const pon=()=>{$("st-n").textContent=TOT.toLocaleString("es-CL");$("st-cal").textContent=EST[0].n.toLocaleString("es-CL");$("st-norte").textContent=norte.length;$("st-inv").textContent="US$ "+inv25.toLocaleString("es-CL")+" MM"};
   pon(); setTimeout(pon,1200);
+  try{const top=norte.filter(p=>p.f&&p.i>0&&/^(En |Aprobado)/.test(p.e)).slice(0,25);if(top.length>=10){PROY=top;radar(new Date());$("radar-info").textContent="Cada punto es un proyecto real del norte"+(dia?", al "+dia:"")+". Toque uno para ver cuál es."}}catch(e){}
+  if(window.vidDatos)vidDatos(TOT);
   $("st-src").textContent="Fuente: buscador público del SEIA (Servicio de Evaluación Ambiental)."+(dia?" Actualizado el "+dia+".":"");
   $("x-nota").textContent="Incluye los "+TOT+" proyectos presentados al SEIA en los últimos 12 meses"+(dia?", actualizados el "+dia:"")+". El informe mensual trae los nuevos de cada mes.";
 })();
@@ -1012,6 +1148,32 @@ function punto(c){if(!c||typeof PROY==="undefined")return;const p=PROY[+c.datase
 svg.addEventListener("click",e=>punto(e.target.closest("circle[data-k]")));
 svg.addEventListener("mouseover",e=>punto(e.target.closest("circle[data-k]")));
 svg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();punto(e.target.closest("circle[data-k]"))}});
+})();
+</script>
+<script>
+/* Recorrido animado: escenas con tiempo, pausa y capítulos. */
+(function(){
+var v=document.getElementById("vid");if(!v)return;
+var S=[].slice.call(v.querySelectorAll(".vs")),caps=document.getElementById("v-caps"),pp=document.getElementById("v-pp");
+var N=["El problema","El radar","El negocio","La decisión","Empezar"],rm=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var k=0,t=0,play=false,fin=false,last=0;
+caps.innerHTML=N.map(function(n,i){return '<button type="button" data-k="'+i+'"><span>'+n+'</span><u><i></i></u></button>'}).join("");
+var B=[].slice.call(caps.children);
+var IC={p:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',s:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',r:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></svg>'};
+function boton(){pp.innerHTML=fin?IC.r:play?IC.s:IC.p;pp.setAttribute("aria-label",fin?"Repetir":play?"Pausar":"Reproducir");v.classList.toggle("pausa",!play&&!fin&&!rm)}
+function barras(){B.forEach(function(b,i){b.setAttribute("aria-current",i===k);b.querySelector("i").style.width=(i<k?100:i>k?0:Math.min(100,t/(+S[k].dataset.t)*100))+"%"})}
+function ir(n){k=n;t=0;fin=false;S.forEach(function(s){s.classList.remove("on")});void v.offsetWidth;S[k].classList.add("on");barras();boton()}
+function tick(now){if(play){t+=Math.min(.25,(now-last)/1000);if(t>=+S[k].dataset.t){if(k<S.length-1)ir(k+1);else{play=false;fin=true;t=+S[k].dataset.t;boton()}}barras()}last=now;requestAnimationFrame(tick)}
+pp.addEventListener("click",function(){if(fin){ir(0);play=true}else play=!play;boton()});
+caps.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;ir(+b.dataset.k);play=!rm;boton()});
+window.vidDatos=function(tot){
+  if(tot)document.getElementById("v-n").textContent=tot.toLocaleString("es-CL");
+  if(typeof PROY==="undefined")return;
+  document.getElementById("v-top").innerHTML=PROY.slice(0,3).map(function(p,i){return '<div class="vcard a" style="--d:'+(1.4+i*.6)+'"><span class="al">'+esc(p.r)+" · "+esc(p.e)+"</span><b>"+esc(p.n)+'</b><span class="m">'+mm(p.i)+"</span></div>"}).join("");
+};
+vidDatos();ir(0);
+if(!rm&&"IntersectionObserver" in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting&&!fin&&t===0&&k===0){play=true;boton();io.disconnect()}})},{threshold:.5});io.observe(v)}
+last=performance.now();requestAnimationFrame(tick);
 })();
 </script>
 </body>
