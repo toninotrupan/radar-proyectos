@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sermai · Plataforma</title>
+<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<style>
+html,body{height:100%}
+body{margin:0;display:grid;place-items:center;background:#f6f1e7;color:#0b1736;font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;text-align:center;padding:24px;box-sizing:border-box}
+p{margin:0 0 16px}
+button{font:inherit;padding:10px 18px;border-radius:8px;border:1px solid #0b1736;background:#0b1736;color:#fff;cursor:pointer}
+button:focus-visible{outline:3px solid #b8672f;outline-offset:2px}
+</style>
+<script src="vendor/supabase.js"></script>
+</head>
+<body>
+<div><p id="m" role="status">Cargando la plataforma…</p></div>
+<script>
+/* Cascarón público: no contiene datos ni cálculos. Si hay sesión con acceso vigente, pide el código de la plataforma al servidor. */
+(function(){
+  var ir=function(){location.replace("/ingresar/?volver="+encodeURIComponent(location.pathname+location.search+location.hash))};
+  var fallo=function(){var m=document.getElementById("m");if(!m)return;m.textContent="No se pudo cargar la plataforma. Revise su conexión a internet.";
+    var b=document.createElement("button");b.type="button";b.textContent="Volver a intentar";b.onclick=function(){location.reload()};m.parentNode.appendChild(b)};
+  try{
+    var sb=window.supabase.createClient("https://pufgxfjxvbgobkavecqo.supabase.co","sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH");
+    window.SB_PRE=sb;
+    sb.auth.getSession().then(function(r){
+      var s=r.data&&r.data.session;if(!s)return ir();
+      return fetch("/api/app/",{headers:{Authorization:"Bearer "+s.access_token},cache:"no-store"}).then(function(x){
+        if(x.status===401||x.status===403)return ir();
+        if(!x.ok)throw new Error("HTTP "+x.status);
+        return x.text().then(function(h){document.open();document.write(h);document.close()});
+      });
+    }).catch(fallo);
+  }catch(e){ir()}
+})();
+</script>
+</body>
+</html>
