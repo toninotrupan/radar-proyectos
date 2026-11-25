@@ -1,0 +1,16 @@
+/* Tema Sermai (marfil, azul noche y cobre) para la plataforma, la sala y el informe. Se carga después del estilo propio de cada página. */
+@font-face{font-family:Montserrat;src:url(/fonts/Montserrat-latin.woff2) format("woff2");font-weight:600;font-display:swap}
+:root{--bg:#f6f1e8;--panel:#fbf8f2;--panel2:#f3ece0;--fg:#0a1424;--muted:#566072;--line:#e0d5c1;--soft:#efe7d8;
+ --ink:#fbf8f2;--ink2:#f3ece0;--ink-line:#e0d5c1;--ink-line2:#cdbfa6;--ink-fg:#0a1424;--ink-muted:#566072;--ink-strong:#0a1424;
+ --acc:#a8582a;--acc-fg:#fff;--pri:#a8582a;--pri-fg:#fff;--pri-soft:#f6e6d6;--accent:#a8582a;--accent-soft:#f6e6d6;--eval:#a8582a;--eval-soft:#f6e6d6;
+ --cu:#a8582a;--cu-soft:#f6e6d6;--b1:#e9c9a8;--b2:#d9dfe9;--b3:#f3c49a;
+ --disp:Montserrat,"Instrument Sans",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1322;--panel:#121d33;--panel2:#0f1a2e;--fg:#f1ece2;--muted:#a5adbb;--line:#24324e;--soft:#16233d;
+ --ink:#0a1424;--ink2:#13213c;--ink-line:#24324e;--ink-line2:#3a4a6c;--ink-fg:#f1ece2;--ink-muted:#a5adbb;--ink-strong:#fff;
+ --acc:#e2a274;--acc-fg:#1a0f07;--pri:#e2a274;--pri-fg:#1a0f07;--pri-soft:#33231a;--accent:#e2a274;--accent-soft:#33231a;--eval:#e2a274;--eval-soft:#33231a;--cu:#e2a274;--cu-soft:#33231a;--b1:#5a3a22;--b2:#1d2c4a;--b3:#7a4a28}}
+:root[data-theme=dark]{--bg:#0b1322;--panel:#121d33;--panel2:#0f1a2e;--fg:#f1ece2;--muted:#a5adbb;--line:#24324e;--soft:#16233d;
+ --ink:#0a1424;--ink2:#13213c;--ink-line:#24324e;--ink-line2:#3a4a6c;--ink-fg:#f1ece2;--ink-muted:#a5adbb;--ink-strong:#fff;
+ --acc:#e2a274;--acc-fg:#1a0f07;--pri:#e2a274;--pri-fg:#1a0f07;--pri-soft:#33231a;--accent:#e2a274;--accent-soft:#33231a;--eval:#e2a274;--eval-soft:#33231a;--cu:#e2a274;--cu-soft:#33231a;--b1:#5a3a22;--b2:#1d2c4a;--b3:#7a4a28}
+h1,h2,h3,.brand{font-family:Montserrat,"Instrument Sans",system-ui,sans-serif!important;font-weight:600!important;letter-spacing:-.01em}
+.brand .smark{width:34px;height:34px;border-radius:8px;flex:none;display:block}
+.brand{display:flex;align-items:center;gap:10px}

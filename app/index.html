@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#f5f6fa">
-<title>Radar de Proyectos | Plataforma</title>
+<title>Plataforma · Sermai</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
@@ -446,13 +447,14 @@ details>summary{font-weight:600;cursor:pointer;padding:6px 0;min-height:32px}
   .rv,.enter{opacity:1!important;transform:none!important;translate:none!important;animation:none!important}details>summary{list-style:none}.wrap{margin:0}body{background:#fff}main{padding:0;max-width:none}.panel,.kpis{box-shadow:none;break-inside:avoid}
 }
 </style>
+<link rel="stylesheet" href="/sermai-tema.css">
 </head>
 <body>
 <a class="skip" href="#app">Saltar al contenido</a>
 <aside class="side" id="side" aria-label="Menú principal">
   <a class="brand" href="#inicio">
-    <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><circle class="m1" cx="20" cy="20" r="18"/><circle class="m2" cx="20" cy="20" r="11.5"/><circle class="m2" cx="20" cy="20" r="5"/><g class="sweep"><path class="m3" d="M20 20 L20 2 A18 18 0 0 1 35.6 11 Z"/><path class="m4" d="M20 20 L20 2"/></g><circle class="blip" cx="27" cy="12" r="2.2"/></svg>
-    <span>Radar de Proyectos<small>Plataforma</small></span>
+    <svg class="smark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><radialGradient id="ips" gradientUnits="userSpaceOnUse" cx="30.3" cy="36.1" r="7.5"><stop offset="0" stop-color="#fff0dc"/><stop offset=".18" stop-color="#f6bd88"/><stop offset=".55" stop-color="#cf7f47"/><stop offset=".85" stop-color="#8f4518"/><stop offset="1" stop-color="#6a2d0b"/></radialGradient></defs><rect width="64" height="64" rx="12" fill="#0a1424"/><path d="M14,48 L29.5,14 L34.5,14 L50,48 L44.6,48 L32,19.6 L19.4,48 Z" fill="#F4EFE6"/><circle cx="32" cy="38" r="5.2" fill="url(#ips)"/><ellipse cx="30.4" cy="35.8" rx="1.9" ry="1.0" fill="#fff" opacity=".55" transform="rotate(-28 30.4 35.8)"/></svg>
+    <span>Sermai<small>Plataforma de proyectos</small></span>
   </a>
   <nav aria-label="Secciones" id="nav"></nav>
   <div class="side-foot">
@@ -1375,7 +1377,7 @@ function render(first){const h=(location.hash||"#inicio").slice(1);const app=$("
   const nav=h.startsWith("p-")||h.startsWith("c-")||h.startsWith("i-")?"proyectos":h.startsWith("t-")?"empresas":VISTAS[h]?h:"inicio";document.querySelectorAll("[data-nav]").forEach(a=>a.dataset.nav===nav?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
   if(h.startsWith("p-"))vFicha(app,h.slice(2));else if(h.startsWith("c-"))vCosteo(app,h.slice(2));else if(h.startsWith("i-"))vInforme(app,h.slice(2));else if(h.startsWith("t-"))vTitular(app,decodeURIComponent(h.slice(2)));else(VISTAS[h]||vInicio)(app);
   ANIM=false;chip();
-  const h1=app.querySelector("h1");document.title=(h1?h1.textContent+" | ":"")+"Radar de Proyectos";scrollTo(0,0);
+  const h1=app.querySelector("h1");document.title=(h1?h1.textContent+" | ":"")+"Sermai";scrollTo(0,0);
   if(!RM&&"IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{rootMargin:"0px 0px -6% 0px"});const vh=innerHeight*.92;app.querySelectorAll(":scope>section,:scope>.kpis,:scope>.grid2>*,.sec>.panel,.sec>.grid2>*").forEach(n=>{if(n.getBoundingClientRect().top>vh){n.classList.add("rv");io.observe(n)}});CLEAN.push(()=>io.disconnect())}if(!first)app.focus({preventScroll:true})}
 function chip(){const pf=perfil(),mc=$("#mechip"),on=!!(pf&&pf.rubros.length);mc.classList.toggle("on",on);mc.querySelector("span").textContent=on?(pf.nombre||"Mi empresa"):"Configurar mi empresa";mc.setAttribute("aria-label",on?"Mi empresa: "+(pf.nombre||"configurada"):"Configurar mi empresa")}
 function route(){if(document.startViewTransition&&!RM){const t=document.startViewTransition(()=>render());t.ready.catch(()=>{});t.finished.catch(()=>{})}else render()}
