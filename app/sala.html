@@ -160,7 +160,7 @@ function errTexto(e){const m=(e&&e.message)||String(e||"");
   if(/already registered|already been registered/i.test(m))return"Ese correo ya tiene cuenta. Entra con tu clave o usa «Olvidé mi clave».";
   if(/rate limit|too many/i.test(m))return"Se hicieron muchos intentos seguidos. Espera unos minutos y prueba otra vez.";
   if(/Signups not allowed|signup is disabled/i.test(m))return"El registro de cuentas nuevas está cerrado por ahora.";
-  if(/password/i.test(m)&&/6|short|weak/i.test(m))return"La clave debe tener al menos 8 caracteres.";
+  if(/password/i.test(m)&&/6|short|weak/i.test(m))return"La clave debe tener al menos 10 caracteres, con letras y números.";
   if(/row-level security|permission denied|not authorized/i.test(m))return"No tienes permiso para hacer esto.";
   if(/exceeded the maximum allowed size|too large/i.test(m))return"El archivo supera el máximo de "+MAX_MB+" MB.";
   if(/Failed to fetch|NetworkError/i.test(m))return"No hay conexión con el servidor. Revisa tu internet y prueba otra vez.";
@@ -202,7 +202,7 @@ function vEntrar(app){
     const b=el("button","btn",modo==="entrar"?"Entrar":modo==="crear"?"Crear mi cuenta":"Enviarme el enlace");b.type="submit";f.append(b,box);
     f.onsubmit=async ev=>{ev.preventDefault();const em=correo.value.trim().toLowerCase();
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return aviso(box,"Escribe un correo válido, por ejemplo nombre@empresa.cl.","bad");
-      if(modo!=="recuperar"&&clave.value.length<8)return aviso(box,"La clave debe tener al menos 8 caracteres.","bad");
+      if(modo!=="recuperar"&&clave.value.length<10)return aviso(box,"La clave debe tener al menos 10 caracteres, con letras y números.","bad");
       if(modo==="crear"&&!acepta.i.checked)return aviso(box,"Para crear la cuenta debes aceptar la política de privacidad.","bad");
       b.disabled=true;aviso(box,"Un momento…");const aqui=location.origin+location.pathname;
       try{
@@ -223,7 +223,7 @@ function vEntrar(app){
 
 function vNuevaClave(app){app.append(el("h1",null,"Elige una clave nueva"));const p=el("section","panel");const f=el("form","stack");const clave=input("password","",{autocomplete:"new-password"});const box=el("div");const b=el("button","btn","Guardar la clave nueva");b.type="submit";
   f.append(campo("Clave nueva (mínimo 8 caracteres)",clave),b,box);
-  f.onsubmit=async ev=>{ev.preventDefault();if(clave.value.length<8)return aviso(box,"La clave debe tener al menos 8 caracteres.","bad");b.disabled=true;const{error}=await sb.auth.updateUser({password:clave.value});if(error){b.disabled=false;return aviso(box,errTexto(error),"bad")}RECUPERA=false;location.hash="#inicio";route()};
+  f.onsubmit=async ev=>{ev.preventDefault();if(clave.value.length<10)return aviso(box,"La clave debe tener al menos 10 caracteres, con letras y números.","bad");b.disabled=true;const{error}=await sb.auth.updateUser({password:clave.value});if(error){b.disabled=false;return aviso(box,errTexto(error),"bad")}RECUPERA=false;location.hash="#inicio";route()};
   p.append(f);app.append(p)}
 
 // ---------- Consentimiento (Ley 21.719) ----------

@@ -58,8 +58,8 @@ a,.lnk{color:var(--cu);background:none;border:0;padding:0;font:inherit;cursor:po
  <div class="links"><button type="button" class="lnk" data-ir="fEntrar">Volver a ingresar</button></div>
 </form>
 <form id="fNueva" novalidate hidden>
- <h2>Crear clave nueva</h2><p class="sub">Escriba una clave de al menos 8 caracteres.</p>
- <label for="cn">Clave nueva</label><div class="ojo"><input id="cn" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-ver="cn">Mostrar</button></div>
+ <h2>Crear clave nueva</h2><p class="sub">Escriba una clave de al menos 10 caracteres, con letras y números.</p>
+ <label for="cn">Clave nueva</label><div class="ojo"><input id="cn" type="password" autocomplete="new-password" minlength="10" required><button type="button" data-ver="cn">Mostrar</button></div>
  <button class="btn" type="submit">Guardar clave</button>
  <p class="msg" id="m3" role="status"></p>
 </form>
@@ -79,7 +79,7 @@ const AQUI=location.origin+location.pathname;
 const destino=()=>{const v=new URLSearchParams(location.search).get("volver")||"";return /^\/app\//.test(v)?v:"/app/"};
 const ver=id=>{["fEntrar","fOlvido","fNueva","sinAcceso"].forEach(x=>$(x).hidden=x!==id);const f=$(id).querySelector("input");f&&f.focus()};
 const msg=(el,t,ok)=>{el.textContent=t;el.className="msg "+(ok?"ok":"err")};
-const ERR=e=>{const m=(e&&e.message||"").toLowerCase();if(m.includes("invalid login"))return"El correo o la clave no coinciden. Revise e intente de nuevo.";if(m.includes("email not confirmed"))return"Falta confirmar su correo. Busque el mensaje de Sermai en su bandeja.";if(m.includes("rate")||m.includes("seconds"))return"Hizo varios intentos seguidos. Espere un minuto e intente de nuevo.";if(m.includes("password")&&m.includes("least"))return"La clave debe tener al menos 8 caracteres.";if(m.includes("fetch"))return"No pudimos conectarnos. Revise su internet e intente de nuevo.";return"No se pudo completar. Intente de nuevo en un momento."};
+const ERR=e=>{const m=(e&&e.message||"").toLowerCase();if(m.includes("invalid login"))return"El correo o la clave no coinciden. Revise e intente de nuevo.";if(m.includes("email not confirmed"))return"Falta confirmar su correo. Busque el mensaje de Sermai en su bandeja.";if(m.includes("rate")||m.includes("seconds"))return"Hizo varios intentos seguidos. Espere un minuto e intente de nuevo.";if(m.includes("password")&&m.includes("least"))return"La clave debe tener al menos 10 caracteres, con letras y números.";if(m.includes("fetch"))return"No pudimos conectarnos. Revise su internet e intente de nuevo.";return"No se pudo completar. Intente de nuevo en un momento."};
 let recupera=false;
 async function revisar(){const{data:{session}}=await sb.auth.getSession();if(!session||recupera)return;
  const{data,error}=await sb.rpc("plataforma_tengo_acceso");
@@ -97,7 +97,7 @@ $("fOlvido").onsubmit=e=>{e.preventDefault();const b=e.target.querySelector("but
  if(!em)return msg($("m2"),"Escriba su correo.");
  enviar(e.target,b,async()=>{const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:AQUI});if(error)return msg($("m2"),ERR(error));msg($("m2"),"Listo. Si el correo tiene cuenta, le llegará un enlace en unos minutos.",true)})};
 $("fNueva").onsubmit=e=>{e.preventDefault();const b=e.target.querySelector("button[type=submit]"),cn=$("cn").value;
- if(cn.length<8)return msg($("m3"),"La clave debe tener al menos 8 caracteres.");
+ if(cn.length<10)return msg($("m3"),"La clave debe tener al menos 10 caracteres, con letras y números.");
  enviar(e.target,b,async()=>{const{error}=await sb.auth.updateUser({password:cn});if(error)return msg($("m3"),ERR(error));msg($("m3"),"Clave guardada. Entrando…",true);recupera=false;await revisar()})};
 sb.auth.onAuthStateChange(ev=>{if(ev==="PASSWORD_RECOVERY"){recupera=true;ver("fNueva")}});
 if(/type=recovery/.test(location.hash)){recupera=true;ver("fNueva")}else revisar();

@@ -454,7 +454,7 @@ details>summary{font-weight:600;cursor:pointer;padding:6px 0;min-height:32px}
 <script>
 /* Acceso: solo cuentas habilitadas en plataforma_accesos (base Radar de Proyectos). */
 window.SB_ACCESO=(function(){const ir=()=>location.replace("/ingresar/?volver="+encodeURIComponent(location.pathname+location.search+location.hash));
- try{const sb=window.supabase.createClient("https://pufgxfjxvbgobkavecqo.supabase.co","sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH");
+ try{const sb=window.SB_PRE||window.supabase.createClient("https://pufgxfjxvbgobkavecqo.supabase.co","sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH");
   sb.auth.getSession().then(async({data:{session}})=>{if(!session)return ir();const{data,error}=await sb.rpc("plataforma_tengo_acceso");if(error||data!==true)return ir();
    document.documentElement.classList.remove("guard");window.SB_USUARIO=session.user.email;const q=document.getElementById("quienSoy");if(q)q.textContent=session.user.email}).catch(ir);
   return sb}catch(e){ir();return null}})();
