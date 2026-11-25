@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#f5f6fa">
 <title>Plataforma · Sermai</title>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2"><link rel="icon" type="image/png" sizes="32x32" href="/icono-32.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght@300..800&family=Instrument+Sans:wght@400..700&display=swap">
@@ -448,6 +448,17 @@ details>summary{font-weight:600;cursor:pointer;padding:6px 0;min-height:32px}
 }
 </style>
 <link rel="stylesheet" href="/sermai-tema.css">
+<style>html.guard body{visibility:hidden}</style>
+<script>document.documentElement.classList.add("guard");</script>
+<script src="vendor/supabase.js"></script>
+<script>
+/* Acceso: solo cuentas habilitadas en plataforma_accesos (base Radar de Proyectos). */
+window.SB_ACCESO=(function(){const ir=()=>location.replace("/ingresar/?volver="+encodeURIComponent(location.pathname+location.search+location.hash));
+ try{const sb=window.supabase.createClient("https://pufgxfjxvbgobkavecqo.supabase.co","sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH");
+  sb.auth.getSession().then(async({data:{session}})=>{if(!session)return ir();const{data,error}=await sb.rpc("plataforma_tengo_acceso");if(error||data!==true)return ir();
+   document.documentElement.classList.remove("guard");window.SB_USUARIO=session.user.email;const q=document.getElementById("quienSoy");if(q)q.textContent=session.user.email}).catch(ir);
+  return sb}catch(e){ir();return null}})();
+</script>
 </head>
 <body>
 <a class="skip" href="#app">Saltar al contenido</a>
@@ -460,6 +471,8 @@ details>summary{font-weight:600;cursor:pointer;padding:6px 0;min-height:32px}
   <div class="side-foot">
     <a href="sala.html"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a1 1 0 011-1h5l2 2h8a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/></svg>Sala de datos</a>
     <button type="button" id="tema"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14A8 8 0 0110 4a8 8 0 1010 10z"/></svg><span>Cambiar a modo oscuro</span></button>
+    <button type="button" id="salirCuenta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 16l-4-4 4-4M6 12h10"/></svg><span>Salir</span></button>
+    <p class="stamp" id="quienSoy"></p>
     <p class="stamp" id="stamp"></p>
   </div>
 </aside>
@@ -522,6 +535,8 @@ const norm=s=>(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 const fdate=d=>d?d.split("-").reverse().join("/"):"";
 const regionCorta=r=>(r||"").replace(/^Región (de la |del |de los |de )?/,"").replace("Metropolitana de Santiago","Metropolitana").replace("Libertador General Bernardo O'Higgins","O'Higgins").replace(" y de la Antártica Chilena","").replace(" del General Carlos Ibáñez del Campo","");
 const esNorte=p=>NORTE.some(n=>(p.region||"").includes(n));
+const MACROZ={norte:NORTE,centro:["Valparaíso","Metropolitana","Santiago","O'Higgins","Libertador","Maule"],sur:["Ñuble","Biobío","Bío","Araucanía","Los Ríos","Los Lagos","Aysén","Aisén","Magallanes"]};
+const deZona=(p,z)=>!z||MACROZ[z].some(n=>(p.region||"").includes(n));
 const sector=p=>SECTOR[(p.tipologia||"").trim().toLowerCase()[0]]||"Otro";
 function plazo(p){const e=norm(p.estado);if(e.includes("aprobado"))return{t:"Corto plazo",c:"ok"};if(e.includes("admision")&&!e.includes("no admitido"))return{t:"Mediano plazo",c:"adm"};if(e.includes("calificacion"))return{t:"Mediano plazo",c:"eval"};return{t:"Cerrado",c:"bad"}}
 const vigente=p=>plazo(p).t!=="Cerrado";
@@ -542,14 +557,14 @@ function vProyectos(app){
   const k=el("section","kpis");const vig=P.filter(vigente);
   k.append(kpi(P.length,"proyectos presentados"),kpi(P.filter(p=>plazo(p).t==="Mediano plazo").length,"en evaluación"),kpi(P.filter(p=>plazo(p).t==="Corto plazo").length,"aprobados"),kpi(P.filter(esNorte).length,"en el norte"),kpi("US$ "+money(vig.reduce((s,p)=>s+(+p.inversion_mmusd||0),0)/1000)+" mil M","inversión vigente"));
   app.append(k);
-  const f=el("section","filters filterbar");f.innerHTML='<label for="fz">Zona<select id="fz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="fr">Región<select id="fr"></select></label><label for="fs">Sector<select id="fs"></select></label><label for="fe">Estado<select id="fe"></select></label><label for="fq">Buscar<input id="fq" type="search" placeholder="Proyecto o titular"></label>';
+  const f=el("section","filters filterbar");f.innerHTML='<label for="fz">Zona<select id="fz"><option value="">Todo Chile</option><option value="norte">Zona norte</option><option value="centro">Zona central</option><option value="sur">Zona sur</option></select></label><label for="fr">Región<select id="fr"></select></label><label for="fs">Sector<select id="fs"></select></label><label for="fe">Estado<select id="fe"></select></label><label for="fq">Buscar<input id="fq" type="search" placeholder="Proyecto o titular"></label>';
   app.append(f);
   const cnt=el("p","count"),list=el("section","list"),slot=el("div");slot.style.display="flex";slot.style.justifyContent="center";app.append(cnt,list,slot);
   fillSel($("#fr"),[...new Set(P.map(p=>p.region))].filter(Boolean).sort((a,b)=>a.localeCompare(b,"es")),"Todas");
   fillSel($("#fs"),[...new Set(P.map(sector))].sort((a,b)=>a.localeCompare(b,"es")),"Todos");
   fillSel($("#fe"),[...new Set(P.map(p=>p.estado))].filter(Boolean),"Todos");
   const draw=()=>{const z=$("#fz").value,r=$("#fr").value,s=$("#fs").value,e=$("#fe").value,q=norm($("#fq").value.trim());
-    const rows=P.filter(p=>(!z||esNorte(p))&&(!r||p.region===r)&&(!s||sector(p)===s)&&(!e||p.estado===e)&&(!q||norm(p.nombre+" "+p.titular).includes(q)));
+    const rows=P.filter(p=>deZona(p,z)&&(!r||p.region===r)&&(!s||sector(p)===s)&&(!e||p.estado===e)&&(!q||norm(p.nombre+" "+p.titular).includes(q)));
     list.textContent="";slot.textContent="";
     cnt.textContent=rows.length?rows.length+" proyectos, US$ "+money(rows.reduce((a,p)=>a+(+p.inversion_mmusd||0),0))+" millones en total":"Ningún proyecto calza con esos filtros. Prueba quitando alguno.";
     if(rows.length)slot.append(pager(list,rows,p=>card(p)))};
@@ -558,7 +573,7 @@ function vProyectos(app){
 function vOpps(app){
   app.append(header("Oportunidades por rubro","Elige el rubro de tu empresa y la zona. Te mostramos los proyectos vigentes donde ese rubro tiene espacio y por qué."));
   const pn=el("section","panel hl");
-  const f=el("div","filters");f.innerHTML='<label for="or">Rubro de tu empresa<select id="or"></select></label><label for="oz">Zona<select id="oz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label><label for="op">% de la inversión para tu rubro (supuesto)<input id="op" type="number" min="0" max="100" step="0.1"></label>';
+  const f=el("div","filters");f.innerHTML='<label for="or">Rubro de tu empresa<select id="or"></select></label><label for="oz">Zona<select id="oz"><option value="">Todo Chile</option><option value="norte">Zona norte</option><option value="centro">Zona central</option><option value="sur">Zona sur</option></select></label><label for="op">% de la inversión para tu rubro (supuesto)<input id="op" type="number" min="0" max="100" step="0.1"></label>';
   pn.append(f);const res=el("div","kpis");pn.append(res);
   pn.append(el("p","note","Cómo leer la valorización: es el monto de inversión de los proyectos donde calza tu rubro, multiplicado por el porcentaje que tú indiques. El porcentaje inicial viene de un proyecto real cuando hay dato y es un supuesto cuando no lo hay (el detalle está al final de esta página): ajústalo con tu experiencia. Es un orden de magnitud para priorizar, no una cotización."));
   app.append(pn);
@@ -573,7 +588,7 @@ function vOpps(app){
   if(saved&&RUBROS.some(r=>r.id===saved))sel.value=saved;
   const setPct=()=>{$("#op").value=RUBROS.find(r=>r.id===sel.value).pct};setPct();
   const draw=()=>{const r=RUBROS.find(x=>x.id===sel.value),z=$("#oz").value,pct=Math.max(0,+$("#op").value||0);try{localStorage.setItem("radar_rubro",r.id)}catch(e){}
-    const rows=P.filter(p=>vigente(p)&&(!z||esNorte(p))&&opps(p).some(o=>o.id===r.id)).sort((a,b)=>b.inversion_mmusd-a.inversion_mmusd);
+    const rows=P.filter(p=>vigente(p)&&deZona(p,z)&&opps(p).some(o=>o.id===r.id)).sort((a,b)=>b.inversion_mmusd-a.inversion_mmusd);
     const tot=rows.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);
     res.textContent="";res.append(kpi(rows.length,"proyectos donde calzas"),kpi("US$ "+money(tot)+" M","inversión de esos proyectos"),kpi("US$ "+money(tot*pct/100)+" M","mercado potencial para tu rubro ("+pct+"%)"),kpi(rows.filter(p=>plazo(p).t==="Corto plazo").length,"ya aprobados (corto plazo)"));
     list.textContent="";slot.textContent="";
@@ -584,9 +599,9 @@ function vOpps(app){
 function group(rows,key,val){const m={};rows.forEach(p=>{const k=key(p);m[k]=(m[k]||0)+val(p)});return Object.entries(m).sort((a,b)=>b[1]-a[1])}
 function vMercado(app){
   app.append(header("Mercado","Dónde está la inversión que viene. Solo proyectos vigentes: en admisión, en evaluación o aprobados."));
-  const f=el("section","filters filterbar");f.innerHTML='<label for="mz">Zona<select id="mz"><option value="">Todo Chile</option><option value="norte">Solo norte</option></select></label>';app.append(f);
+  const f=el("section","filters filterbar");f.innerHTML='<label for="mz">Zona<select id="mz"><option value="">Todo Chile</option><option value="norte">Zona norte</option><option value="centro">Zona central</option><option value="sur">Zona sur</option></select></label>';app.append(f);
   const out=el("div","grid2");app.append(out);
-  const draw=()=>{const rows=P.filter(p=>vigente(p)&&(!$("#mz").value||esNorte(p)));const inv=p=>+p.inversion_mmusd||0;out.textContent="";
+  const draw=()=>{const rows=P.filter(p=>vigente(p)&&deZona(p,$("#mz").value));const inv=p=>+p.inversion_mmusd||0;out.textContent="";
     out.append(bars("Inversión por región (US$ millones)",group(rows,p=>regionCorta(p.region),inv).slice(0,12),money),
       bars("Inversión por sector (US$ millones)",group(rows,sector,inv).slice(0,12),money),
       bars("Inversión por plazo (US$ millones)",group(rows,p=>plazo(p).t+(plazo(p).t==="Corto plazo"?" (aprobado)":" (en evaluación)"),inv),money),
@@ -1392,5 +1407,6 @@ async function boot(){const app=$("#app");
   catch(e){app.textContent="";const s=el("div","soon");s.setAttribute("role","alert");const b=el("button","btn","Volver a intentar");b.type="button";b.onclick=()=>{app.textContent="";app.append(el("p","count","Cargando proyectos…"));boot()};s.append(el("b",null,"No se pudieron cargar los proyectos"),el("span",null,"Revisa tu conexión a internet y vuelve a intentar. Detalle: "+e.message),b);app.append(s)}}
 shell();boot();
 </script>
+<script>document.getElementById("salirCuenta").addEventListener("click",async()=>{try{await window.SB_ACCESO.auth.signOut()}catch(e){}location.replace("/ingresar/")});</script>
 </body>
 </html>

@@ -1,0 +1,103 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingresar · Sermai</title><meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2"><link rel="icon" type="image/png" sizes="32x32" href="/icono-32.png?v=2"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+@font-face{font-family:Mont;src:url(/fonts/Montserrat-latin.woff2) format("woff2");font-weight:600;font-display:swap}
+:root{--bg:#f6f1e8;--panel:#fbf8f2;--ink:#0a1424;--mut:#566072;--ln:#e0d5c1;--cu:#a8582a;--err:#a3261b;--ok:#2f6b3a}
+*{box-sizing:border-box}html,body{margin:0}
+body{min-height:100vh;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Instrument Sans",system-ui,sans-serif;display:grid;grid-template-columns:1.05fr 1fr}
+.lado{--cu:#e2a274;background:#0a1424;color:#f4efe6;padding:56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+.lado::before{content:"";position:absolute;inset:-20%;background:radial-gradient(40% 35% at 70% 30%,rgba(216,141,87,.28),transparent 70%),radial-gradient(35% 30% at 20% 80%,rgba(111,134,179,.22),transparent 70%);animation:luz 14s ease-in-out infinite alternate}
+@keyframes luz{to{transform:translate(-6%,4%)}}
+.lado>*{position:relative}.lado a{color:inherit;text-decoration:none}
+.lado .logo{height:64px;width:auto}
+.lado h1{font:600 clamp(28px,3.2vw,42px)/1.15 Mont,sans-serif;margin:0 0 16px;max-width:15ch}
+.lado p{color:#c9d0dd;max-width:42ch;margin:0}
+.lado small{color:#8f9ab0}
+main{display:flex;align-items:center;justify-content:center;padding:48px 24px}
+.caja{width:100%;max-width:400px}
+.caja h2{font:600 26px/1.2 Mont,sans-serif;margin:0 0 6px}
+.caja .sub{color:var(--mut);margin:0 0 28px}
+label{display:block;font-size:14px;color:var(--mut);margin:0 0 6px}
+input{width:100%;height:50px;border:1px solid var(--ln);border-radius:10px;background:var(--panel);padding:0 14px;font:inherit;color:var(--ink);margin-bottom:18px}
+input:focus{outline:2px solid var(--cu);outline-offset:1px;border-color:var(--cu)}
+.ojo{position:relative}.ojo input{padding-right:84px}
+.ojo button{position:absolute;right:6px;top:6px;height:38px;border:0;background:none;color:var(--cu);font:500 14px "Instrument Sans",sans-serif;cursor:pointer;padding:0 10px;border-radius:8px}
+.btn{position:relative;isolation:isolate;overflow:hidden;width:100%;height:52px;border:0;border-radius:999px;font:600 16px Mont,sans-serif;cursor:pointer;color:#f4efe6;background:#0a1424;transition:color .3s,box-shadow .3s,transform .15s}
+.btn::before{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .35s;background:radial-gradient(140% 160% at 28% 0%,#ffe6cc 0%,#f6bd88 26%,#d8894f 58%,#a2541f 100%)}
+.btn:hover,.btn:focus-visible{color:#2a1205;transform:translateY(-1px);box-shadow:0 14px 30px -10px rgba(162,84,31,.85)}
+.btn:hover::before,.btn:focus-visible::before{opacity:1}
+.btn[disabled]{opacity:.6;cursor:wait}
+.links{display:flex;justify-content:space-between;gap:12px;margin-top:18px;font-size:15px}
+a,.lnk{color:var(--cu);background:none;border:0;padding:0;font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.msg{min-height:24px;margin:14px 0 0;font-size:15px}.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.volver{display:inline-block;margin-top:34px;font-size:14px;color:var(--mut)}
+[hidden]{display:none!important}
+@media (max-width:860px){body{grid-template-columns:1fr;grid-template-rows:auto 1fr}.lado{padding:28px 20px;gap:22px}.lado .logo{height:48px}.lado .txt,.lado small{display:none}main{padding:36px 16px 48px;align-items:flex-start}}
+@media (prefers-reduced-motion:reduce){.lado::before{animation:none}}
+</style></head><body>
+<aside class="lado"><a href="/" aria-label="Sermai, inicio"><svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="25 -10 4243 1094" role="img" aria-label="Sermai"><defs><linearGradient id="nvsh" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="900" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#f3c49a" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/><animateTransform attributeName="gradientTransform" type="translate" values="-1200 0;4400 0;4400 0" keyTimes="0;.45;1" dur="5s" repeatCount="indefinite"/></linearGradient><radialGradient id="nvs" gradientUnits="userSpaceOnUse" cx="3572.8" cy="475.5" r="118.9"><stop offset="0" stop-color="#fff0dc"/><stop offset=".18" stop-color="#f6bd88"/><stop offset=".55" stop-color="#cf7f47"/><stop offset=".85" stop-color="#8f4518"/><stop offset="1" stop-color="#6a2d0b"/></radialGradient></defs><path d="M311 710Q229 710 154 686.5Q79 663 35 626L80 525Q122 558 184 580Q246 602 311 602Q366 602 400 590Q434 578 450 557.5Q466 537 466 511Q466 479 443 459.5Q420 440 383.5 428.5Q347 417 302.5 407Q258 397 213.5 383.5Q169 370 132.5 348.5Q96 327 73 291Q50 255 50 199Q50 142 80.5 94.5Q111 47 173.5 18.5Q236 -10 332 -10Q395 -10 457 6Q519 22 565 52L524 153Q477 125 427 111.5Q377 98 331 98Q277 98 243.5 111Q210 124 194.5 145Q179 166 179 193Q179 225 201.5 244.5Q224 264 260.5 275Q297 286 342 296.5Q387 307 431.5 320Q476 333 512.5 354Q549 375 571.5 411Q594 447 594 502Q594 558 563.5 605.5Q533 653 470 681.5Q407 710 311 710ZM783 700V0H1294V109H913V591H1308V700ZM903 398V291H1251V398ZM1513 700V0H1800Q1940 0 2019.5 66Q2099 132 2099 249Q2099 326 2063 381.5Q2027 437 1960.5 466.5Q1894 496 1801 496H1585L1643 437V700ZM1971 700 1794 446H1933L2111 700ZM1643 451 1585 389H1795Q1881 389 1924.5 352Q1968 315 1968 249Q1968 182 1924.5 146Q1881 110 1795 110H1585L1643 46ZM2304 700V0H2411L2717 511H2661L2962 0H3069L3070 700H2947L2946 193H2972L2716 620H2658L2398 193H2428V700ZM4128 700V0H4258V700Z" fill="currentColor"/><path d="M3220,700 L3535,0 L3663,0 L3979,700 L3843,700 L3599,128 L3354,700 Z" fill="currentColor"/><path d="M311 710Q229 710 154 686.5Q79 663 35 626L80 525Q122 558 184 580Q246 602 311 602Q366 602 400 590Q434 578 450 557.5Q466 537 466 511Q466 479 443 459.5Q420 440 383.5 428.5Q347 417 302.5 407Q258 397 213.5 383.5Q169 370 132.5 348.5Q96 327 73 291Q50 255 50 199Q50 142 80.5 94.5Q111 47 173.5 18.5Q236 -10 332 -10Q395 -10 457 6Q519 22 565 52L524 153Q477 125 427 111.5Q377 98 331 98Q277 98 243.5 111Q210 124 194.5 145Q179 166 179 193Q179 225 201.5 244.5Q224 264 260.5 275Q297 286 342 296.5Q387 307 431.5 320Q476 333 512.5 354Q549 375 571.5 411Q594 447 594 502Q594 558 563.5 605.5Q533 653 470 681.5Q407 710 311 710ZM783 700V0H1294V109H913V591H1308V700ZM903 398V291H1251V398ZM1513 700V0H1800Q1940 0 2019.5 66Q2099 132 2099 249Q2099 326 2063 381.5Q2027 437 1960.5 466.5Q1894 496 1801 496H1585L1643 437V700ZM1971 700 1794 446H1933L2111 700ZM1643 451 1585 389H1795Q1881 389 1924.5 352Q1968 315 1968 249Q1968 182 1924.5 146Q1881 110 1795 110H1585L1643 46ZM2304 700V0H2411L2717 511H2661L2962 0H3069L3070 700H2947L2946 193H2972L2716 620H2658L2398 193H2428V700ZM4128 700V0H4258V700Z" fill="url(#nvsh)" class="shine"/><path d="M3220,700 L3535,0 L3663,0 L3979,700 L3843,700 L3599,128 L3354,700 Z" fill="url(#nvsh)" class="shine"/><circle cx="3599" cy="505" r="116" fill="none" stroke="#d88d57" stroke-width="9" opacity=".5" class="ring"/><circle cx="3599" cy="505" r="116" fill="none" stroke="#d88d57" stroke-width="9" opacity=".5" class="ring r2"/><circle cx="3599" cy="505" r="82" fill="url(#nvs)"/><ellipse cx="3574.4" cy="470.6" rx="29.5" ry="16.4" fill="#fff" opacity=".55" transform="rotate(-28 3574.4 470.6)"/><path transform="translate(18.4 950.0) scale(0.1770)" d="M94 700V0H224V700ZM753 700V0H860L1299 539H1246V0H1375V700H1268L829 161H882V700ZM2045 700V110H1813V0H2407V110H2175V700ZM2845 700V0H3356V109H2975V591H3370V700ZM2965 398V291H3313V398ZM3855 700V0H3985V590H4351V700ZM4794 700V0H4924V700ZM5780 710Q5698 710 5629.5 683.5Q5561 657 5510 608.5Q5459 560 5431 494Q5403 428 5403 350Q5403 272 5431 206Q5459 140 5510.5 91.5Q5562 43 5631 16.5Q5700 -10 5782 -10Q5871 -10 5942.5 19Q6014 48 6063 104L5981 184Q5940 143 5892.5 123.5Q5845 104 5788 104Q5733 104 5686 122Q5639 140 5605 173Q5571 206 5552.5 251Q5534 296 5534 350Q5534 403 5552.5 448Q5571 493 5605 526.5Q5639 560 5685 578Q5731 596 5787 596Q5839 596 5887.5 579.5Q5936 563 5980 524L6054 621Q5999 665 5926.5 687.5Q5854 710 5780 710ZM6054 621 5931 604V342H6054ZM6565 700V0H7076V109H6695V591H7090V700ZM6685 398V291H7033V398ZM7575 700V0H7682L8121 539H8068V0H8197V700H8090L7651 161H7704V700ZM9049 710Q8969 710 8900.5 683.5Q8832 657 8781.5 608.5Q8731 560 8703 494Q8675 428 8675 350Q8675 272 8703 206Q8731 140 8782 91.5Q8833 43 8901 16.5Q8969 -10 9050 -10Q9136 -10 9207 19.5Q9278 49 9327 107L9243 186Q9205 145 9158 124.5Q9111 104 9056 104Q9001 104 8955.5 122Q8910 140 8876.5 173Q8843 206 8824.5 251Q8806 296 8806 350Q8806 404 8824.5 449Q8843 494 8876.5 527Q8910 560 8955.5 578Q9001 596 9056 596Q9111 596 9158 575.5Q9205 555 9243 513L9327 593Q9278 650 9207 680Q9136 710 9049 710ZM9783 700V0H9913V700ZM10343 700 10658 0H10786L11102 700H10966L10695 69H10747L10477 700ZM10488 538 10523 436H10901L10936 538ZM12147 700V0H12453Q12567 0 12653 44Q12739 88 12787 166Q12835 244 12835 350Q12835 455 12787 533.5Q12739 612 12653 656Q12567 700 12453 700ZM12277 590H12447Q12525 590 12583 560Q12641 530 12672.5 476Q12704 422 12704 350Q12704 277 12672.5 223.5Q12641 170 12583 140Q12525 110 12447 110H12277ZM13313 700V0H13824V109H13443V591H13838V700ZM13433 398V291H13781V398ZM14939 700V0H15227Q15320 0 15386.5 30Q15453 60 15489 116Q15525 172 15525 249Q15525 326 15489 382Q15453 438 15386.5 468Q15320 498 15227 498H15011L15069 437V700ZM15069 451 15011 388H15221Q15307 388 15350.5 351.5Q15394 315 15394 249Q15394 182 15350.5 146Q15307 110 15221 110H15011L15069 46ZM16005 700V0H16292Q16432 0 16511.5 66Q16591 132 16591 249Q16591 326 16555 381.5Q16519 437 16452.5 466.5Q16386 496 16293 496H16077L16135 437V700ZM16463 700 16286 446H16425L16603 700ZM16135 451 16077 389H16287Q16373 389 16416.5 352Q16460 315 16460 249Q16460 182 16416.5 146Q16373 110 16287 110H16077L16135 46ZM17404 710Q17322 710 17253 683Q17184 656 17133 607.5Q17082 559 17054 493.5Q17026 428 17026 350Q17026 272 17054 206.5Q17082 141 17133 92.5Q17184 44 17253 17Q17322 -10 17403 -10Q17485 -10 17553.5 17Q17622 44 17673 92.5Q17724 141 17752 206.5Q17780 272 17780 350Q17780 428 17752 494Q17724 560 17673 608Q17622 656 17553.5 683Q17485 710 17404 710ZM17403 596Q17456 596 17501 578Q17546 560 17579 526.5Q17612 493 17630.5 448.5Q17649 404 17649 350Q17649 296 17630.5 251.5Q17612 207 17579 173.5Q17546 140 17501 122Q17456 104 17403 104Q17350 104 17305.5 122Q17261 140 17227.5 173.5Q17194 207 17175.5 251.5Q17157 296 17157 350Q17157 403 17175.5 448Q17194 493 17227 526.5Q17260 560 17305 578Q17350 596 17403 596ZM18430 700V423L18459 503L18155 0H18294L18538 405H18460L18706 0H18834L18530 503L18560 423V700ZM19259 700V0H19770V109H19389V591H19784V700ZM19379 398V291H19727V398ZM20593 710Q20513 710 20444.5 683.5Q20376 657 20325.5 608.5Q20275 560 20247 494Q20219 428 20219 350Q20219 272 20247 206Q20275 140 20326 91.5Q20377 43 20445 16.5Q20513 -10 20594 -10Q20680 -10 20751 19.5Q20822 49 20871 107L20787 186Q20749 145 20702 124.5Q20655 104 20600 104Q20545 104 20499.5 122Q20454 140 20420.5 173Q20387 206 20368.5 251Q20350 296 20350 350Q20350 404 20368.5 449Q20387 494 20420.5 527Q20454 560 20499.5 578Q20545 596 20600 596Q20655 596 20702 575.5Q20749 555 20787 513L20871 593Q20822 650 20751 680Q20680 710 20593 710ZM21469 700V110H21237V0H21831V110H21599V700ZM22597 710Q22515 710 22446 683Q22377 656 22326 607.5Q22275 559 22247 493.5Q22219 428 22219 350Q22219 272 22247 206.5Q22275 141 22326 92.5Q22377 44 22446 17Q22515 -10 22596 -10Q22678 -10 22746.5 17Q22815 44 22866 92.5Q22917 141 22945 206.5Q22973 272 22973 350Q22973 428 22945 494Q22917 560 22866 608Q22815 656 22746.5 683Q22678 710 22597 710ZM22596 596Q22649 596 22694 578Q22739 560 22772 526.5Q22805 493 22823.5 448.5Q22842 404 22842 350Q22842 296 22823.5 251.5Q22805 207 22772 173.5Q22739 140 22694 122Q22649 104 22596 104Q22543 104 22498.5 122Q22454 140 22420.5 173.5Q22387 207 22368.5 251.5Q22350 296 22350 350Q22350 403 22368.5 448Q22387 493 22420 526.5Q22453 560 22498 578Q22543 596 22596 596ZM23668 710Q23586 710 23511 686.5Q23436 663 23392 626L23437 525Q23479 558 23541 580Q23603 602 23668 602Q23723 602 23757 590Q23791 578 23807 557.5Q23823 537 23823 511Q23823 479 23800 459.5Q23777 440 23740.5 428.5Q23704 417 23659.5 407Q23615 397 23570.5 383.5Q23526 370 23489.5 348.5Q23453 327 23430 291Q23407 255 23407 199Q23407 142 23437.5 94.5Q23468 47 23530.5 18.5Q23593 -10 23689 -10Q23752 -10 23814 6Q23876 22 23922 52L23881 153Q23834 125 23784 111.5Q23734 98 23688 98Q23634 98 23600.5 111Q23567 124 23551.5 145Q23536 166 23536 193Q23536 225 23558.5 244.5Q23581 264 23617.5 275Q23654 286 23699 296.5Q23744 307 23788.5 320Q23833 333 23869.5 354Q23906 375 23928.5 411Q23951 447 23951 502Q23951 558 23920.5 605.5Q23890 653 23827 681.5Q23764 710 23668 710Z" fill="var(--cu)"/></svg></a>
+<div class="txt"><h1>Los proyectos de Chile, antes de que partan.</h1><p>Entre a la plataforma para ver el monitor del SEIA, las fichas de cada proyecto, las oportunidades para su rubro y el costeo.</p></div>
+<small>Solo datos públicos del Servicio de Evaluación Ambiental.</small></aside>
+<main><div class="caja">
+<form id="fEntrar" novalidate>
+ <h2>Ingresar</h2><p class="sub">Use el correo y la clave de su cuenta Sermai.</p>
+ <label for="em">Correo</label><input id="em" type="email" autocomplete="username" required>
+ <label for="cl">Clave</label><div class="ojo"><input id="cl" type="password" autocomplete="current-password" required><button type="button" data-ver="cl">Mostrar</button></div>
+ <button class="btn" type="submit">Ingresar</button>
+ <p class="msg" id="m1" role="status"></p>
+ <div class="links"><button type="button" class="lnk" id="aOlvido">Olvidé mi clave</button><a href="/#contacto">Solicitar acceso</a></div>
+</form>
+<form id="fOlvido" novalidate hidden>
+ <h2>Recuperar clave</h2><p class="sub">Le enviaremos un enlace a su correo para crear una clave nueva.</p>
+ <label for="em2">Correo</label><input id="em2" type="email" autocomplete="username" required>
+ <button class="btn" type="submit">Enviar enlace</button>
+ <p class="msg" id="m2" role="status"></p>
+ <div class="links"><button type="button" class="lnk" data-ir="fEntrar">Volver a ingresar</button></div>
+</form>
+<form id="fNueva" novalidate hidden>
+ <h2>Crear clave nueva</h2><p class="sub">Escriba una clave de al menos 8 caracteres.</p>
+ <label for="cn">Clave nueva</label><div class="ojo"><input id="cn" type="password" autocomplete="new-password" minlength="8" required><button type="button" data-ver="cn">Mostrar</button></div>
+ <button class="btn" type="submit">Guardar clave</button>
+ <p class="msg" id="m3" role="status"></p>
+</form>
+<div id="sinAcceso" hidden>
+ <h2>Su cuenta aún no tiene acceso</h2><p class="sub">Entró como <b id="quien"></b>, pero ese correo todavía no está habilitado para la plataforma. Escríbanos y lo activamos.</p>
+ <a class="btn" style="display:flex;align-items:center;justify-content:center;text-decoration:none" href="/#contacto">Solicitar acceso</a>
+ <div class="links"><button type="button" class="lnk" id="salir">Entrar con otro correo</button></div>
+</div>
+<a class="volver" href="/">Volver a sermai.cl</a>
+</div></main>
+<script src="/app/vendor/supabase.js"></script>
+<script>
+const URL_SB="https://pufgxfjxvbgobkavecqo.supabase.co",KEY="sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH";
+const sb=window.supabase.createClient(URL_SB,KEY);
+const $=id=>document.getElementById(id);
+const AQUI=location.origin+location.pathname;
+const destino=()=>{const v=new URLSearchParams(location.search).get("volver")||"";return /^\/app\//.test(v)?v:"/app/"};
+const ver=id=>{["fEntrar","fOlvido","fNueva","sinAcceso"].forEach(x=>$(x).hidden=x!==id);const f=$(id).querySelector("input");f&&f.focus()};
+const msg=(el,t,ok)=>{el.textContent=t;el.className="msg "+(ok?"ok":"err")};
+const ERR=e=>{const m=(e&&e.message||"").toLowerCase();if(m.includes("invalid login"))return"El correo o la clave no coinciden. Revise e intente de nuevo.";if(m.includes("email not confirmed"))return"Falta confirmar su correo. Busque el mensaje de Sermai en su bandeja.";if(m.includes("rate")||m.includes("seconds"))return"Hizo varios intentos seguidos. Espere un minuto e intente de nuevo.";if(m.includes("password")&&m.includes("least"))return"La clave debe tener al menos 8 caracteres.";if(m.includes("fetch"))return"No pudimos conectarnos. Revise su internet e intente de nuevo.";return"No se pudo completar. Intente de nuevo en un momento."};
+let recupera=false;
+async function revisar(){const{data:{session}}=await sb.auth.getSession();if(!session||recupera)return;
+ const{data,error}=await sb.rpc("plataforma_tengo_acceso");
+ if(!error&&data===true){location.replace(destino());return}
+ $("quien").textContent=session.user.email;ver("sinAcceso")}
+document.querySelectorAll("[data-ver]").forEach(b=>b.onclick=()=>{const i=$(b.dataset.ver);const s=i.type==="password";i.type=s?"text":"password";b.textContent=s?"Ocultar":"Mostrar"});
+document.querySelectorAll("[data-ir]").forEach(b=>b.onclick=()=>ver(b.dataset.ir));
+$("aOlvido").onclick=()=>{$("em2").value=$("em").value;ver("fOlvido")};
+$("salir").onclick=async()=>{await sb.auth.signOut();ver("fEntrar")};
+async function enviar(form,btn,fn){btn.disabled=true;try{await fn()}finally{btn.disabled=false}}
+$("fEntrar").onsubmit=e=>{e.preventDefault();const b=e.submitter||e.target.querySelector("button[type=submit]"),em=$("em").value.trim().toLowerCase(),cl=$("cl").value;
+ if(!em||!cl)return msg($("m1"),"Escriba su correo y su clave.");
+ enviar(e.target,b,async()=>{msg($("m1"),"Ingresando…",true);const{error}=await sb.auth.signInWithPassword({email:em,password:cl});if(error)return msg($("m1"),ERR(error));$("m1").textContent="";await revisar()})};
+$("fOlvido").onsubmit=e=>{e.preventDefault();const b=e.target.querySelector("button[type=submit]"),em=$("em2").value.trim().toLowerCase();
+ if(!em)return msg($("m2"),"Escriba su correo.");
+ enviar(e.target,b,async()=>{const{error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:AQUI});if(error)return msg($("m2"),ERR(error));msg($("m2"),"Listo. Si el correo tiene cuenta, le llegará un enlace en unos minutos.",true)})};
+$("fNueva").onsubmit=e=>{e.preventDefault();const b=e.target.querySelector("button[type=submit]"),cn=$("cn").value;
+ if(cn.length<8)return msg($("m3"),"La clave debe tener al menos 8 caracteres.");
+ enviar(e.target,b,async()=>{const{error}=await sb.auth.updateUser({password:cn});if(error)return msg($("m3"),ERR(error));msg($("m3"),"Clave guardada. Entrando…",true);recupera=false;await revisar()})};
+sb.auth.onAuthStateChange(ev=>{if(ev==="PASSWORD_RECOVERY"){recupera=true;ver("fNueva")}});
+if(/type=recovery/.test(location.hash)){recupera=true;ver("fNueva")}else revisar();
+</script></body></html>
