@@ -492,8 +492,9 @@ window.SB_ACCESO=(function(){const ir=()=>location.replace("/ingresar/?volver="+
 </div>
 <nav class="tabs" id="tabs" aria-label="Accesos rápidos"></nav>
 <script>
-const SUPA="https://uyhdxjnqhkkazrokdjjc.supabase.co/rest/v1/";
-const KEY="sb_publishable_C7FEhSMaFO6yX9dXqgjKIA_cxGBjYwk";
+/* Datos: base "Radar de Proyectos". Solo se leen con sesión iniciada y acceso vigente (reglas RLS en la base). */
+const SUPA="https://pufgxfjxvbgobkavecqo.supabase.co/rest/v1/";
+const KEY="sb_publishable_NTYEm1iPk_cet1ASTbpKTQ_TochumyH";
 const BASE_INICIAL="2026-11-22T03:00:00Z"; // los "nuevos" anteriores a esta fecha son la carga inicial
 const NORTE=["Arica","Tarapacá","Antofagasta","Atacama","Coquimbo"];
 const SECTOR={a:"Agua",b:"Transmisión eléctrica",c:"Energía",e:"Transporte e infraestructura vial",f:"Puertos",g:"Infraestructura urbana",h:"Inmobiliario",i:"Minería",j:"Ductos",k:"Industria",l:"Agroindustria",m:"Forestal",n:"Acuicultura","ñ":"Química y combustibles",o:"Saneamiento y agua",p:"Áreas protegidas"};
@@ -1106,7 +1107,9 @@ function vCosteo(app,id){
     else if(Math.abs(+$("#cd").value-o.dolar.v)>=1){const b=el("button","btn2","Usar el dólar de hoy ($ "+Math.round(o.dolar.v).toLocaleString("es-CL")+")");b.type="button";b.onclick=()=>{$("#cd").value=Math.round(o.dolar.v*100)/100;calc();b.remove()};indSlot.append(b)}}
     if(vacio())auto(false);else calc()});
 }
-async function get(path){const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+KEY}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+async function get(path){const sb=window.SB_ACCESO;const{data:{session}}=await sb.auth.getSession();
+ if(!session){location.replace("/ingresar/?volver="+encodeURIComponent(location.pathname+location.search+location.hash));throw new Error("sesión vencida")}
+ const r=await fetch(SUPA+path,{headers:{apikey:KEY,Authorization:"Bearer "+session.access_token}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
 
 /* ================= Interfaz ================= */
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
