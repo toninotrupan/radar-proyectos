@@ -686,6 +686,13 @@ function ddPanel(t,keys){const s=el("section","panel");s.append(el("h2",null,"Re
       if(fs.length>12)s.append(el("p","note","Mostramos los 12 más recientes de "+fs.length+"."))}}
   return s}
 const grupoDe=t=>{const n=tkey(t);return G.find(g=>g.re.test(n))||null};
+function regsDe(nombres,sec){const ns=nombres.map(tkey);const rx=e=>{try{return new RegExp(e.patron)}catch(x){return null}};
+  const prop=E.filter(e=>e.tipo==="registro"&&e.patron&&(r=>r&&ns.some(n=>r.test(n)))(rx(e)));
+  const gen=E.filter(e=>e.tipo==="registro"&&!e.patron&&(!e.sectores.length||e.sectores.includes(sec))&&!prop.some(x=>x.url_proveedores&&x.url_proveedores===e.url_proveedores));return{prop,gen}}
+function regsBloque(c,nombres,sec){const {prop,gen}=regsDe(nombres,sec);
+  if(prop.length){c.append(el("p","note","Este es el canal de proveedores de esta empresa, revisado en su propio sitio o en una fuente pública."));const ul=el("ul","emp");prop.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+  else c.append(el("p","note","Todavía no hemos verificado el canal de proveedores propio de esta empresa. Búscalo en su sitio web, en la sección Proveedores o Contacto."));
+  if(gen.length){c.append(el("p","sub","Registros generales del sector"),el("p","note","No son de esta empresa. Son registros que usan varias compañías del sector para buscar proveedores"+(prop.length?".":"; no sabemos si esta empresa los usa.")));const ul=el("ul","emp");gen.forEach(e=>ul.append(empLi(e)));c.append(ul)}}
 const ekey=t=>{const g=grupoDe(t);return g?"g:"+tkey(g.grupo):tkey(t)};
 function titulares(){const m={};P.forEach(p=>{if(!p.titular)return;const g=grupoDe(p.titular);const k=ekey(p.titular);const t=m[k]=m[k]||{k,nombre:g?g.grupo:p.titular,g,ps:[],soc:[]};t.ps.push(p);if(!t.soc.some(x=>tkey(x)===tkey(p.titular)))t.soc.push(p.titular)});
   return Object.values(m).map(t=>{const v=t.ps.filter(vigente);t.nv=v.length;t.inv=v.reduce((a,p)=>a+(+p.inversion_mmusd||0),0);t.regs=[...new Set(v.map(p=>regionCorta(p.region)))];t.peak=v.reduce((a,p)=>a+(peak(p)||0),0);return t}).sort((a,b)=>b.inv-a.inv||b.ps.length-a.ps.length)}
@@ -769,8 +776,7 @@ function vTitular(app,k){const t=titulares().find(x=>x.k===k);const b=el("a","ba
   app.append(header(t.nombre,"Dueño de "+t.ps.length+(t.ps.length===1?" proyecto presentado":" proyectos presentados")+" al SEIA en el último año. "+t.nv+(t.nv===1?" sigue vigente":" siguen vigentes")+", por US$ "+money(t.inv)+" millones."));
   if(t.g){const gs=el("section","panel");gs.append(el("h2",null,"Sociedades de este grupo"),el("p","desc",t.soc.join(" · ")));const nt=el("p","note",(t.g.nota||"")+" ");if(t.g.fuente_url){const a=el("a",null,"Fuente");a.href=t.g.fuente_url;a.target="_blank";a.rel="noopener";nt.append(a)}gs.append(nt);app.append(gs)}
   const est=group(t.ps,p=>p.estado||"Sin estado",()=>1);const s=el("section","panel");s.append(el("h2",null,"Cómo le va en el SEIA"));s.append(el("p","desc",est.map(([e,n])=>n+" "+e).join(" · ")));s.append(el("p","note","Proyectos desistidos, no admitidos o rechazados indican obras que no se harán o que se atrasan. Cuenta solo lo presentado en los últimos 12 meses."));app.append(s);
-  const sec=SECEMP[((t.ps[0].tipologia||"").trim().toLowerCase()[0])];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(t.nombre);const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sec))&&(!/^Codelco/.test(e.nombre)||esCodelco));
-  if(regs.length){const c=el("section","panel");c.append(el("h2",null,"Cómo ser su proveedor"),el("p","note","Registros de proveedores que usan las empresas de este sector. No sabemos cuál usa esta empresa en particular: confírmalo en su sitio."));const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul);app.append(c)}
+  {const sec=SECEMP[((t.ps[0].tipologia||"").trim().toLowerCase()[0])];const c=el("section","panel");c.append(el("h2",null,"Cómo ser su proveedor"));regsBloque(c,t.soc,sec);app.append(c)}
   app.append(ddPanel(t.nombre,t.soc.map(tkey)));
   const h=el("h2",null,"Sus proyectos");h.style.margin="18px 0 8px";app.append(h);const list=el("section","list");t.ps.slice().sort((a,b)=>(+b.inversion_mmusd||0)-(+a.inversion_mmusd||0)).forEach(p=>list.append(card(p)));app.append(list)}
 function vEmpresa(app){
@@ -1004,7 +1010,8 @@ function vInforme(app,id){const p=P.find(x=>String(x.id)===String(id));if(!p){ap
   if(pf&&pf.rubros.length){const sc=puntaje(p,pf);if(sc)s3.append(el("p","desc","Puntaje de prioridad para "+(pf.nombre||"tu empresa")+": "+sc.v+" de 100."))}app.append(s3);
   const s4=el("section","panel");s4.append(el("h2",null,"Dónde seguirlo y cómo llegar"));const ul=el("ul","emp");const li=(t,d,u)=>{const x=el("li");x.append(el("b",null,t),el("span",null,d));const sp=el("span");sp.append(ext(u.replace(/^https?:\/\//,""),u));x.append(sp);ul.append(x)};
   li("Expediente público en el SEIA","Todos los documentos de la evaluación ambiental.","https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id);
-  PE.filter(x=>String(x.proyecto_id)===String(p.id)).forEach(x=>{const e=E.find(z=>z.id===x.empresa_id);if(e&&e.canal)li(e.nombre,(x.rol||TIPOEMP[e.tipo]||"")+". Canal corporativo para proveedores.",e.canal)});
+  PE.filter(x=>String(x.proyecto_id)===String(p.id)).forEach(x=>{const e=E.find(z=>z.id===x.empresa_id);if(e&&(e.url_proveedores||e.sitio))li(e.nombre,(x.rol||TIPOEMP[e.tipo]||"")+". Canal corporativo para proveedores.",e.url_proveedores||e.sitio)});
+  regsDe([p.titular||""],null).prop.filter(e=>e.url_proveedores).forEach(e=>li(e.nombre,"Canal de proveedores del dueño. "+(e.canal||"").replace(/\.$/,"")+".",e.url_proveedores));
   li("Ficha completa en Radar de Proyectos","Con el detalle por partidas, el costeo y la revisión del dueño.",location.origin+location.pathname+"#p-"+p.id);s4.append(ul);app.append(s4);
   app.append(el("p","note","Las cifras de oportunidad son estimaciones: la inversión declarada multiplicada por un porcentaje por rubro, repartida con supuestos de referencia. Las fechas de aprobación, obra y contacto son estimaciones a partir de promedios del SEA y supuestos nuestros. La probabilidad es histórica y no evalúa este proyecto en particular. Datos tomados de fuentes públicas (SEIA, SMA). No es una cotización ni una recomendación de inversión."))}
 function vComparar(app){const pf=perfil();app.append(header("Comparar proyectos","Elige hasta tres proyectos para verlos lado a lado."));let ids=[];try{ids=JSON.parse(localStorage.getItem("radar_cmp")||"[]")}catch(e){}const fv=favs();if(!ids.length)ids=fv.slice(0,3);
@@ -1029,7 +1036,7 @@ function cobrePanel(){const i=ST.indicadores;if(!i||!i.libra_cobre)return null;c
   else s.append(el("p","desc","Empezamos a guardar el precio día a día el 23 de noviembre de 2026. La tendencia aparecerá aquí cuando haya algunos días de historia."));
   const nm=P.filter(p=>vigente(p)&&(p.tipologia||"").trim().toLowerCase()[0]==="i");s.append(el("p","note","Hay "+nm.length+" proyectos mineros vigentes por US$ "+money(nm.reduce((a,p)=>a+(+p.inversion_mmusd||0),0))+" millones. Con el cobre alto las mineras suelen acelerar sus inversiones y con el cobre bajo las postergan; es una tendencia general, no un dato de cada proyecto. Valores actualizados por un bot todos los días (findic.cl, con datos del Banco Central)."));return s}
 function licitacionesPanel(p){const s=el("section","panel");s.append(el("h2",null,"Dónde aparecen las licitaciones"));const ul=el("ul","emp");const li=(t,d,u)=>{const x=el("li");x.append(el("b",null,t),el("span",null,d));const sp=el("span");sp.append(ext("Abrir",u));x.append(sp);ul.append(x)};
-  E.filter(e=>e.canal&&e.tipo!=="proveedor"&&p.titular&&norm(p.titular).includes(norm(e.nombre).split(" ")[0])&&norm(e.nombre).split(" ")[0].length>3).slice(0,3).forEach(e=>li("Portal de proveedores de "+e.nombre,"Las empresas privadas licitan en su propio portal. Inscribirse ahí es el primer paso.",e.canal));
+  regsDe([p.titular||""],null).prop.filter(e=>e.url_proveedores).forEach(e=>li(e.nombre,"Canal de proveedores del dueño de este proyecto. "+(e.canal||"").replace(/\.$/,"")+".",e.url_proveedores));
   li("Mercado Público","Si el mandante es un ministerio, un municipio o un servicio público, sus compras se publican aquí. Las empresas privadas no usan este sitio.","https://www.mercadopublico.cl/");
   li("Expediente del SEIA","No publica licitaciones, pero muestra las obras y los plazos que el dueño comprometió.","https://seia.sea.gob.cl/expediente/expediente.php?id_expediente="+p.id);s.append(ul);
   s.append(el("p","note","No leemos las licitaciones abiertas de cada empresa: cada portal es distinto y la mayoría exige una cuenta de proveedor. Aquí te dejamos el camino más corto para llegar a ellas."));return s}
@@ -1305,9 +1312,9 @@ function vFicha(app,id){
     const conf=PE.filter(x=>x.proyecto_id===p.id);
     if(conf.length){c.append(el("p","note","Adjudicaciones confirmadas por fuente pública:"));const ul=el("ul","emp");conf.forEach(x=>{const e=E.find(y=>y.id===x.empresa_id);if(!e)return;const li=empLi(e,"Rol: "+x.rol);li.append(ext("Ver fuente",x.fuente_url));ul.append(li)});c.append(ul)}
     else c.append(el("p","note","Todavía no hay una constructora adjudicada publicada para este proyecto. El SEIA no informa quién construye: eso se conoce cuando el dueño adjudica y lo comunica. Mientras tanto hay dos caminos."));
-    const sc=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const esCodelco=/codelco|corporaci[oó]n nacional del cobre/i.test(p.titular||"");const regs=E.filter(e=>e.tipo==="registro"&&(!e.sectores.length||e.sectores.includes(sc))&&(!/^Codelco/.test(e.nombre)||esCodelco));const cons=E.filter(e=>e.tipo!=="registro"&&e.tipo!=="proveedor"&&e.sectores.includes(sc));
+    const sc=SECEMP[(p.tipologia||"").trim().toLowerCase()[0]];const cons=E.filter(e=>e.tipo!=="registro"&&e.tipo!=="proveedor"&&e.sectores.includes(sc));
     c.append(el("p","sub","1. Al dueño del proyecto: "+(p.titular||"")),el("p","note","Las grandes mineras y eléctricas compran a través de registros de proveedores. Estar inscrito es el primer filtro."));
-    if(regs.length){const ul=el("ul","emp");regs.forEach(e=>ul.append(empLi(e)));c.append(ul)}
+    regsBloque(c,[p.titular||""],sc);
     c.append(el("p","sub","2. A las empresas que suelen construir este tipo de proyecto"));
     if(cons.length){c.append(el("p","note","No significa que tengan este contrato: son empresas que construyen proyectos de este sector en Chile. Envía la presentación de tu empresa por su canal de proveedores."));const ul=el("ul","emp");cons.forEach(e=>ul.append(empLi(e)));c.append(ul)}
     else c.append(el("p","note","Aún no tenemos empresas verificadas para este sector."));
