@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /ingresar/
+Disallow: /api/
+
+Sitemap: https://sermai.cl/sitemap.xml
